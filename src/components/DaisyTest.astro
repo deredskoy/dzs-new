@@ -1,0 +1,39 @@
+<div class="hero min-h-screen bg-base-200">
+    <div class="hero-content text-center">
+        <div class="max-w-md">
+            <h1 class="text-5xl font-bold">Hello DaisyUI</h1>
+            <p class="py-6">This is a test of DaisyUI components in Astro</p>
+            <button class="btn btn-primary">Get Started</button>
+        </div>
+    </div>
+</div>
+
+<!-- Theme switcher -->
+<div class="fixed top-4 right-4">
+    <select data-choose-theme class="select select-bordered">
+        <option value="light">Light</option>
+        <option value="dark">Dark</option>
+        <option value="cupcake">Cupcake</option>
+    </select>
+</div>
+
+<script>
+    // Theme switcher logic
+    const themeSelect = document.querySelector("[data-choose-theme]");
+
+    // Set initial theme from localStorage or default to 'light'
+    const currentTheme = localStorage.getItem("theme") || "light";
+    document.documentElement.setAttribute("data-theme", currentTheme);
+    if (themeSelect instanceof HTMLSelectElement) {
+        themeSelect.value = currentTheme;
+    }
+
+    // Handle theme changes
+    themeSelect?.addEventListener("change", (e) => {
+        if (e.target instanceof HTMLSelectElement) {
+            const theme = e.target.value;
+            document.documentElement.setAttribute("data-theme", theme);
+            localStorage.setItem("theme", theme);
+        }
+    });
+</script>
