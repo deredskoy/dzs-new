@@ -1,38 +1,82 @@
 <div class="hero min-h-screen bg-base-200">
-    <div class="hero-content text-center">
+    <div
+        class="hero-content flex-col lg:flex-row justify-between max-w-7xl w-full"
+    >
+        <!-- Left side - Text content -->
         <div class="max-w-md">
-            <h1 class="text-5xl font-bold">Hello DaisyUI</h1>
-            <p class="py-6">This is a test of DaisyUI components in Astro</p>
-            <button class="btn btn-primary">Get Started</button>
+            <h1 class="text-5xl font-bold">LLC DZS</h1>
+            <p class="py-6">
+                Repair and manufacture of components and assemblies
+            </p>
+            <button class="btn btn-primary">Ask a Question</button>
+        </div>
+
+        <!-- Right side - Image -->
+        <div class="lg:w-1/2">
+            <img
+                src="/public/dzs-logo.png"
+                alt="Technical Drawing"
+                class="w-full h-auto"
+            />
+        </div>
+
+        <!-- Header links -->
+        <div class="fixed top-8 right-32">
+            <div class="flex gap-12">
+                <a href="https://astro.build" target="_blank" class="text-xl"
+                    >Services</a
+                >
+                <a href="https://astro.build" target="_blank" class="text-xl"
+                    >About Us</a
+                >
+                <a href="https://astro.build" target="_blank" class="text-xl"
+                    >Contact Us</a
+                >
+            </div>
+
+            <!-- Language switcher -->
+            <div class="fixed top-6 right-4">
+                <select data-choose-theme class="select select-bordered">
+                    <option value="light">EN</option>
+                    <option value="dark">UA</option>
+                </select>
+            </div>
+
+            <!-- Logo DZS -->
+            <div class="fixed top-4 left-4">
+                <a href="https://dzs.com.br" target="_blank">
+                    <img src="/dzs-logo.png" alt="DZS Logo" class="w-58 h-28" />
+                </a>
+            </div>
+
+            <script>
+                // Theme switcher logic
+                const themeSelect = document.querySelector(
+                    "[data-choose-theme]",
+                );
+
+                // Set initial theme from localStorage or default to 'light'
+                const currentTheme = localStorage.getItem("theme") || "light";
+                document.documentElement.setAttribute(
+                    "data-theme",
+                    currentTheme,
+                );
+                if (themeSelect instanceof HTMLSelectElement) {
+                    themeSelect.value = currentTheme;
+                }
+
+                // Handle theme changes
+                themeSelect?.addEventListener("change", (e) => {
+                    if (e.target instanceof HTMLSelectElement) {
+                        const theme = e.target.value;
+                        document.documentElement.setAttribute(
+                            "data-theme",
+                            theme,
+                        );
+                        localStorage.setItem("theme", theme);
+                    }
+                });
+            </script>
         </div>
     </div>
 </div>
-
-<!-- Theme switcher -->
-<div class="fixed top-4 right-4">
-    <select data-choose-theme class="select select-bordered">
-        <option value="light">Light</option>
-        <option value="dark">Dark</option>
-    </select>
-</div>
-
-<script>
-    // Theme switcher logic
-    const themeSelect = document.querySelector("[data-choose-theme]");
-
-    // Set initial theme from localStorage or default to 'light'
-    const currentTheme = localStorage.getItem("theme") || "light";
-    document.documentElement.setAttribute("data-theme", currentTheme);
-    if (themeSelect instanceof HTMLSelectElement) {
-        themeSelect.value = currentTheme;
-    }
-
-    // Handle theme changes
-    themeSelect?.addEventListener("change", (e) => {
-        if (e.target instanceof HTMLSelectElement) {
-            const theme = e.target.value;
-            document.documentElement.setAttribute("data-theme", theme);
-            localStorage.setItem("theme", theme);
-        }
-    });
-</script>
