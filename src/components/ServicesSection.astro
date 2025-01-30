@@ -1,0 +1,71 @@
+---
+// src/components/ServicesSection.astro
+---
+
+<section class="bg-[#0B1437] text-white py-20">
+    <div class="container mx-auto px-4 max-w-7xl">
+        <!-- Technical drawing lines decoration -->
+        <div class="relative mb-12">
+            <div
+                class="absolute left-0 top-0 w-16 h-16 border-l-2 border-t-2 border-gray-500 opacity-50"
+            >
+            </div>
+            <h2 class="text-5xl font-bold pl-20">Our services</h2>
+            <p class="text-gray-400 mt-4 pl-20">
+                Email design is intricate. We'll address each aspect
+                individually.
+            </p>
+        </div>
+
+        <!-- Services Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-16">
+            <!-- Service Card 1 -->
+            <div
+                class="bg-white rounded-3xl p-6 flex flex-col items-center text-center"
+            >
+                <div class="w-48 h-48 mb-6">
+                    <img
+                        src="/brake-disc.png"
+                        alt="Disc linings"
+                        class="w-full h-full object-contain"
+                    />
+                </div>
+                <h3 class="text-[#0B1437] text-xl font-semibold">
+                    Disc linings:BelAZ
+                </h3>
+            </div>
+
+            <!-- Service Card 2 -->
+            <div
+                class="bg-white rounded-3xl p-6 flex flex-col items-center text-center"
+            >
+                <div class="w-48 h-48 mb-6">
+                    <img
+                        src="/going-logo.png"
+                        alt="Brakes"
+                        class="w-full h-full object-contain"
+                    />
+                </div>
+                <h3 class="text-[#0B1437] text-xl font-semibold">
+                    Brakes:HITACHI 3500
+                </h3>
+            </div>
+
+            <!-- Service Card 3 -->
+            <div
+                class="bg-white rounded-3xl p-6 flex flex-col items-center text-center"
+            >
+                <div class="w-48 h-48 mb-6">
+                    <img
+                        src="/parts-diagram.png"
+                        alt="Other friction products"
+                        class="w-full h-full object-contain"
+                    />
+                </div>
+                <h3 class="text-[#0B1437] text-xl font-semibold">
+                    Other friction products
+                </h3>
+            </div>
+        </div>
+    </div>
+</section>

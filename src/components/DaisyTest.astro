@@ -1,3 +1,7 @@
+---
+// src/components/DaisyTest.astro
+---
+
 <div class="hero min-h-screen bg-base-200">
     <div
         class="hero-content flex-col lg:flex-row justify-between max-w-7xl w-full"
@@ -21,62 +25,49 @@
         </div>
 
         <!-- Header links -->
-        <div class="fixed top-8 right-32">
+        <div class="absolute top-8 right-32">
+            <!-- Navigation Menu -->
             <div class="flex gap-12">
-                <a href="https://astro.build" target="_blank" class="text-xl"
-                    >Services</a
-                >
-                <a href="https://astro.build" target="_blank" class="text-xl"
-                    >About Us</a
-                >
-                <a href="https://astro.build" target="_blank" class="text-xl"
-                    >Contact Us</a
-                >
+                <a href="#services" class="text-xl">Services</a>
+                <a href="#about" class="text-xl">About Us</a>
+                <a href="#contact" class="text-xl">Contact Us</a>
             </div>
+        </div>
 
-            <!-- Language switcher -->
-            <div class="fixed top-6 right-4">
-                <select data-choose-theme class="select select-bordered">
-                    <option value="light">EN</option>
-                    <option value="dark">UA</option>
-                </select>
-            </div>
+        <!-- Language switcher -->
+        <div class="absolute top-6 right-4">
+            <select data-choose-theme class="select select-bordered">
+                <option value="light">EN</option>
+                <option value="dark">UA</option>
+            </select>
+        </div>
 
-            <!-- Logo DZS -->
-            <div class="fixed top-4 left-4">
-                <a href="https://dzs.com.br" target="_blank">
-                    <img src="/dzs-logo.png" alt="DZS Logo" class="w-58 h-28" />
-                </a>
-            </div>
-
-            <script>
-                // Theme switcher logic
-                const themeSelect = document.querySelector(
-                    "[data-choose-theme]",
-                );
-
-                // Set initial theme from localStorage or default to 'light'
-                const currentTheme = localStorage.getItem("theme") || "light";
-                document.documentElement.setAttribute(
-                    "data-theme",
-                    currentTheme,
-                );
-                if (themeSelect instanceof HTMLSelectElement) {
-                    themeSelect.value = currentTheme;
-                }
-
-                // Handle theme changes
-                themeSelect?.addEventListener("change", (e) => {
-                    if (e.target instanceof HTMLSelectElement) {
-                        const theme = e.target.value;
-                        document.documentElement.setAttribute(
-                            "data-theme",
-                            theme,
-                        );
-                        localStorage.setItem("theme", theme);
-                    }
-                });
-            </script>
+        <!-- Logo DZS -->
+        <div class="absolute top-4 left-4">
+            <a href="https://dzs.com.br" target="_blank">
+                <img src="/dzs-logo.png" alt="DZS Logo" class="w-58 h-28" />
+            </a>
         </div>
     </div>
 </div>
+
+<script>
+    // Theme switcher logic
+    const themeSelect = document.querySelector("[data-choose-theme]");
+
+    // Set initial theme from localStorage or default to 'light'
+    const currentTheme = localStorage.getItem("theme") || "light";
+    document.documentElement.setAttribute("data-theme", currentTheme);
+    if (themeSelect instanceof HTMLSelectElement) {
+        themeSelect.value = currentTheme;
+    }
+
+    // Handle theme changes
+    themeSelect?.addEventListener("change", (e) => {
+        if (e.target instanceof HTMLSelectElement) {
+            const theme = e.target.value;
+            document.documentElement.setAttribute("data-theme", theme);
+            localStorage.setItem("theme", theme);
+        }
+    });
+</script>
