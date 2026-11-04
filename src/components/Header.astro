@@ -1,0 +1,11 @@
+---
+import { url } from '../lib/site';
+const nav = [{ title:'Продукція та послуги',href:'/catalog' },{ title:'Підприємство',href:'/about-company' },{ title:'Галерея',href:'/portfolio' },{ title:'Контакти',href:'/contacts' }];
+const current = Astro.url.pathname;
+---
+<a class="skip-link" href="#main">Перейти до вмісту</a>
+<header class="site-header"><div class="wrap header-inner">
+  <a class="brand" href={url('/')} aria-label="ДЗС — головна"><img src={url('/media/logo-header.png')} width="158" height="82" alt="ДЗС"/><span>Дніпропетровський<br/>завод спецремонта</span></a>
+  <nav class="desktop-nav" aria-label="Головна навігація">{nav.map(item => <a href={url(item.href)} aria-current={current===url(item.href)?'page':undefined}>{item.title}</a>)}</nav>
+  <details class="mobile-nav"><summary aria-label="Відкрити навігацію">Меню <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M3 6H21M3 12H21M3 18H21" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></summary><nav aria-label="Мобільна навігація">{nav.map(item => <a href={url(item.href)}>{item.title}<span aria-hidden="true">↗</span></a>)}</nav></details>
+</div></header>

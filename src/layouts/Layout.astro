@@ -1,17 +1,21 @@
 ---
-import "../styles/global.css";
+import '@fontsource/roboto/400.css';
+import '@fontsource/roboto/500.css';
+import '@fontsource/roboto/700.css';
+import '@fontsource/ibm-plex-mono/400.css';
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { url } from '../lib/site';
+interface Props { title?: string; description?: string; canonicalPath?: string; contact?: boolean }
+const { title='Виготовлення та ремонт вузлів і агрегатів',description='Дніпропетровський завод спецремонта. Виготовлення вузлів, ремонт редукторів, фрикційні вироби та механічна обробка. Працюємо у Дніпрі з 2003 року.',canonicalPath,contact=true } = Astro.props;
+const canonical = new URL(canonicalPath ? url(canonicalPath) : Astro.url.pathname, Astro.site);
 ---
-
 <!doctype html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width" />
-        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-        <meta name="generator" content={Astro.generator} />
-        <title>Astro + DaisyUI</title>
-    </head>
-    <body>
-        <slot />
-    </body>
-</html>
+<html lang="uk"><head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>{title} — ДЗС</title><meta name="description" content={description}/>
+<meta name="robots" content="noindex, nofollow"/><meta name="theme-color" content="#102448"/>
+<link rel="canonical" href={canonical}/><link rel="icon" href={url('/favicon.svg')} type="image/svg+xml"/>
+<meta property="og:title" content={title+' — ДЗС'}/><meta property="og:description" content={description}/><meta property="og:type" content="website"/>
+</head><body><Header/><main id="main" tabindex="-1"><slot/></main><Footer contact={contact}/></body></html>

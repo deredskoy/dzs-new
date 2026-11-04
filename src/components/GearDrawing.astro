@@ -1,0 +1,21 @@
+---
+function gear(teeth: number, outer: number, root: number, hole: number) {
+  const points = Array.from({ length: teeth * 4 }, (_, i) => {
+    const r = i % 4 === 1 || i % 4 === 2 ? outer : root;
+    const a = (i / (teeth * 4)) * Math.PI * 2;
+    return (Math.cos(a) * r).toFixed(2) + ',' + (Math.sin(a) * r).toFixed(2);
+  });
+  return 'M' + points.join(' L') + 'Z M' + hole + ',0 A' + hole + ',' + hole + ' 0 1 0 ' + -hole + ',0 A' + hole + ',' + hole + ' 0 1 0 ' + hole + ',0 Z';
+}
+---
+<svg class="gear-drawing" viewBox="0 0 600 540" fill="none" aria-hidden="true">
+  <g class="drawing-lines" stroke="currentColor" stroke-width=".8">
+    <path d="M55 140H335M195 20V290M178 34H211M179 266H211M82 45V251M74 45H162M74 251H162M78 49L86 41M78 255L86 247"/>
+    <g transform="translate(195 140)"><path d={gear(16,107,94,33)}/><circle r="77" stroke-dasharray="3 4"/><circle r="22"/><path d="M-125 0H125M0-125V125" stroke-dasharray="8 5"/></g>
+    <path d="M151 384L525 407V441L151 419ZM160 388L515 410M150 461H526M151 428V473M526 448V473M148 465L156 457M522 465L530 457M554 221V441M541 221H564M541 441H564M550 225L558 217M550 445L558 437M190 372V431M187 378L190 372L193 378M187 425L190 431L193 425"/>
+    <path d="M220 464H470M355 403L362 437" stroke-dasharray="5 4"/>
+  </g>
+  <g transform="translate(331 245) rotate(12)"><path d={gear(12,113,94,55)} fill="var(--navy)" fill-rule="evenodd"/></g>
+  <g transform="translate(448 349) rotate(7)"><path d={gear(10,72,57,33)} fill="var(--orange)" fill-rule="evenodd"/></g>
+  <g class="drawing-labels" fill="currentColor" font-size="10" font-family="monospace"><text x="58" y="38">Ø 210</text><text x="311" y="483">275 ±0.1</text><text x="562" y="334" transform="rotate(-90 562 334)">200 ±0.05</text><text x="183" y="365">A</text><text x="183" y="444">A</text><text x="39" y="518">ДЗС · ВИРОБНИЦТВО / РЕМОНТ</text><text x="491" y="518">01 / 03</text></g>
+</svg>

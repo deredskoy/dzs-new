@@ -25,3 +25,8 @@ pnpm-debug.log*
 
 # vscode settings
 .vscode/
+
+.scratch/pre-redesign-2026-11-04/
+test-results/
+playwright-report/
+.env.*
