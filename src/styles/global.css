@@ -44,6 +44,11 @@ mark {background:var(--orange);color:var(--ink);box-decoration-break:clone;-webk
 .desktop-nav a:after {content:'';position:absolute;bottom:4px;left:0;width:0;height:2px;background:var(--orange);transition:width .18s}
 .desktop-nav a:hover:after,.desktop-nav a[aria-current]:after {width:100%}
 .mobile-nav {display:none}
+.header-controls {display:flex;align-items:center;gap:18px;flex-shrink:0}
+.language-switch {display:flex;border:1px solid var(--line);border-radius:5px;padding:3px;gap:2px;font:11px var(--mono)}
+.language-switch a {display:grid;place-items:center;min-width:44px;min-height:44px;border-radius:3px}
+.language-switch a[aria-current] {background:var(--navy);color:white}
+.language-switch a:not([aria-current]):hover {background:var(--wash)}
 .hero-section {display:grid;grid-template-columns:1fr 1.08fr;align-items:center;position:relative;padding-top:50px}
 .hero-copy {padding:32px 0 48px;position:relative;z-index:1}
 .hero-copy .eyebrow {font-size:10px}
@@ -198,6 +203,7 @@ mark {background:var(--orange);color:var(--ink);box-decoration-break:clone;-webk
   .content-cards{gap:28px 22px}.card-text h2{font-size:20px}
 }
 @media(max-width:760px) {
+  .header-inner{gap:12px}.header-controls{gap:12px}.language-switch{padding:2px;font-size:10px}
   .wrap{width:calc(100% - 40px)}.header-inner{min-height:80px}.brand img{width:76px;height:46px}.brand span{display:block;font-size:10px}
   .desktop-nav{display:none}.mobile-nav{display:block}.mobile-nav summary{display:flex;align-items:center;gap:10px;font-size:13px;min-height:44px;list-style:none;padding:10px 0}
   .mobile-nav summary::-webkit-details-marker{display:none}.mobile-nav nav{position:absolute;top:80px;left:0;width:100%;padding:12px 20px 24px;background:white;border-bottom:1px solid var(--line);box-shadow:0 20px 24px #1024480d;z-index:20}
@@ -227,6 +233,7 @@ mark {background:var(--orange);color:var(--ink);box-decoration-break:clone;-webk
   .album-grid{grid-template-columns:1fr 1fr;gap:20px 14px;padding-bottom:50px}.album-grid>a>span{font-size:8px}.contact-cards{grid-template-columns:1fr;gap:32px;padding-bottom:50px}.contact-cards h2{margin:14px 0 20px}
 }
 @media(max-width:420px) {
+  .brand span{display:none}.header-controls{gap:14px}
   .brand span{font-size:9px}.hero-copy h1{font-size:69px}.hero-lead{font-size:25px}.hero-art{margin-top:8px}.hero-actions{gap:12px}
   .hero-actions .text-link{font-size:11px}.about-section h2{font-size:31px}.about-facts{grid-template-columns:1fr}.content-cards{grid-template-columns:1fr}
   .featured-product{grid-template-columns:112px 1fr;column-gap:18px}.featured-title h3{font-size:18px}.form-pair{grid-template-columns:1fr}.section-heading{flex-wrap:wrap}

@@ -1,6 +1,9 @@
 ---
-import { url,imageUrl,type Card } from '../lib/site';
-interface Props { cards:Card[]; gallery?:boolean }
-const {cards,gallery=false}=Astro.props;
+import { translator, type Locale } from '../lib/i18n';
+import { url as siteUrl,imageUrl,type Card } from '../lib/site';
+interface Props { cards:Card[]; gallery?:boolean; locale?:Locale }
+const {cards,gallery=false,locale='uk'}=Astro.props;
+const t=translator(locale);
+const url=(path:string)=>siteUrl(path,locale);
 ---
-<div class:list={['content-cards',{'gallery-cards':gallery}]}>{cards.map(card=><article class="content-card"><a href={url(card.href)} class="card-link"><div class="card-image">{card.image&&<img src={imageUrl(card.image)} alt={card.title} width="800" height="600" loading="lazy" decoding="async"/>}<span class="card-arrow" aria-hidden="true">↗</span></div><div class="card-text"><h2>{card.title}</h2>{card.description&&<p>{card.description}</p>}<span class="text-link">{gallery?'Переглянути роботу':'Докладніше'} <span aria-hidden="true">→</span></span></div></a></article>)}</div>
+<div class:list={['content-cards',{'gallery-cards':gallery}]}>{cards.map(card=><article class="content-card"><a href={url(card.href)} class="card-link"><div class="card-image">{card.image&&<img src={imageUrl(card.image)} alt={t(card.title)} width="800" height="600" loading="lazy" decoding="async"/>}<span class="card-arrow" aria-hidden="true">↗</span></div><div class="card-text"><h2>{t(card.title)}</h2>{card.description&&<p>{t(card.description)}</p>}<span class="text-link">{t(gallery?'Переглянути роботу':'Докладніше')} <span aria-hidden="true">→</span></span></div></a></article>)}</div>

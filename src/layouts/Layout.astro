@@ -6,16 +6,39 @@ import '@fontsource/ibm-plex-mono/400.css';
 import '../styles/global.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
-import { url } from '../lib/site';
-interface Props { title?: string; description?: string; canonicalPath?: string; contact?: boolean }
-const { title='Виготовлення та ремонт вузлів і агрегатів',description='Дніпропетровський завод спецремонта. Виготовлення вузлів, ремонт редукторів, фрикційні вироби та механічна обробка. Працюємо у Дніпрі з 2003 року.',canonicalPath,contact=true } = Astro.props;
-const canonical = new URL(canonicalPath ? url(canonicalPath) : Astro.url.pathname, Astro.site);
+import { url, contentPath } from '../lib/site';
+import { translator, type Locale } from '../lib/i18n';
+
+interface Props { title?: string; description?: string; canonicalPath?: string; contact?: boolean; locale?: Locale }
+const { title = 'Виготовлення та ремонт вузлів і агрегатів', description = 'Дніпропетровський завод спецремонта. Виготовлення вузлів, ремонт редукторів, фрикційні вироби та механічна обробка. Працюємо у Дніпрі з 2003 року.', canonicalPath, contact = true, locale = 'uk' } = Astro.props;
+const t = translator(locale);
+const path = canonicalPath || contentPath(Astro.url.pathname);
+const absolute = (language: Locale) => new URL(url(path, language), Astro.site);
+const pageTitle = t(title) + ' — ' + t('ДЗС');
 ---
 <!doctype html>
-<html lang="uk"><head>
-<meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>{title} — ДЗС</title><meta name="description" content={description}/>
-<meta name="robots" content="noindex, nofollow"/><meta name="theme-color" content="#102448"/>
-<link rel="canonical" href={canonical}/><link rel="icon" href={url('/favicon.svg')} type="image/svg+xml"/>
-<meta property="og:title" content={title+' — ДЗС'}/><meta property="og:description" content={description}/><meta property="og:type" content="website"/>
-</head><body><Header/><main id="main" tabindex="-1"><slot/></main><Footer contact={contact}/></body></html>
+<html lang={locale}>
+  <head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>{pageTitle}</title>
+    <meta name="description" content={t(description)}/>
+    <meta name="robots" content="noindex, nofollow"/>
+    <meta name="theme-color" content="#102448"/>
+    <link rel="canonical" href={absolute(locale)}/>
+    <link rel="alternate" hreflang="uk" href={absolute('uk')}/>
+    <link rel="alternate" hreflang="en" href={absolute('en')}/>
+    <link rel="alternate" hreflang="x-default" href={absolute('uk')}/>
+    <link rel="icon" href={url('/favicon.svg')} type="image/svg+xml"/>
+    <meta property="og:title" content={pageTitle}/>
+    <meta property="og:description" content={t(description)}/>
+    <meta property="og:type" content="website"/>
+    <meta property="og:locale" content={locale === 'en' ? 'en_GB' : 'uk_UA'}/>
+    <meta property="og:locale:alternate" content={locale === 'en' ? 'uk_UA' : 'en_GB'}/>
+  </head>
+  <body>
+    <Header locale={locale}/>
+    <main id="main" tabindex="-1"><slot/></main>
+    <Footer contact={contact} locale={locale}/>
+  </body>
+</html>

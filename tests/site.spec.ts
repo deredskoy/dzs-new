@@ -1,6 +1,7 @@
 import { test, expect } from '@playwright/test';
 import fs from 'node:fs';
 import path from 'node:path';
+import { emailDraft } from '../src/lib/contact';
 
 const base = '/dzs-new/';
 function htmlFiles(dir: string): string[] {
@@ -15,8 +16,15 @@ test('every built page and its local links and media resolve', async ({ request 
     const response = await request.get(base + relative);
     expect(response.status(), relative).toBe(200);
     const html = await response.text();
-    expect(html, relative).toContain('lang="uk"');
+    const language = relative.startsWith('en/') ? 'en' : 'uk';
+    expect(html, relative).toContain('lang="' + language + '"');
     expect(html, relative).toContain('noindex, nofollow');
+    expect(html, relative).toContain('hreflang="uk"');
+    expect(html, relative).toContain('hreflang="en"');
+    expect(html, relative).toContain('hreflang="x-default"');
+    if (language === 'en') {
+      expect(html, 'Untranslated text or labels in ' + relative).not.toMatch(/[А-Яа-яІіЇїЄєҐґЁё]/u);
+    }
     expect((html.match(/<h1(?:\s|>)/g) || []).length, relative).toBe(1);
     for (const match of html.matchAll(/(?:href|src)="([^"]+)"/g)) {
       const target = match[1].split('#')[0].split('?')[0];
@@ -40,8 +48,9 @@ for (const viewport of screens) {
     await page.setViewportSize(viewport);
     const errors: string[] = [];
     page.on('pageerror', error => errors.push(error.message));
-    for (const route of routes) {
-      await page.goto(base + route);
+    for (const locale of ['uk', 'en']) {
+      for (const route of routes) {
+      await page.goto(base + (locale === 'en' ? 'en/' : '') + route);
       await page.evaluate(async () => {
         document.querySelectorAll<HTMLImageElement>('img').forEach(img => img.loading = 'eager');
         await document.fonts.ready;
@@ -55,8 +64,14 @@ for (const viewport of screens) {
       expect(state.scrollWidth, route).toBeLessThanOrEqual(state.width + 1);
       expect(state.brokenImages, route).toEqual([]);
       await expect(page.locator('h1')).toBeVisible();
+      for (const link of await page.locator('.language-switch a').all()) {
+        const box = await link.boundingBox();
+        expect(box?.width).toBeGreaterThanOrEqual(44);
+        expect(box?.height).toBeGreaterThanOrEqual(44);
+      }
       if ((viewport.width === 375 || viewport.width === 1440) && (route === '' || route.startsWith('product/'))) {
-        await page.screenshot({ path: 'test-results/' + (route ? 'product' : 'home') + '-' + viewport.width + '.png', fullPage: true });
+        await page.screenshot({ path: 'test-results/' + locale + '-' + (route ? 'product' : 'home') + '-' + viewport.width + '.png', fullPage: true });
+      }
       }
     }
     expect(errors).toEqual([]);
@@ -94,4 +109,65 @@ test('skip link supports keyboard navigation', async ({ page }) => {
   await expect(page.getByRole('link', { name: 'Перейти до вмісту' })).toBeFocused();
   await page.keyboard.press('Enter');
   await expect(page.locator('#main')).toBeFocused();
+});
+
+test('language switch preserves the page and section, including legacy aliases and errors', async ({ page }) => {
+  await page.setViewportSize({ width: 375, height: 812 });
+  const pairs = [
+    ['', 'en/'],
+    ['product/info/proizvodstvo-tormoznoj-diskovoj-nakladki-dlya-samosvala-belaz-130t/', 'en/product/info/proizvodstvo-tormoznoj-diskovoj-nakladki-dlya-samosvala-belaz-130t/'],
+    ['portfolio/remont-planetarnogo-reduktora-hoda-ekg-10i/', 'en/portfolio/remont-planetarnogo-reduktora-hoda-ekg-10i/'],
+    ['catalog/category/remont-planetarnyh-reduktorov-hoda-povorota-ekskavatorov/', 'en/catalog/category/remont-planetarnyh-reduktorov-hoda-povorota-ekskavatorov/'],
+    ['404.html', 'en/404/'],
+  ];
+  for (const [uk, en] of pairs) {
+    const hash = uk === '404.html' ? '' : '#contact';
+    await page.goto(base + uk + hash);
+    await page.locator('.language-switch a[hreflang="en"]').click();
+    expect(new URL(page.url()).pathname + new URL(page.url()).hash).toBe(base + en + hash);
+    await expect(page.locator('html')).toHaveAttribute('lang', 'en');
+    await expect(page.locator('.language-switch a[hreflang="en"]')).toHaveAttribute('aria-current', 'true');
+    await page.locator('.language-switch a[hreflang="uk"]').click();
+    expect(new URL(page.url()).pathname + new URL(page.url()).hash).toBe(base + uk + hash);
+    await expect(page.locator('html')).toHaveAttribute('lang', 'uk');
+  }
+});
+
+test('English navigation, breadcrumbs and content links remain in English', async ({ page }) => {
+  await page.goto(base + 'en/');
+  await page.getByRole('navigation', { name: 'Main navigation' }).getByRole('link', { name: 'Company', exact: true }).click();
+  await expect(page).toHaveURL(/\/en\/about-company\/$/);
+  await page.locator('.rich-content').getByRole('link', { name: 'Our machine shop' }).click();
+  await expect(page).toHaveURL(/\/en\/states\/nash-stanochnyy-park\/$/);
+  await expect(page.locator('h1')).toHaveText('Our machine shop');
+  await expect(page.locator('.rich-content')).toContainText('3000 kg');
+  await page.locator('.breadcrumbs').getByRole('link', { name: 'Home', exact: true }).click();
+  await expect(page).toHaveURL(/\/en\/$/);
+  await page.getByRole('navigation', { name: 'Main navigation' }).getByRole('link', { name: 'Products & services' }).click();
+  await page.locator('.content-card').filter({ hasText: '130-tonne BelAZ' }).getByRole('link').first().click();
+  await expect(page.locator('h1')).toHaveText('Brake lining for BelAZ');
+  await expect(page.locator('.rich-content')).toContainText('75131-3577060-01');
+  await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', /\/dzs-new\/en\/product\//);
+});
+
+test('English contact form and prepared email use English labels', async ({ page }) => {
+  await page.goto(base + 'en/contacts/');
+  await page.getByLabel('Your name').fill('Jane + Alex');
+  await page.getByLabel('Email', { exact: false }).first().fill('review@example.com');
+  await page.getByLabel('What do you need manufactured or repaired?').fill('Parts & assemblies — 75131-3577060-01');
+  const form = page.locator('[data-contact-form]');
+  expect(await form.evaluate((element: HTMLFormElement) => element.checkValidity())).toBe(true);
+  await expect(form.getByRole('button')).toHaveText(/Prepare an email/);
+  const labels = JSON.parse((await form.getAttribute('data-email-labels'))!);
+  const data = new FormData();
+  data.set('name', 'Jane + Alex');
+  data.set('email', 'review@example.com');
+  data.set('message', 'Parts & assemblies — 75131-3577060-01');
+  const draft = emailDraft(data, labels);
+  expect(draft).toContain('subject=Enquiry%20to%20DZS');
+  expect(draft).toContain('Jane%20%2B%20Alex');
+  const parsed = new URL(draft);
+  expect(parsed.searchParams.get('body')).toContain('Name: Jane + Alex');
+  expect(parsed.searchParams.get('body')).toContain('Parts & assemblies — 75131-3577060-01');
+  expect(await form.getAttribute('data-email-status')).toContain('Send the prepared draft');
 });

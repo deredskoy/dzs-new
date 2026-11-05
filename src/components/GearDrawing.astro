@@ -1,4 +1,8 @@
 ---
+interface Props { locale?:Locale }
+const {locale='uk'}=Astro.props;
+const t=translator(locale);
+import { translator, type Locale } from '../lib/i18n';
 function gear(teeth: number, outer: number, root: number, hole: number) {
   const points = Array.from({ length: teeth * 4 }, (_, i) => {
     const r = i % 4 === 1 || i % 4 === 2 ? outer : root;
@@ -17,5 +21,5 @@ function gear(teeth: number, outer: number, root: number, hole: number) {
   </g>
   <g transform="translate(331 245) rotate(12)"><path d={gear(12,113,94,55)} fill="var(--navy)" fill-rule="evenodd"/></g>
   <g transform="translate(448 349) rotate(7)"><path d={gear(10,72,57,33)} fill="var(--orange)" fill-rule="evenodd"/></g>
-  <g class="drawing-labels" fill="currentColor" font-size="10" font-family="monospace"><text x="58" y="38">Ø 210</text><text x="311" y="483">275 ±0.1</text><text x="562" y="334" transform="rotate(-90 562 334)">200 ±0.05</text><text x="183" y="365">A</text><text x="183" y="444">A</text><text x="39" y="518">ДЗС · ВИРОБНИЦТВО / РЕМОНТ</text><text x="491" y="518">01 / 03</text></g>
+  <g class="drawing-labels" fill="currentColor" font-size="10" font-family="monospace"><text x="58" y="38">Ø 210</text><text x="311" y="483">275 ±0.1</text><text x="562" y="334" transform="rotate(-90 562 334)">200 ±0.05</text><text x="183" y="365">A</text><text x="183" y="444">A</text><text x="39" y="518">{t("ДЗС · ВИРОБНИЦТВО / РЕМОНТ")}</text><text x="491" y="518">01 / 03</text></g>
 </svg>
