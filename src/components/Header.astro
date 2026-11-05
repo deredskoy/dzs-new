@@ -12,6 +12,14 @@ const nav = [
   { title: 'Галерея', href: '/portfolio' },
   { title: 'Контакти', href: '/contacts' },
 ];
+function currentSection(href: string) {
+  if (currentPath === href) return 'page';
+  const section = currentPath.split('/')[1];
+  if ((href === '/catalog' && ['catalog', 'product'].includes(section))
+    || (href === '/about-company' && section === 'states')
+    || (href === '/portfolio' && section === 'portfolio')) return 'location';
+  return undefined;
+}
 ---
 <a class="skip-link" href="#main">{t('Перейти до вмісту')}</a>
 <header class="site-header">
@@ -21,7 +29,7 @@ const nav = [
       <span>{t('Дніпропетровський')}<br/>{t('завод спецремонта')}</span>
     </a>
     <nav class="desktop-nav" aria-label={t('Головна навігація')}>
-      {nav.map(item => <a href={url(item.href, locale)} aria-current={currentPath === item.href ? 'page' : undefined}>{t(item.title)}</a>)}
+      {nav.map(item => <a href={url(item.href, locale)} aria-current={currentSection(item.href)}>{t(item.title)}</a>)}
     </nav>
     <div class="header-controls">
       <nav class="language-switch" aria-label={t('Мова сайту')}>
@@ -29,9 +37,9 @@ const nav = [
         <a href={url(currentPath, 'en')} hreflang="en" aria-label={t('Англійська')} aria-current={locale === 'en' ? 'true' : undefined} data-language-link>EN</a>
       </nav>
       <details class="mobile-nav">
-        <summary aria-label={t('Відкрити навігацію')}>{t('Меню')} <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M3 6H21M3 12H21M3 18H21" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></summary>
+        <summary>{t('Меню')} <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5"><path class="menu-lines" d="M3 6H21M3 12H21M3 18H21"/><path class="menu-close" d="M5 5L19 19M5 19L19 5"/></svg></summary>
         <nav aria-label={t('Мобільна навігація')}>
-          {nav.map(item => <a href={url(item.href, locale)}>{t(item.title)}<span aria-hidden="true">↗</span></a>)}
+          {nav.map(item => <a href={url(item.href, locale)} aria-current={currentSection(item.href)}>{t(item.title)}<span aria-hidden="true">↗</span></a>)}
         </nav>
       </details>
     </div>
@@ -41,4 +49,21 @@ const nav = [
   document.querySelectorAll<HTMLAnchorElement>('[data-language-link]').forEach(link => {
     link.addEventListener('click', () => { link.hash = window.location.hash; });
   });
+  const menu = document.querySelector<HTMLDetailsElement>('.mobile-nav');
+  if (menu) {
+    document.addEventListener('keydown', event => {
+      if (event.key !== 'Escape' || !menu.open) return;
+      menu.open = false;
+      menu.querySelector('summary')?.focus();
+    });
+    document.addEventListener('click', event => {
+      if (event.target instanceof Node && !menu.contains(event.target)) menu.open = false;
+    });
+    menu.addEventListener('focusout', event => {
+      if (event.relatedTarget instanceof Node && !menu.contains(event.relatedTarget)) menu.open = false;
+    });
+    matchMedia('(min-width: 961px)').addEventListener('change', event => {
+      if (event.matches) menu.open = false;
+    });
+  }
 </script>

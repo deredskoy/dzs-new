@@ -37,8 +37,10 @@ test('every built page and its local links and media resolve', async ({ request 
 });
 
 const screens = [
+  { width: 320, height: 740 },
   { width: 375, height: 812 },
   { width: 768, height: 1024 },
+  { width: 1024, height: 768 },
   { width: 1440, height: 1000 },
 ];
 const routes = ['', 'catalog/', 'product/info/proizvodstvo-tormoznoj-diskovoj-nakladki-dlya-samosvala-belaz-130t/', 'states/nash-stanochnyy-park/', 'states/dokumenty/', 'portfolio/', 'contacts/'];
@@ -71,6 +73,10 @@ for (const viewport of screens) {
       }
       if ((viewport.width === 375 || viewport.width === 1440) && (route === '' || route.startsWith('product/'))) {
         await page.screenshot({ path: 'test-results/' + locale + '-' + (route ? 'product' : 'home') + '-' + viewport.width + '.png', fullPage: true });
+        if (route === '') {
+          await page.screenshot({ path: 'test-results/' + locale + '-hero-' + viewport.width + '.png' });
+          await page.locator(viewport.width === 375 ? '.contact-form' : '.contact-grid').screenshot({ path: 'test-results/' + locale + '-form-' + viewport.width + '.png' });
+        }
       }
       }
     }
@@ -78,16 +84,34 @@ for (const viewport of screens) {
   });
 }
 
-test('mobile menu opens and follows a section link', async ({ page }) => {
+test('mobile menu supports dismissal, focus and active sections', async ({ page }) => {
   await page.setViewportSize({ width: 375, height: 812 });
   await page.goto(base);
   const navigation = page.getByRole('navigation', { name: 'Мобільна навігація' });
   await expect(navigation).not.toBeVisible();
   await page.getByText('Меню', { exact: false }).first().click();
   await expect(navigation).toBeVisible();
+  await navigation.getByRole('link', { name: 'Галерея' }).focus();
+  await page.keyboard.press('Escape');
+  await expect(navigation).not.toBeVisible();
+  await expect(page.locator('.mobile-nav summary')).toBeFocused();
+  await page.keyboard.press('Enter');
+  await expect(navigation).toBeVisible();
+  await page.locator('.language-switch a').first().focus();
+  await expect(navigation).not.toBeVisible();
+  await page.locator('.mobile-nav summary').click();
+  await page.locator('.hero-baseline > span').click();
+  await expect(navigation).not.toBeVisible();
+  await page.locator('.mobile-nav summary').click();
   await navigation.getByRole('link', { name: 'Галерея' }).click();
   await expect(page).toHaveURL(/\/portfolio\/$/);
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Галерея робіт');
+  await page.locator('.mobile-nav summary').click();
+  await expect(navigation.getByRole('link', { name: 'Галерея' })).toHaveAttribute('aria-current', 'page');
+  await page.setViewportSize({ width: 1024, height: 768 });
+  await expect(page.locator('.mobile-nav')).toHaveJSProperty('open', false);
+  await page.setViewportSize({ width: 375, height: 812 });
+  await expect(navigation).not.toBeVisible();
 });
 
 test('contact form uses visible labels and native validation without sending', async ({ page }) => {
@@ -146,6 +170,7 @@ test('English navigation, breadcrumbs and content links remain in English', asyn
   await page.getByRole('navigation', { name: 'Main navigation' }).getByRole('link', { name: 'Products & services' }).click();
   await page.locator('.content-card').filter({ hasText: '130-tonne BelAZ' }).getByRole('link').first().click();
   await expect(page.locator('h1')).toHaveText('Brake lining for BelAZ');
+  await expect(page.getByRole('navigation', { name: 'Main navigation' }).getByRole('link', { name: 'Products & services' })).toHaveAttribute('aria-current', 'location');
   await expect(page.locator('.rich-content')).toContainText('75131-3577060-01');
   await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', /\/dzs-new\/en\/product\//);
 });

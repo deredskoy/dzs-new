@@ -26,7 +26,7 @@ const emailStatus = t('Надішліть підготовлений лист у
         <p class="address">{t('Україна, м. Дніпро')}</p>
         <a class="text-link" href={url('/contacts')}>{t('Усі контакти ↗')}</a>
       </div>
-      <form class="contact-form" action="mailto:tovdzs@gmail.com" method="get" data-contact-form data-email-labels={JSON.stringify(emailLabels)} data-email-status={emailStatus}>
+      <form class="contact-form" action="mailto:tovdzs@gmail.com" method="get" aria-describedby="contact-note" data-contact-form data-email-labels={JSON.stringify(emailLabels)} data-email-status={emailStatus}>
         <div class="form-pair">
           <label>{t('Ваше ім’я')} <span aria-hidden="true">*</span><input name="name" autocomplete="name" required maxlength="100" placeholder={t('Як до вас звертатися')}/></label>
           <label>{t('Телефон')}<input name="phone" type="tel" autocomplete="tel" maxlength="50" placeholder="+380"/></label>
@@ -34,7 +34,7 @@ const emailStatus = t('Надішліть підготовлений лист у
         <label>{t('Електронна пошта')} <span aria-hidden="true">*</span><input name="email" type="email" autocomplete="email" required maxlength="200" placeholder="name@company.ua"/></label>
         <label>{t('Компанія')}<input name="company" autocomplete="organization" maxlength="200" placeholder={t('Назва підприємства')}/></label>
         <label>{t('Що потрібно виготовити чи відновити?')} <span aria-hidden="true">*</span><textarea name="message" required rows="4" maxlength="5000" placeholder={t('Тип обладнання, деталь, характер робіт…')}></textarea></label>
-        <p class="form-note">{t('Кнопка підготує лист у вашій поштовій програмі. Ви зможете додати файли та надіслати його.')}</p>
+        <p class="form-note" id="contact-note">{t('Кнопка підготує лист у вашій поштовій програмі. Ви зможете додати файли та надіслати його.')}</p>
         <div class="form-actions">
           <p class="form-status" role="status" aria-live="polite"></p>
           <button class="button" type="submit">{t('Підготувати лист')} <span aria-hidden="true">↗</span></button>
