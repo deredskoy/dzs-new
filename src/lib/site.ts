@@ -1,5 +1,6 @@
 import source from '../data/site-content.json';
 import assets from '../data/asset-map.json';
+import details from '../data/product-details.json';
 import { normalizeText, translate, translateHtml, type Locale } from './i18n';
 
 export interface Card { title: string; href: string; image: string; description: string }
@@ -92,8 +93,35 @@ export function titleFor(page: SourcePage, locale: Locale = 'uk') {
   if (page.path.split('/').length > 4 && page.path.startsWith('/catalog/') && page.cards.length === 1) return page.cards[0].title;
   return page.title;
 }
-export function richHtml(page: SourcePage, locale: Locale = 'uk') {
-  return page.html.replace(/(?:&nbsp;|\u00a0)+/g, ' ').replace(/ {2,}/g, ' ')
+// The old site typed lists as paragraphs or <br> lines starting with a dash; turn them into real lists.
+const dashLine = /^\s*(?:<[^>]+>\s*)*[-–—]\s+/;
+function dashLists(html: string) {
+  return html.replace(/<p>([\s\S]*?)<\/p>/g, (paragraph, inner: string) => {
+    const lines = inner.split(/<br\s*\/?>/i);
+    if (!lines.some(line => dashLine.test(line))) return paragraph;
+    let result = '';
+    let text: string[] = [];
+    let items: string[] = [];
+    const flushText = () => { const value = text.join('<br>').trim(); if (value) result += '<p>' + value + '</p>'; text = []; };
+    const flushItems = () => { if (items.length) result += '<ul>' + items.map(item => '<li>' + item + '</li>').join('') + '</ul>'; items = []; };
+    for (const line of lines) {
+      if (dashLine.test(line)) { flushText(); items.push(line.replace(/^(\s*(?:<[^>]+>\s*)*)[-–—]\s+/, '$1').replace(/[;,]\s*$/, '').trim().replace(/^([^.]*)\.$/, '$1')); }
+      else { flushItems(); text.push(line); }
+    }
+    flushItems(); flushText();
+    return result;
+  }).replace(/<\/ul>\s*<ul>/g, '');
+}
+/** Where the first list of a page is replaced by a structured graphic. */
+export const graphicMarker = '<!--graphic-->';
+export interface RichOptions { worksheet?: boolean; replaceList?: boolean }
+export function richHtml(page: SourcePage, locale: Locale = 'uk', options: RichOptions = {}) {
+  let html = dashLists(page.html.replace(/(?:&nbsp;|\u00a0)+/g, ' ').replace(/ {2,}/g, ' '));
+  // A repair page's list is the sequence of work done; it reads as a numbered job sheet.
+  if (options.worksheet) html = html.replace('<ul>', '<ol class="worksheet">').replace(/<\/ul>/, '</ol>');
+  // The page is split around the graphic, so plain wrappers must not stay open across the split.
+  if (options.replaceList) html = html.replace(/<\/?(?:div|section)>/g, '').replace(/<ul>[\s\S]*?<\/ul>/, graphicMarker);
+  return html
     .replace(/<p>\s*<img [^>]*src="([^"]+)"[^>]*>\s*<\/p>/g, (match, src) => retiredImages.includes(src) ? '' : match)
     .replace(/<p>(?:\s*<br\s*\/?>)+/g, '<p>').replace(/(?:<br\s*\/?>\s*)+<\/p>/g, '</p>')
     .replace(/<p>\s*<\/p>/g, '')
@@ -108,4 +136,25 @@ export function richHtml(page: SourcePage, locale: Locale = 'uk') {
     })
     .replace(/<img /g, '<img loading="lazy" decoding="async" ')
     .replace(/<h1\b/g, '<h2').replace(/<\/h1>/g, '</h2>');
+}
+
+export interface ProductDetail { kind: 'part' | 'make' | 'repair' | 'machining' | 'sale'; lead: string; facts: [string, string][]; graphic?: 'timeline' | 'models' | 'lathe-1553' | 'lathe-dip400' | 'press'; worksheet?: boolean }
+const productData = details as unknown as { products: Record<string, ProductDetail>; timeline: { year: number; title: string; code: string; href: string }[]; models: { brand: string; type: string; models: string[] }[]; briefs: Record<ProductDetail['kind'], string[]> };
+export const partsTimeline = productData.timeline;
+export const excavatorModels = productData.models;
+export function productDetail(path: string) {
+  const detail = productData.products[path];
+  return detail ? { ...detail, brief: productData.briefs[detail.kind] } : undefined;
+}
+/** Other work from the same catalogue section: the narrowest section first, then its parent. */
+export function relatedCards(path: string, locale: Locale = 'uk', limit = 3) {
+  const sections = sourcePages.filter(page => page.path.startsWith('/catalog/category/') && page.cards.some(card => card.href === path))
+    .sort((a, b) => b.path.split('/').length - a.path.split('/').length);
+  const cards: Card[] = [];
+  for (const section of sections) {
+    for (const card of localizePage(section, locale).cards) {
+      if (card.href !== path && card.href.startsWith('/product/') && !cards.some(other => other.href === card.href)) cards.push(card);
+    }
+  }
+  return cards.slice(0, limit);
 }

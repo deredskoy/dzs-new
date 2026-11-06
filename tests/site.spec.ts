@@ -43,7 +43,13 @@ const screens = [
   { width: 1024, height: 768 },
   { width: 1440, height: 1000 },
 ];
-const routes = ['', 'catalog/', 'product/info/proizvodstvo-tormoznoj-diskovoj-nakladki-dlya-samosvala-belaz-130t/', 'states/nash-stanochnyy-park/', 'states/dokumenty/', 'portfolio/', 'contacts/'];
+const product = {
+  hitachi: 'product/info/proizvodstvo-tormoznoj-diskovoj-kolodki-4674697-hitachi-eh-3500/',
+  lathe: 'product/info/vypolnim-tokarnye-raboty-na-karusel-nom-stanke/',
+  komatsu: 'product/info/remont-planetarnogo-reduktora-povorota-ekskavatora-komatsu-pc-3000/',
+  planetary: 'product/info/izgotovlenie-planetarnyh-reduktorov-hoda-i-povorota/',
+};
+const routes = ['', 'catalog/', 'product/info/proizvodstvo-tormoznoj-diskovoj-nakladki-dlya-samosvala-belaz-130t/', ...Object.values(product), 'states/nash-stanochnyy-park/', 'states/dokumenty/', 'portfolio/', 'contacts/'];
 
 for (const viewport of screens) {
   test('layout and image loading at '+viewport.width+'px', async ({ page }) => {
@@ -142,6 +148,38 @@ test('contact form uses visible labels and native validation without sending', a
   await expect(form).toHaveAttribute('action', 'mailto:tovdzs@gmail.com');
   await expect(form.getByRole('button')).toHaveText(/Підготувати лист/);
   await expect(form.locator('.form-note')).toContainText('поштовій програмі');
+});
+
+test('product pages add facts, real lists and one graphic from the source data', async ({ page }) => {
+  await page.goto(base + product.hitachi);
+  await expect(page.locator('.product-facts')).toContainText('4674697');
+  await expect(page.locator('.product-facts')).toContainText('ТУ У 29.3-32510553-001:2017');
+  await expect(page.locator('.parts-timeline li')).toHaveCount(4);
+  await expect(page.locator('.parts-timeline [aria-current="page"]')).toContainText('2016');
+  await expect(page.locator('.contact-brief li')).toHaveCount(4);
+  const related = page.locator('.related-section .card-link');
+  await expect(related).toHaveCount(3);
+  for (const link of await related.all()) expect(await link.getAttribute('href')).not.toContain('4674697-hitachi');
+
+  await page.goto(base + product.lathe);
+  await expect(page.locator('.machine-figure svg')).toBeVisible();
+  await expect(page.locator('.rich-content li', { hasText: 'свердління' })).toHaveCount(1);
+  const dashLines = await page.locator('.rich-content p').evaluateAll(items => items.filter(item => /^\s*[-–—]\s/.test(item.textContent || '')).length);
+  expect(dashLines).toBe(0);
+
+  await page.goto(base + product.komatsu);
+  await expect(page.locator('.rich-content ol.worksheet li')).toHaveCount(6);
+  await expect(page.locator('.product-facts')).toContainText('Полтавський ГЗК');
+
+  await page.goto(base + product.planetary);
+  await expect(page.locator('.model-group')).toHaveCount(4);
+  await expect(page.locator('.model-groups')).toContainText('PC 8000-6');
+  await expect(page.locator('.rich-content', { hasText: 'PC 8000-6' })).toHaveCount(0);
+  expect(await page.locator('.model-groups').evaluate(element => element.closest('.rich-content') === null)).toBe(true);
+
+  await page.goto(base + 'en/' + product.hitachi);
+  await expect(page.locator('.product-facts')).toContainText('Part number');
+  await expect(page.locator('.parts-timeline')).toContainText('This page');
 });
 
 test('skip link supports keyboard navigation', async ({ page }) => {

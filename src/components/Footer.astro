@@ -2,8 +2,8 @@
 import { url as siteUrl, companyLinks } from '../lib/site';
 import { translator, type Locale } from '../lib/i18n';
 
-interface Props { contact?: boolean; contactDetails?: boolean; locale?: Locale }
-const { contact = true, contactDetails = true, locale = 'uk' } = Astro.props;
+interface Props { contact?: boolean; contactDetails?: boolean; brief?: { items: string[]; note?: string }; locale?: Locale }
+const { contact = true, contactDetails = true, brief, locale = 'uk' } = Astro.props;
 const t = translator(locale);
 const url = (path: string) => siteUrl(path, locale);
 const emailLabels = { name: t('Ім’я:'), company: t('Компанія:'), phone: t('Телефон:'), subject: t('Запит до ДЗС') };
@@ -16,7 +16,11 @@ const emailStatus = t('Надішліть підготовлений лист у
     <div class="contact-grid">
       <div class="contact-details">
         <h3>{t('Поговорімо про деталі')}</h3>
-        <p>{t('Опишіть виріб, обладнання чи потрібну роботу. Креслення та фото можна додати до листа.')}</p>
+        {brief ? <div class="contact-brief">
+          <p>{t('Щоб ми швидше підготували розрахунок, вкажіть у листі:')}</p>
+          <ul>{brief.items.map(item => <li>{t(item)}</li>)}</ul>
+          {brief.note && <p class="contact-brief-note">{t(brief.note)}</p>}
+        </div> : <p class="contact-lead">{t('Опишіть виріб, обладнання чи потрібну роботу. Креслення та фото можна додати до листа.')}</p>}
         {contactDetails && <a class="contact-phone" href="tel:+380673775670">+38 (067) 377-56-70</a>}
         {contactDetails && <a class="contact-email" href="mailto:tovdzs@gmail.com">tovdzs@gmail.com <span aria-hidden="true">↗</span></a>}
         <div class="hours">

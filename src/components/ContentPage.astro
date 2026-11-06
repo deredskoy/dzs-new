@@ -2,7 +2,11 @@
 import Layout from '../layouts/Layout.astro';
 import WorkSteps from '../components/WorkSteps.astro';
 import ContentCards from '../components/ContentCards.astro';
-import { pageImages,titleFor,richHtml,imageUrl,imageSize,url as siteUrl,categories,companyLinks,type SourcePage } from '../lib/site';
+import ProductFacts from '../components/ProductFacts.astro';
+import PartsTimeline from '../components/PartsTimeline.astro';
+import ExcavatorModels from '../components/ExcavatorModels.astro';
+import MachineDrawing from '../components/MachineDrawing.astro';
+import { pageImages,titleFor,richHtml,graphicMarker,productDetail,relatedCards,imageUrl,imageSize,url as siteUrl,categories,companyLinks,type SourcePage } from '../lib/site';
 import { translator, type Locale } from '../lib/i18n';
 interface Props {page:SourcePage; locale?:Locale}
 const {page,locale='uk'}=Astro.props;
@@ -19,19 +23,28 @@ const images=pageImages(page).map(image=>({...image,...imageSize(image.src)}));
 const description=page.text?page.text.slice(0,155).trim()+(page.text.length>155?'…':''):title;
 const parentHref=product||catalog?'/catalog':gallery?'/portfolio':'/about-company';
 const parentTitle=product||catalog?'Продукція та послуги':gallery?'Галерея':'Підприємство';
+// Product pages add a short summary, a fact panel and, where the source has the data, one graphic.
+const detail=product?productDetail(page.path):undefined;
+const drawing=detail?.graphic==='lathe-1553'||detail?.graphic==='lathe-dip400'||detail?.graphic==='press'?detail.graphic:undefined;
+const [richBefore,richAfter]=richHtml(page,locale,{worksheet:detail?.worksheet,replaceList:detail?.graphic==='models'}).split(graphicMarker);
+const related=product?relatedCards(page.path,locale):[];
+const brief=detail?{items:detail.brief,note:detail.kind==='repair'?'Точний обсяг робіт визначимо після розбирання та дефектування.':undefined}:undefined;
 ---
-<Layout locale={locale} title={title} description={description} canonicalPath={page.path} contactDetails={!contacts}>
+<Layout locale={locale} title={title} description={description} canonicalPath={page.path} contactDetails={!contacts} contactBrief={brief}>
 <div class="wrap breadcrumbs"><a href={url('/')}>{t("Головна")}</a><span>/</span>{page.path!==parentHref&&!contacts&&<><a href={url(parentHref)}>{t(parentTitle)}</a><span>/</span></>}<span aria-current="page">{title}</span></div>
-{product?<section class="product-hero"><div class="wrap product-hero-grid"><div class="product-hero-image">{images[0]&&<img src={imageUrl(images[0].src)} width={images[0].width} height={images[0].height} alt={title} fetchpriority="high"/>}</div><div><p class="eyebrow">{t("ВИРОБНИЦТВО / РЕМОНТ · ДЗС")}</p><h1>{title}</h1><p class="product-intro">{t("Власна виробнича база. Робота за кресленням, технічним завданням або зразком замовника.")}</p><div class="product-cta"><a class="button button-light" href="#contact">{t("Обговорити замовлення ↗")}</a><a href="tel:+380673775670">+38 (067) 377-56-70</a></div></div></div></section>:<section class="page-heading wrap"><p class="eyebrow">{t(catalog?'НАШІ МОЖЛИВОСТІ':gallery?'РОБОТА В ДЕТАЛЯХ':contacts?'БУДЬМО НА ЗВ’ЯЗКУ':'ДНІПРОПЕТРОВСЬКИЙ ЗАВОД СПЕЦРЕМОНТА')}</p><h1>{title}</h1></section>}
+{product?<section class="product-hero"><div class="wrap product-hero-grid"><div class="product-hero-image">{images[0]&&<img src={imageUrl(images[0].src)} width={images[0].width} height={images[0].height} alt={title} fetchpriority="high"/>}</div><div><p class="eyebrow">{t("ВИРОБНИЦТВО / РЕМОНТ · ДЗС")}</p><h1>{title}</h1><p class="product-intro">{t(detail?.lead||"Власна виробнича база. Робота за кресленням, технічним завданням або зразком замовника.")}</p><div class="product-cta"><a class="button button-light" href="#contact">{t("Обговорити замовлення ↗")}</a><a href="tel:+380673775670">+38 (067) 377-56-70</a></div></div></div></section>:<section class="page-heading wrap"><p class="eyebrow">{t(catalog?'НАШІ МОЖЛИВОСТІ':gallery?'РОБОТА В ДЕТАЛЯХ':contacts?'БУДЬМО НА ЗВ’ЯЗКУ':'ДНІПРОПЕТРОВСЬКИЙ ЗАВОД СПЕЦРЕМОНТА')}</p><h1>{title}</h1></section>}
 
 {company&&<nav class="wrap section-nav" aria-label={t("Розділи підприємства")}>{companyLinks.map(item=><a href={url(item.href)} aria-current={page.path===item.href?'page':undefined}>{t(item.title)}</a>)}</nav>}
 {catalog&&<nav class="wrap section-nav" aria-label={t("Напрями діяльності")}><a href={url('/catalog')} aria-current={page.path==='/catalog'?'page':undefined}>{t("Усі напрями")}</a>{categories.map(item=><a href={url(item.href)} aria-current={page.path===item.href||page.path.startsWith(item.href+'/')?'page':undefined}>{t(item.title)}</a>)}</nav>}
 
 {contacts?<section class="wrap contact-cards"><article><span class="eyebrow">{t("ТЕЛЕФОН")}</span><h2>{t("Поговорімо")}</h2><a href="tel:+380673775670">+38 (067) 377-56-70</a><a href="tel:+380679723706">+38 (067) 972-37-06</a><a href="tel:+380967700405">+38 (096) 770-04-05</a></article><article><span class="eyebrow">{t("ЕЛЕКТРОННА ПОШТА")}</span><h2>{t("Напишіть нам")}</h2><a href="mailto:tovdzs@gmail.com">tovdzs@gmail.com ↗</a><p>{t("Додайте до листа креслення, фотографії та опис задачі.")}</p></article><article><span class="eyebrow">{t("ПІДПРИЄМСТВО")}</span><h2>{t("Дніпро, Україна")}</h2><p>{t("ТОВ «Дніпропетровський завод спецремонта»")}</p><p>{t("49038, м. Дніпро")}</p><p>{t("Перед візитом узгодьте час і місце зустрічі телефоном.")}</p></article></section>:galleryAlbum?<section class="wrap album-grid" aria-label={t("Фотографії виконаної роботи")}>{images.map((image,index)=><a href={imageUrl(image.src)} target="_blank" rel="noopener" data-shape={image.shape} aria-label={t('Відкрити фото')+' '+(index+1)+': '+title}><img src={imageUrl(image.src)} alt={image.alt||title+': '+t('фото')+' '+(index+1)} width={image.width} height={image.height} loading={index>1?'lazy':'eager'}/><span>{t('ФОТО')} {String(index+1).padStart(2,'0')} <span aria-hidden="true">↗</span></span></a>)}</section>:<>
-{page.text&&<section class:list={['wrap body-section',{'product-body':product}]}>{product&&<h2>{t("Докладніше")} <mark>{t("про виріб і роботи")}</mark></h2>}<div class="rich-content" set:html={richHtml(page,locale)}/></section>}
+{page.text&&(product?<section class="wrap body-section product-body"><div class:list={['product-body-grid',{'has-facts':detail}]}>{detail&&<ProductFacts facts={detail.facts} locale={locale}/>}<div class="product-text"><h2>{t("Докладніше")} <mark>{t("про виріб і роботи")}</mark></h2><div class="rich-content" set:html={richBefore}/>{richAfter!==undefined&&<><ExcavatorModels locale={locale}/><div class="rich-content" set:html={richAfter}/></>}</div></div></section>:<section class="wrap body-section"><div class="rich-content" set:html={richBefore}/></section>)}
+{detail?.graphic==='timeline'&&<PartsTimeline current={page.path} locale={locale}/>}
+{drawing&&<MachineDrawing variant={drawing} locale={locale}/>}
 {page.cards.length>0&&<section class="wrap card-section"><ContentCards cards={page.cards} gallery={gallery} locale={locale}/></section>}
 {catalog&&!page.cards.length&&<div class="wrap empty-catalog"><p>{t("Актуальну наявність та умови уточнюйте у наших спеціалістів.")}</p><a class="button" href="#contact">{t("Зв’язатися з ДЗС ↗")}</a></div>}
 {product&&images.length>1&&<section class="wrap product-gallery"><h2>{t("Деталі зблизька")}</h2><div class="album-grid">{images.slice(1).map(image=><a href={imageUrl(image.src)} target="_blank" rel="noopener" data-shape={image.shape}><img src={imageUrl(image.src)} alt={image.alt||title} width={image.width} height={image.height} loading="lazy"/></a>)}</div></section>}
 </>}
 {product&&<WorkSteps locale={locale}/>}
+{related.length>0&&<section class="wrap related-section" aria-labelledby="related-title"><h2 id="related-title">{t("Також у цьому напрямі")}</h2><ContentCards cards={related} locale={locale}/></section>}
 </Layout>
