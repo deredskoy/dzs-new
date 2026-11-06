@@ -10,7 +10,7 @@ export function emailDraft(data: FormData, labels: EmailLabels): string {
     labels.name + ' ' + data.get('name'),
     labels.company + ' ' + (data.get('company') || '—'),
     labels.phone + ' ' + (data.get('phone') || '—'),
-    'Email: ' + data.get('email'),
+    'Email: ' + (data.get('email') || '—'),
     '',
     String(data.get('message') || ''),
   ].join('\n');

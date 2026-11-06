@@ -9,8 +9,8 @@ import Footer from '../components/Footer.astro';
 import { url, contentPath } from '../lib/site';
 import { translator, type Locale } from '../lib/i18n';
 
-interface Props { title?: string; description?: string; canonicalPath?: string; contact?: boolean; locale?: Locale }
-const { title = 'Виготовлення та ремонт вузлів і агрегатів', description = 'Дніпропетровський завод спецремонта. Виготовлення вузлів, ремонт редукторів, фрикційні вироби та механічна обробка. Працюємо у Дніпрі з 2003 року.', canonicalPath, contact = true, locale = 'uk' } = Astro.props;
+interface Props { title?: string; description?: string; canonicalPath?: string; contact?: boolean; contactDetails?: boolean; locale?: Locale }
+const { title = 'Виготовлення та ремонт вузлів і агрегатів', description = 'Дніпропетровський завод спецремонта. Виготовлення вузлів, ремонт редукторів, фрикційні вироби та механічна обробка. Працюємо у Дніпрі з 2003 року.', canonicalPath, contact = true, contactDetails = true, locale = 'uk' } = Astro.props;
 const t = translator(locale);
 const path = canonicalPath || contentPath(Astro.url.pathname);
 const absolute = (language: Locale) => new URL(url(path, language), Astro.site);
@@ -39,6 +39,6 @@ const pageTitle = t(title) + ' — ' + t('ДЗС');
   <body>
     <Header locale={locale}/>
     <main id="main" tabindex="-1"><slot/></main>
-    <Footer contact={contact} locale={locale}/>
+    <Footer contact={contact} contactDetails={contactDetails} locale={locale}/>
   </body>
 </html>

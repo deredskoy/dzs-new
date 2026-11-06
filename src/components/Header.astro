@@ -32,12 +32,16 @@ function currentSection(href: string) {
       {nav.map(item => <a href={url(item.href, locale)} aria-current={currentSection(item.href)}>{t(item.title)}</a>)}
     </nav>
     <div class="header-controls">
+      <a class="header-phone" href="tel:+380673775670">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><path d="M8.6 3.5H5.2C4.3 3.5 3.5 4.3 3.6 5.2C4.3 13.1 10.9 19.7 18.8 20.4C19.7 20.5 20.5 19.7 20.5 18.8V15.4L16.3 13.8L14.2 15.9C11.6 14.7 9.3 12.4 8.1 9.8L10.2 7.7Z"/></svg>
+        <span class="header-phone-text"><span class="header-phone-number">+38 (067) 377-56-70</span><span class="header-phone-hours">{t('Пн–Пт, 09:00–18:00')}</span></span>
+      </a>
       <nav class="language-switch" aria-label={t('Мова сайту')}>
         <a href={url(currentPath, 'uk')} hreflang="uk" aria-label={t('Українська')} aria-current={locale === 'uk' ? 'true' : undefined} data-language-link>UA</a>
         <a href={url(currentPath, 'en')} hreflang="en" aria-label={t('Англійська')} aria-current={locale === 'en' ? 'true' : undefined} data-language-link>EN</a>
       </nav>
       <details class="mobile-nav">
-        <summary>{t('Меню')} <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5"><path class="menu-lines" d="M3 6H21M3 12H21M3 18H21"/><path class="menu-close" d="M5 5L19 19M5 19L19 5"/></svg></summary>
+        <summary><span class="menu-label">{t('Меню')}</span><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5"><path class="menu-lines" d="M3 6H21M3 12H21M3 18H21"/><path class="menu-close" d="M5 5L19 19M5 19L19 5"/></svg></summary>
         <nav aria-label={t('Мобільна навігація')}>
           {nav.map(item => <a href={url(item.href, locale)} aria-current={currentSection(item.href)}>{t(item.title)}<span aria-hidden="true">↗</span></a>)}
         </nav>

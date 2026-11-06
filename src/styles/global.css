@@ -65,6 +65,13 @@ mark { background: var(--orange); color: var(--ink); box-decoration-break: clone
 .mobile-nav { display: none; }
 .menu-close { display: none; }
 .header-controls { display: flex; align-items: center; gap: 16px; flex-shrink: 0; }
+/* The phone is the main way customers reach the plant, so it stays in the header on every page. */
+.header-phone { display: flex; align-items: center; gap: 10px; min-height: 48px; padding-right: 8px; color: var(--navy); }
+.header-phone svg { flex-shrink: 0; }
+.header-phone-text { display: flex; flex-direction: column; }
+.header-phone-number { font-size: 15px; font-weight: 500; line-height: 1.35; white-space: nowrap; color: var(--ink); }
+.header-phone-hours { font: 11px/1.5 var(--mono); color: var(--muted); white-space: nowrap; }
+.header-phone:hover .header-phone-number { text-decoration: underline; }
 .language-switch { display: flex; border: 1px solid var(--line); border-radius: var(--radius); padding: 3px; gap: 4px; font-size: 13px; font-weight: 500; }
 .language-switch a { display: grid; place-items: center; min-width: 44px; min-height: 44px; border-radius: 3px; transition: background .18s; }
 .language-switch a[aria-current] { background: var(--navy); color: white; }
@@ -92,7 +99,6 @@ mark { background: var(--orange); color: var(--ink); box-decoration-break: clone
 .services-section .eyebrow, .product-hero .eyebrow { color: var(--on-dark-muted); }
 .featured-products { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 36px; }
 .featured-product { position: relative; display: block; min-width: 0; }
-.product-index { display: block; font: 12px var(--mono); color: var(--on-dark-muted); margin-bottom: 14px; }
 .featured-image { display: grid; place-items: center; background: white; border-radius: 20px; aspect-ratio: 1.42; overflow: hidden; }
 .featured-image img { height: 100%; width: 100%; object-fit: contain; padding: 20px; transition: transform .22s; }
 .featured-title { display: flex; justify-content: space-between; align-items: flex-start; gap: 14px; border-top: 1px solid #61718c; padding-top: 20px; margin-top: 24px; }
@@ -112,8 +118,7 @@ mark { background: var(--orange); color: var(--ink); box-decoration-break: clone
 .about-intro p { font-size: 19px; line-height: 1.75; color: var(--muted); margin-bottom: 20px; }
 .about-facts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 36px; }
 .about-facts article { border-top: 1px solid var(--line); padding-top: 18px; }
-.about-facts span { font: 12px/1.6 var(--mono); color: var(--muted); }
-.about-facts h3 { font-size: 24px; margin: 16px 0 12px; }
+.about-facts h3 { font-size: 24px; margin: 6px 0 12px; }
 .about-facts p { font-size: 16px; color: var(--muted); }
 .partners-strip { padding: 40px 0 44px; background: var(--navy); color: white; }
 .partners-strip .eyebrow { color: var(--on-dark-muted); text-align: center; margin-bottom: 28px; }
@@ -135,6 +140,10 @@ mark { background: var(--orange); color: var(--ink); box-decoration-break: clone
 .card-image { position: relative; background: var(--wash); overflow: hidden; aspect-ratio: 1.45; border: 1px solid var(--line); border-radius: 8px; }
 .card-image img { height: 100%; width: 100%; object-fit: contain; padding: 22px; transition: transform .22s; }
 .gallery-cards .card-image img { object-fit: cover; padding: 0; }
+/* Vertical photos stay whole inside horizontal cards; a blurred copy of the same photo fills the sides. */
+.card-image[data-shape="portrait"]::before { content: ''; position: absolute; inset: -40px; background: var(--photo) center / cover; filter: blur(28px); opacity: .55; }
+.card-image[data-shape="portrait"] img { position: relative; }
+.gallery-cards .card-image[data-shape="portrait"] img { object-fit: contain; }
 .card-arrow { position: absolute; bottom: 12px; right: 12px; width: 40px; height: 40px; display: grid; place-items: center; border-radius: 50%; background: white; color: var(--navy); font-size: 22px; transition: background .18s; }
 .card-link:is(:hover, :focus-visible) .card-arrow { background: var(--orange); }
 .card-link:is(:hover, :focus-visible) h2 { text-decoration: underline; text-underline-offset: .2em; }
@@ -150,7 +159,7 @@ mark { background: var(--orange); color: var(--ink); box-decoration-break: clone
 .contact-details h3 { font-size: 28px; margin-bottom: 18px; }
 .contact-details > p:first-of-type { color: var(--muted); max-width: 38ch; font-size: 17px; margin-bottom: 28px; }
 .contact-phone { display: flex; align-items: center; min-height: 44px; font-size: 27px; letter-spacing: -.02em; margin-bottom: 8px; }
-.contact-email { display: flex; align-items: center; justify-content: space-between; min-height: 44px; max-width: 340px; font-size: 20px; margin-bottom: 28px; text-decoration: underline; }
+.contact-email { display: flex; align-items: center; gap: 10px; width: fit-content; min-height: 44px; font-size: 20px; margin-bottom: 28px; text-decoration: underline; }
 .contact-phone:hover, .contact-email:hover { text-decoration: underline; text-decoration-thickness: 2px; }
 .contact-email span { color: #a54e00; }
 .hours { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 16px; max-width: 380px; padding: 24px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
@@ -229,8 +238,11 @@ mark { background: var(--orange); color: var(--ink); box-decoration-break: clone
 .product-gallery { padding-top: 12px; padding-bottom: 12px; }
 .product-gallery h2 { font-size: 32px; margin-bottom: 28px; }
 .album-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px; padding-bottom: 80px; }
-.album-grid a { min-width: 0; }
-.album-grid img { width: 100%; aspect-ratio: 1.3; object-fit: contain; background: var(--wash); border: 1px solid var(--line); border-radius: var(--radius); }
+/* Album tiles follow the photo: horizontal photos take one row, vertical ones two, so no tile is mostly margin. */
+.album-grid a { min-width: 0; display: flex; flex-direction: column; }
+.album-grid img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; background: var(--wash); border: 1px solid var(--line); border-radius: var(--radius); }
+.album-grid a[data-shape="portrait"] { grid-row: span 2; }
+.album-grid a[data-shape="portrait"] img { flex: 1 1 auto; aspect-ratio: 2 / 3; }
 .album-grid > a > span { display: flex; justify-content: space-between; font: 12px/1.6 var(--mono); padding: 16px 0; border-bottom: 1px solid var(--line); color: var(--muted); }
 .album-grid a:hover > span { color: var(--navy); border-color: var(--navy); }
 .product-gallery .album-grid { padding-bottom: 0; }
@@ -295,6 +307,9 @@ mark { background: var(--orange); color: var(--ink); box-decoration-break: clone
   .brand img { width: 76px; height: 46px; }
   .brand span { display: none; }
   .language-switch { padding: 2px; }
+  .header-phone { justify-content: center; width: 50px; height: 50px; padding: 0; border: 1px solid var(--line); border-radius: var(--radius); }
+  .header-phone:hover { background: var(--wash); border-color: var(--navy); }
+  .header-phone-text { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
   .mobile-nav nav { padding-inline: 20px; }
   .hero-section { grid-template-columns: 1fr; padding-top: 24px; }
   .hero-copy { padding: 24px 0 8px; }
@@ -313,7 +328,6 @@ mark { background: var(--orange); color: var(--ink); box-decoration-break: clone
   .services-section { padding: 56px 0 40px; }
   .featured-products { grid-template-columns: 1fr; gap: 0; }
   .featured-product { display: grid; grid-template-columns: 170px 1fr; column-gap: 24px; padding: 28px 0; border-top: 1px solid #61718c; }
-  .product-index { display: none; }
   .featured-image { grid-row: 1/3; aspect-ratio: 1.15; border-radius: 16px; }
   .featured-image img { padding: 12px; }
   .featured-title { border: 0; padding: 0; margin: 0; align-self: end; }
@@ -390,6 +404,12 @@ mark { background: var(--orange); color: var(--ink); box-decoration-break: clone
   .footer-brand { grid-column: auto; }
   .footer-bottom { flex-wrap: wrap; gap: 4px; }
   .contact-phone { font-size: 25px; }
+}
+@media (max-width: 374px) {
+  .header-inner { gap: 8px; }
+  .brand img { width: 62px; height: 40px; }
+  .menu-label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+  .mobile-nav summary { padding-inline: 12px; }
 }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }

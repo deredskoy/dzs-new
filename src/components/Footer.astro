@@ -2,8 +2,8 @@
 import { url as siteUrl, companyLinks } from '../lib/site';
 import { translator, type Locale } from '../lib/i18n';
 
-interface Props { contact?: boolean; locale?: Locale }
-const { contact = true, locale = 'uk' } = Astro.props;
+interface Props { contact?: boolean; contactDetails?: boolean; locale?: Locale }
+const { contact = true, contactDetails = true, locale = 'uk' } = Astro.props;
 const t = translator(locale);
 const url = (path: string) => siteUrl(path, locale);
 const emailLabels = { name: t('Ім’я:'), company: t('Компанія:'), phone: t('Телефон:'), subject: t('Запит до ДЗС') };
@@ -17,22 +17,24 @@ const emailStatus = t('Надішліть підготовлений лист у
       <div class="contact-details">
         <h3>{t('Поговорімо про деталі')}</h3>
         <p>{t('Опишіть виріб, обладнання чи потрібну роботу. Креслення та фото можна додати до листа.')}</p>
-        <a class="contact-phone" href="tel:+380673775670">+38 (067) 377-56-70</a>
-        <a class="contact-email" href="mailto:tovdzs@gmail.com">tovdzs@gmail.com <span aria-hidden="true">↗</span></a>
+        {contactDetails && <a class="contact-phone" href="tel:+380673775670">+38 (067) 377-56-70</a>}
+        {contactDetails && <a class="contact-email" href="mailto:tovdzs@gmail.com">tovdzs@gmail.com <span aria-hidden="true">↗</span></a>}
         <div class="hours">
           <span>{t('ПОНЕДІЛОК — П’ЯТНИЦЯ')}</span><strong>09:00 — 18:00</strong>
           <span>{t('СУБОТА — НЕДІЛЯ')}</span><strong>{t('Вихідні')}</strong>
         </div>
-        <p class="address">{t('Україна, м. Дніпро')}</p>
-        <a class="text-link" href={url('/contacts')}>{t('Усі контакти ↗')}</a>
+        {contactDetails && <p class="address">{t('Україна, м. Дніпро')}</p>}
+        {contactDetails && <a class="text-link" href={url('/contacts')}>{t('Усі контакти ↗')}</a>}
       </div>
       <form class="contact-form" action="mailto:tovdzs@gmail.com" method="get" aria-describedby="contact-note" data-contact-form data-email-labels={JSON.stringify(emailLabels)} data-email-status={emailStatus}>
         <div class="form-pair">
           <label>{t('Ваше ім’я')} <span aria-hidden="true">*</span><input name="name" autocomplete="name" required maxlength="100" placeholder={t('Як до вас звертатися')}/></label>
-          <label>{t('Телефон')}<input name="phone" type="tel" autocomplete="tel" maxlength="50" placeholder="+380"/></label>
+          <label>{t('Компанія')}<input name="company" autocomplete="organization" maxlength="200" placeholder={t('Назва підприємства')}/></label>
         </div>
-        <label>{t('Електронна пошта')} <span aria-hidden="true">*</span><input name="email" type="email" autocomplete="email" required maxlength="200" placeholder="name@company.ua"/></label>
-        <label>{t('Компанія')}<input name="company" autocomplete="organization" maxlength="200" placeholder={t('Назва підприємства')}/></label>
+        <div class="form-pair">
+          <label>{t('Телефон')}<input name="phone" type="tel" autocomplete="tel" maxlength="50" placeholder="+380"/></label>
+          <label>{t('Електронна пошта')}<input name="email" type="email" autocomplete="email" maxlength="200" placeholder="name@company.ua"/></label>
+        </div>
         <label>{t('Що потрібно виготовити чи відновити?')} <span aria-hidden="true">*</span><textarea name="message" required rows="4" maxlength="5000" placeholder={t('Тип обладнання, деталь, характер робіт…')}></textarea></label>
         <p class="form-note" id="contact-note">{t('Кнопка підготує лист у вашій поштовій програмі. Ви зможете додати файли та надіслати його.')}</p>
         <div class="form-actions">

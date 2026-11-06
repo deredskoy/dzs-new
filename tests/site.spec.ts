@@ -71,6 +71,14 @@ for (const viewport of screens) {
         expect(box?.width).toBeGreaterThanOrEqual(44);
         expect(box?.height).toBeGreaterThanOrEqual(44);
       }
+      const phone = page.locator('.header-phone');
+      await expect(phone, route).toBeVisible();
+      await expect(phone).toHaveAttribute('href', 'tel:+380673775670');
+      await expect(phone).toContainText('+38 (067) 377-56-70');
+      const phoneBox = await phone.boundingBox();
+      expect(phoneBox?.width).toBeGreaterThanOrEqual(44);
+      expect(phoneBox?.height).toBeGreaterThanOrEqual(44);
+      if (route === 'contacts/') await expect(page.locator('#contact a[href$="/contacts/"]')).toHaveCount(0);
       if ((viewport.width === 375 || viewport.width === 1440) && (route === '' || route.startsWith('product/'))) {
         await page.screenshot({ path: 'test-results/' + locale + '-' + (route ? 'product' : 'home') + '-' + viewport.width + '.png', fullPage: true });
         if (route === '') {
@@ -119,9 +127,18 @@ test('contact form uses visible labels and native validation without sending', a
   const form = page.locator('[data-contact-form]');
   expect(await form.evaluate((element: HTMLFormElement) => element.checkValidity())).toBe(false);
   await page.getByLabel('Ваше ім’я').fill('Перевірка форми');
-  await page.getByLabel('Електронна пошта').fill('review@example.com');
   await page.getByLabel('Що потрібно виготовити чи відновити?').fill('Перевірка полів без надсилання повідомлення.');
   expect(await form.evaluate((element: HTMLFormElement) => element.checkValidity())).toBe(true);
+  await page.getByLabel('Електронна пошта').fill('не адреса');
+  expect(await form.evaluate((element: HTMLFormElement) => element.checkValidity())).toBe(false);
+  await page.getByLabel('Електронна пошта').fill('review@example.com');
+  expect(await form.evaluate((element: HTMLFormElement) => element.checkValidity())).toBe(true);
+  const labels = JSON.parse((await form.getAttribute('data-email-labels'))!);
+  const data = new FormData();
+  data.set('name', 'Перевірка');
+  data.set('email', '');
+  data.set('message', 'Опис');
+  expect(new URL(emailDraft(data, labels)).searchParams.get('body')).toContain('Email: —');
   await expect(form).toHaveAttribute('action', 'mailto:tovdzs@gmail.com');
   await expect(form.getByRole('button')).toHaveText(/Підготувати лист/);
   await expect(form.locator('.form-note')).toContainText('поштовій програмі');

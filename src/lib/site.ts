@@ -43,6 +43,15 @@ export function imageUrl(src: string) {
   if (src.startsWith('/media/')) return url(src);
   return src;
 }
+export type ImageShape = 'portrait' | 'landscape';
+// Photos narrower than 0.9:1 are treated as vertical; square and wider ones share the horizontal layout.
+export function imageSize(src: string, fallback = { width: 1000, height: 750 }) {
+  const asset = assetMap[src];
+  const width = asset?.width || fallback.width;
+  const height = asset?.height || fallback.height;
+  const shape: ImageShape = width / height < .9 ? 'portrait' : 'landscape';
+  return { width, height, shape };
+}
 export function localizePage(page: SourcePage, locale: Locale): SourcePage {
   if (locale === 'uk') return page;
   const html = translateHtml(page.html, locale);
@@ -60,8 +69,10 @@ export function pageFor(path: string, locale: Locale = 'uk') {
   const page = sourcePages.find(p => p.path === (aliases[path] || path));
   return page ? localizePage(page, locale) : undefined;
 }
+// The old wordmark is a Russian-language raster logo; the header already carries the current one.
+const retiredImages = ['https://dzs.in.ua/uploads/files/long_logo1.png'];
 export function pageImages(page: SourcePage) {
-  return page.images.filter((image, i, all) => !image.src.includes('/partners/') && !assetMap[image.src]?.error && all.findIndex(other => other.src === image.src) === i);
+  return page.images.filter((image, i, all) => !image.src.includes('/partners/') && !retiredImages.includes(image.src) && !assetMap[image.src]?.error && all.findIndex(other => other.src === image.src) === i);
 }
 export const categories = [
   { title: 'Виготовлення', href: '/catalog/category/izgotovlenie', detail: 'Від креслення до готового виробу' },
@@ -83,6 +94,9 @@ export function titleFor(page: SourcePage, locale: Locale = 'uk') {
 }
 export function richHtml(page: SourcePage, locale: Locale = 'uk') {
   return page.html.replace(/(?:&nbsp;|\u00a0)+/g, ' ').replace(/ {2,}/g, ' ')
+    .replace(/<p>\s*<img [^>]*src="([^"]+)"[^>]*>\s*<\/p>/g, (match, src) => retiredImages.includes(src) ? '' : match)
+    .replace(/<p>(?:\s*<br\s*\/?>)+/g, '<p>').replace(/(?:<br\s*\/?>\s*)+<\/p>/g, '</p>')
+    .replace(/<p>\s*<\/p>/g, '')
     .replace(/\b(src|href)="([^"]+)"/g, (_match, attr, original) => {
       let value = original;
       if (assetMap[value]?.path) value = imageUrl(value);
