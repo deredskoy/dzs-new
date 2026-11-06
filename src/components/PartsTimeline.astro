@@ -1,0 +1,20 @@
+---
+import { translator, type Locale } from '../lib/i18n';
+import { partsTimeline, url as siteUrl } from '../lib/site';
+interface Props { current: string; locale?: Locale }
+const { current, locale = 'uk' } = Astro.props;
+const t = translator(locale);
+---
+<section class="graphic-band" aria-labelledby="timeline-title">
+  <div class="wrap">
+    <h2 id="timeline-title">{t('Освоєні аналоги для кар’єрних самоскидів')}</h2>
+    <p class="graphic-intro">{t('Деталі, які ми виготовляємо замість оригінальних, за роком запуску у виробництво.')}</p>
+    <ol class="parts-timeline">
+      {partsTimeline.map(item => {
+        const here = item.href === current;
+        const body = <><span class="timeline-year">{item.year}</span><span class="timeline-title">{t(item.title)}</span>{item.code && <span class="timeline-code">{item.code}</span>}{here && <span class="timeline-here">{t('Ця сторінка')}</span>}</>;
+        return <li class:list={{ current: here }}>{here ? <div class="timeline-item" aria-current="page">{body}</div> : <a class="timeline-item" href={siteUrl(item.href, locale)}>{body}</a>}</li>;
+      })}
+    </ol>
+  </div>
+</section>

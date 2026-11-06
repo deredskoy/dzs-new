@@ -1,0 +1,11 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { url as siteUrl } from '../lib/site';
+
+import { translator, type Locale } from '../lib/i18n';
+interface Props { locale?:Locale }
+const {locale='uk'}=Astro.props;
+const t=translator(locale);
+const url=(path:string)=>siteUrl(path,locale);
+---
+<Layout locale={locale} canonicalPath="/404" title={t("Сторінку не знайдено")} contact={false}><section class="wrap not-found"><p class="eyebrow">{t("ПОМИЛКА 404")}</p><h1>{t("Цієї сторінки")}<br/>{t("тут немає.")}</h1><p>{t("Перейдіть до каталогу або поверніться на головну.")}</p><div class="hero-actions"><a class="button" href={url('/catalog')}>{t("Відкрити каталог ↗")}</a><a class="text-link" href={url('/')}>{t("На головну →")}</a></div></section></Layout>

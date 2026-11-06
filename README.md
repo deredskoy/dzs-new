@@ -1,48 +1,67 @@
-# Astro Starter Kit: Basics
+# ДЗС — сайт для погодження
+
+Оновлення сайту ТОВ «Дніпропетровський завод спецремонта» на Astro. Робоча гілка: `feat/figma-site-preview`. Трекер задач: [GitHub Issues](https://github.com/deredskoy/dzs-new/issues).
+
+## Джерела
+
+- [Макет Figma](https://www.figma.com/design/iqgx2RQba8O0KOyg5y7gkR/%D0%A4%D0%B8%D1%87%D0%B8?node-id=0-1): головна, сторінка BelAZ та спільні елементи. Решта шаблонів і мобільні компонування продовжують цей стиль.
+- [Чинний сайт](https://dzs.in.ua/): тексти, структура каталогу, фотографії, документи та контакти. Знімок контенту — 4 листопада 2026.
+- `../dzs-landing/img`: наявні логотип і фотографії продукції.
+
+## Розробка
+
+Потрібен Node.js 24.14 або новіший та npm.
 
 ```sh
-npm create astro@latest -- --template basics
+npm ci
+npm run dev
+npm run check
+npm run build
+npm test
 ```
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/withastro/astro/tree/latest/examples/basics)
-[![Open with CodeSandbox](https://assets.codesandbox.io/github/button-edit-lime.svg)](https://codesandbox.io/p/sandbox/github/withastro/astro/tree/latest/examples/basics)
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/withastro/astro?devcontainer_path=.devcontainer/basics/devcontainer.json)
+Локальний сайт відкривається за адресою `http://localhost:4321/dzs-new/`. Тести Playwright запускають власний локальний preview після збірки. Перший запуск на новій машині: `npx playwright install chromium`.
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+## Структура
 
-![just-the-basics](https://github.com/withastro/astro/assets/2244813/a0a5533c-a856-4198-8470-2d67b1d7c554)
+- `src/pages/index.astro`, `src/pages/en/index.astro` — головні сторінки обох мов.
+- `src/pages/[...path].astro` — каталог, продукція, підприємство, документи, вакансії, галерея, контакти та новини.
+- `src/components/HomePage.astro`, `ContentPage.astro`, `NotFoundPage.astro` — спільні шаблони обох мов.
+- `src/data/site-content.json` — перенесений публічний контент зі старими адресами.
+- `src/data/product-details.json` — короткий опис, факти, інфографіка та підказки для розрахунку на сторінках продукції. Дані взято лише з текстів чинного сайту; нові характеристики додаються після погодження замовником.
+- `src/data/content.en.json`, `ui.en.json` — англійські переклади контенту та інтерфейсу.
+- `src/lib/i18n.ts` — переклад текстів і підписів; відсутній англійський переклад зупиняє збірку.
+- `src/data/asset-map.json`, `public/media` — локальні копії зображень та відповідність джерелам.
+- `src/lib/site.ts` — посилання з урахуванням базового шляху, вміст і старі адреси.
+- `src/styles/global.css` — кольори, типографіка, спільні компоненти та адаптивні стилі.
+- `tests/site.spec.ts` — перевірка сторінок, посилань, зображень, мобільної навігації та форми.
 
-## 🚀 Project Structure
+## Візуальні правила
 
-Inside of your Astro project, you'll see the following folders and files:
+Композиція, технічний рисунок, біло-синя палітра й помаранчеві акценти відповідають напряму Figma. Зміни читабельності виконуються в спільних стилях сайту. Основний текст — 16–18 px, ширина довгих матеріалів обмежена до `68ch`; підписи, поля та інтерактивні елементи мають окрему шкалу розмірів. Шрифти Roboto та IBM Plex Mono завантажуються локально.
 
-```text
-/
-├── public/
-│   └── favicon.svg
-├── src/
-│   ├── layouts/
-│   │   └── Layout.astro
-│   └── pages/
-│       └── index.astro
-└── package.json
-```
+На вузьких екранах картки та етапи роботи переходять в одну колонку. Меню позначає активний розділ, підтримує Escape й закривається після переходу фокуса назовні. Фокус видимий на світлих і темних секціях, а зменшення анімації враховує налаштування пристрою. Адаптивність обох мов перевіряється на 320, 375, 768, 1024 і 1440 px.
 
-To learn more about the folder structure of an Astro project, refer to [our guide on project structure](https://docs.astro.build/en/basics/project-structure/).
+## Мови
 
-## 🧞 Commands
+Українська версія зберігає початкові адреси. Англійська доступна під `/en/`; обидві версії використовують однакові шаблони та зображення. Перемикач UA/EN зберігає поточну сторінку й розділ (`#contact` тощо). Навігація, форма, підготовлений лист, метадані, підписи фотографій та текстовий контент перекладені. Скановані документи та написи на оригінальних фотографіях збережено в оригіналі.
 
-All commands are run from the root of the project, from a terminal:
+Збірка генерує 114 HTML-файлів: по 57 на кожну мову, включно зі сторінками помилки. Для кожної сторінки задано `lang`, власну canonical-адресу та взаємні посилання `hreflang`. Переклад технічного контенту зберігає номери деталей і моделей; вихідні специфікації потребують погодження замовником разом із контентом.
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+## Тестова публікація
 
-## 👀 Want to learn more?
+Тестові версії: [українська](https://deredskoy.github.io/dzs-new/) та [англійська](https://deredskoy.github.io/dzs-new/en/). Публікація виконується через GitHub Actions після перевірки типів, збірки, браузерних тестів і аудиту залежностей. Публікуються гілки `feat/figma-site-preview` і `main`; pull requests запускають лише перевірки.
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+Конфігурація використовує підкаталог `/dzs-new/`. За потреби можна задати `SITE_URL` та `BASE_PATH` під час збірки.
+
+У тестовій версії увімкнено `noindex, nofollow` і `robots.txt: Disallow: /`. Це не захист доступу: тестове посилання буде публічним. Домен `dzs.in.ua` до цієї версії не підключено.
+
+Форма готує лист у поштовій програмі користувача. Вона не показує фальшиве підтвердження надсилання та не використовує новий сторонній сервіс. Обов’язкові лише ім’я та опис задачі: адреса для відповіді приходить разом із листом. Серверне надсилання потрібно погодити перед production; тоді форма має вимагати телефон або email.
+
+## Перед перенесенням у production
+
+Для першої версії користувач обрав українську й англійську. Замовник погоджує дизайн, переклад, актуальність текстів, документів, вакансій, контактів і годин роботи. Після цього — форма з потрібним способом надсилання, остаточна адреса, індексація, перевірка старих URL та резервна копія чинного сайту.
+
+Повна конфігурація skills Matt Pocock ще не записана: користувач обрав GitHub Issues, решта параметрів setup очікує погодження. Нових Issues чи коментарів автоматично не створено.
+
+Попередні незакомічені зміни `index.astro`, `ActionRoadmap.astro` і `Footer.astro` збережено локально в ігнорованій `.scratch/pre-redesign-2026-11-04/`.

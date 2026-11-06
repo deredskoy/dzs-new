@@ -1,0 +1,14 @@
+---
+import { translator, type Locale } from '../lib/i18n';
+interface Props { facts: [string, string][]; locale?: Locale }
+const { facts, locale = 'uk' } = Astro.props;
+const t = translator(locale);
+---
+<aside class="product-facts" aria-labelledby="facts-title">
+  <h2 id="facts-title">{t('Коротко')}</h2>
+  <dl>{facts.map(([label, value]) => <div><dt>{t(label)}</dt><dd>{t(value)}</dd></div>)}</dl>
+  <div class="facts-actions">
+    <a class="button" href="#contact">{t('Обговорити замовлення ↗')}</a>
+    <a class="facts-phone" href="tel:+380673775670">+38 (067) 377-56-70</a>
+  </div>
+</aside>

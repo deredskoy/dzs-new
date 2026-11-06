@@ -1,0 +1,8 @@
+---
+interface Props { locale?:Locale }
+const {locale='uk'}=Astro.props;
+const t=translator(locale);
+import { translator, type Locale } from '../lib/i18n';
+const steps=[['Заявка','Ви надсилаєте креслення, технічне завдання або зразок.'],['Узгодження','Визначаємо обсяг робіт, вартість і терміни виконання.'],['Виконання','Виготовляємо або відновлюємо деталь на власній виробничій базі.'],['Перевірка','Перевіряємо готовий виріб і передаємо замовлення.']];
+---
+<section class="work-section wrap" aria-labelledby="work-title"><div class="section-heading"><div><p class="eyebrow">{t("ВІД ПЕРШОГО ЛИСТА ДО РЕЗУЛЬТАТУ")}</p><h2 id="work-title">{t("Як ми працюємо")}</h2></div><span class="technical-caption">{t("ПРОЦЕС / 04 КРОКИ")}</span></div><ol class="work-steps">{steps.map(([title,detail],index)=><li><span class="step-number">0{index+1}</span><h3>{t(title)}</h3><p>{t(detail)}</p></li>)}</ol></section>

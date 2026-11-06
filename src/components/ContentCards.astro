@@ -1,0 +1,11 @@
+---
+import { translator, type Locale } from '../lib/i18n';
+import { url as siteUrl,imageUrl,imageSize,type Card } from '../lib/site';
+interface Props { cards:Card[]; gallery?:boolean; locale?:Locale }
+const {cards,gallery=false,locale='uk'}=Astro.props;
+const t=translator(locale);
+const url=(path:string)=>siteUrl(path,locale);
+// A vertical photo is shown whole in the horizontal card; a blurred copy of it fills the sides.
+const photo=(card:Card)=>{const size=imageSize(card.image,{width:800,height:600});const src=imageUrl(card.image);return {...size,src,style:size.shape==='portrait'?`--photo:url("${src}")`:undefined};};
+---
+<div class:list={['content-cards',{'gallery-cards':gallery}]}>{cards.map(card=>{const image=card.image&&photo(card);return <article class="content-card"><a href={url(card.href)} class="card-link"><div class="card-image" data-shape={image?image.shape:undefined} style={image?image.style:undefined}>{image&&<img src={image.src} alt={t(card.title)} width={image.width} height={image.height} loading="lazy" decoding="async"/>}<span class="card-arrow" aria-hidden="true">↗</span></div><div class="card-text"><h2>{t(card.title)}</h2>{card.description&&<p>{t(card.description)}</p>}<span class="text-link">{t(gallery?'Переглянути роботу':'Докладніше')} <span aria-hidden="true">→</span></span></div></a></article>;})}</div>

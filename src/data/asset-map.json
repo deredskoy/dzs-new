@@ -1,0 +1,866 @@
+{
+  "https://dzs.in.ua/files/photo.jpg": {
+    "path": "/media/a3e4ce3271eb08b0.jpg",
+    "bytes": 74992,
+    "width": 800,
+    "height": 435
+  },
+  "https://dzs.in.ua/template/images/logo.png": {
+    "path": "/media/c8a8653211cb77ba.png",
+    "bytes": 56855,
+    "width": 335,
+    "height": 154
+  },
+  "https://dzs.in.ua/uploads/files/dolbilniy.jpg": {
+    "path": "/media/9f9d9fa2e81a6969.jpg",
+    "bytes": 31578,
+    "width": 529,
+    "height": 550
+  },
+  "https://dzs.in.ua/uploads/files/frezerniy.jpg": {
+    "path": "/media/173ea4480ae08a6e.jpg",
+    "bytes": 69546,
+    "width": 600,
+    "height": 803
+  },
+  "https://dzs.in.ua/uploads/files/fronis.jpg": {
+    "path": "/media/975c346de106a2ba.jpg",
+    "bytes": 29121,
+    "width": 200,
+    "height": 200
+  },
+  "https://dzs.in.ua/uploads/files/kran.jpg": {
+    "path": "/media/2b23511fbadf9d44.jpg",
+    "bytes": 23818,
+    "width": 470,
+    "height": 280
+  },
+  "https://dzs.in.ua/uploads/files/long_logo1.png": {
+    "path": "/media/720d54a219180629.png",
+    "bytes": 40510,
+    "width": 492,
+    "height": 62
+  },
+  "https://dzs.in.ua/uploads/files/peskostryi.jpg": {
+    "path": "/media/775095d07d4145a3.jpg",
+    "bytes": 5276,
+    "width": 315,
+    "height": 160
+  },
+  "https://dzs.in.ua/uploads/files/press.jpg": {
+    "path": "/media/acd028d826ca71bc.jpg",
+    "bytes": 252300,
+    "width": 768,
+    "height": 1024
+  },
+  "https://dzs.in.ua/uploads/files/radialno_sverlilniy.jpg": {
+    "path": "/media/8eebf8171436dac6.jpg",
+    "bytes": 43583,
+    "width": 300,
+    "height": 381
+  },
+  "https://dzs.in.ua/uploads/files/stanciya_kompressornaya.jpg": {
+    "path": "/media/a3a280ee69f29c6d.jpg",
+    "bytes": 10854,
+    "width": 200,
+    "height": 126
+  },
+  "https://dzs.in.ua/uploads/files/tal_elektricheskaya.png": {
+    "path": "/media/7a40edb5afc5f7d6.png",
+    "bytes": 4658,
+    "width": 264,
+    "height": 191
+  },
+  "https://dzs.in.ua/uploads/files/tokarno_karyselniy_stanok.jpg": {
+    "path": "/media/39b0bed34327ed60.jpg",
+    "bytes": 54493,
+    "width": 574,
+    "height": 450
+  },
+  "https://dzs.in.ua/uploads/files/tokarno_rastochniy.jpg": {
+    "path": "/media/4f2c5fcd9e852afa.jpg",
+    "bytes": 33460,
+    "width": 300,
+    "height": 212
+  },
+  "https://dzs.in.ua/uploads/files/tokarno_vintorezniy_ft11.jpg": {
+    "path": "/media/175a16cb806f01af.jpg",
+    "bytes": 33103,
+    "width": 300,
+    "height": 210
+  },
+  "https://dzs.in.ua/uploads/files/tokarno_vintorezniy_stanok_dip_400.jpg": {
+    "path": "/media/d92a8987d4ce2a74.jpg",
+    "bytes": 24933,
+    "width": 410,
+    "height": 238
+  },
+  "https://dzs.in.ua/uploads/files/zatochniy.jpg": {
+    "path": "/media/069b616c1a044d2e.jpg",
+    "bytes": 51735,
+    "width": 506,
+    "height": 510
+  },
+  "https://dzs.in.ua/uploads/portfolio/4703800-doukon-samosval-hitachi-en-3500-as.jpg": {
+    "path": "/media/5242b95dec9b8ec2.jpg",
+    "bytes": 585906,
+    "width": 800,
+    "height": 1108
+  },
+  "https://dzs.in.ua/uploads/portfolio/4703800-hitachi-eh3500-salnik-.jpg": {
+    "path": "/media/98eddb3e0f7361cf.jpg",
+    "bytes": 38981,
+    "width": 300,
+    "height": 213
+  },
+  "https://dzs.in.ua/uploads/portfolio/4703800-hitachi-eh3500-salnik-ot-proizvoditelya-ooo-dzs.jpg": {
+    "path": "/media/aa7238c06e612d3c.jpg",
+    "bytes": 41685,
+    "width": 300,
+    "height": 223
+  },
+  "https://dzs.in.ua/uploads/portfolio/4703800-salnik-izgotovlen-dnepropetrovskim-zavodom-specremonta.jpg": {
+    "path": "/media/c4f205c16080993b.jpg",
+    "bytes": 26709,
+    "width": 300,
+    "height": 222
+  },
+  "https://dzs.in.ua/uploads/portfolio/dodatok-ooo-dzs-011.jpg": {
+    "path": "/media/f85ecb0ec8729d0d.jpg",
+    "bytes": 428310,
+    "width": 714,
+    "height": 1019
+  },
+  "https://dzs.in.ua/uploads/portfolio/dodatok-ooo-dzs1.jpg": {
+    "path": "/media/7d2efa05f10e95b0.jpg",
+    "bytes": 230075,
+    "width": 744,
+    "height": 1024
+  },
+  "https://dzs.in.ua/uploads/portfolio/dozvil-ooo-dzs-011.jpg": {
+    "path": "/media/dea7e53cf3abf9c9.jpg",
+    "bytes": 126748,
+    "width": 744,
+    "height": 1024
+  },
+  "https://dzs.in.ua/uploads/portfolio/dozvil-ooo-dzs-021.jpg": {
+    "path": "/media/4433b5c9966bde7c.jpg",
+    "bytes": 127518,
+    "width": 744,
+    "height": 1024
+  },
+  "https://dzs.in.ua/uploads/portfolio/dozvil-ooo-dzs1.jpg": {
+    "path": "/media/8c723c805bbbd7dc.jpg",
+    "bytes": 404083,
+    "width": 2040,
+    "height": 2807
+  },
+  "https://dzs.in.ua/uploads/portfolio/izgotovlenie-probuksovochnogo-ustrojstva-dnepropetrovskim-zavodom-specremonta-01.jpg": {
+    "path": "/media/f813324477010c87.jpg",
+    "bytes": 36414,
+    "width": 222,
+    "height": 300
+  },
+  "https://dzs.in.ua/uploads/portfolio/izgotovlenie-probuksovochnogo-ustrojstva-dnepropetrovskim-zavodom-specremonta-021.jpg": {
+    "path": "/media/b306d98814846633.jpg",
+    "bytes": 33930,
+    "width": 207,
+    "height": 300
+  },
+  "https://dzs.in.ua/uploads/portfolio/izgotovlenie-probuksovochnogo-ustrojstva-dnepropetrovskim-zavodom-specremonta-031.jpg": {
+    "path": "/media/2cff8715e253c861.jpg",
+    "bytes": 28216,
+    "width": 194,
+    "height": 310
+  },
+  "https://dzs.in.ua/uploads/portfolio/izgotovlenie-probuksovochnogo-ustrojstva-dnepropetrovskim-zavodom-specremonta-041.jpg": {
+    "path": "/media/2d413d222ed8eb64.jpg",
+    "bytes": 35652,
+    "width": 210,
+    "height": 300
+  },
+  "https://dzs.in.ua/uploads/portfolio/izgotovlenie-probuksovochnogo-ustrojstva-dnepropetrovskim-zavodom-specremonta1.jpg": {
+    "path": "/media/e65ea3b3f7fbc678.jpg",
+    "bytes": 28355,
+    "width": 222,
+    "height": 300
+  },
+  "https://dzs.in.ua/uploads/portfolio/prikaz-o-naznachenii-direktora-ooo-dzs1.jpg": {
+    "path": "/media/6f07e5cc9ccc3bf5.jpg",
+    "bytes": 196751,
+    "width": 1653,
+    "height": 2337
+  },
+  "https://dzs.in.ua/uploads/portfolio/probuksovochnoe-ustrojstvo-izgotovlenie-dzs1.jpg": {
+    "path": "/media/ac02d5ed74e17728.jpg",
+    "bytes": 38592,
+    "width": 270,
+    "height": 358
+  },
+  "https://dzs.in.ua/uploads/portfolio/razborka-planetarnogo-reduktora-ekskavatora-komatsu-pc-3000-dnepropetrovskij-zavod-specremonta-0212.jpg": {
+    "path": "/media/1301c57c4e665caf.jpg",
+    "bytes": 31865,
+    "width": 302,
+    "height": 200
+  },
+  "https://dzs.in.ua/uploads/portfolio/razborka-planetarnogo-reduktora-ekskavatora-komatsu-pc-3000-dnepropetrovskij-zavod-specremonta-0311.jpg": {
+    "path": "/media/6160f15cc41c5baa.jpg",
+    "bytes": 38717,
+    "width": 231,
+    "height": 300
+  },
+  "https://dzs.in.ua/uploads/portfolio/razborka-planetarnogo-reduktora-ekskavatora-komatsu-pc-3000-dnepropetrovskij-zavod-specremonta-0411.jpg": {
+    "path": "/media/2effce95675dc937.jpg",
+    "bytes": 25268,
+    "width": 239,
+    "height": 300
+  },
+  "https://dzs.in.ua/uploads/portfolio/razborka-planetarnogo-reduktora-ekskavatora-komatsu-pc-3000-dnepropetrovskij-zavod-specremonta-051.jpg": {
+    "path": "/media/40caa078cef453bc.jpg",
+    "bytes": 45643,
+    "width": 325,
+    "height": 201
+  },
+  "https://dzs.in.ua/uploads/portfolio/razborka-planetarnogo-reduktora-ekskavatora-komatsu-pc-3000-dnepropetrovskij-zavod-specremonta-061.jpg": {
+    "path": "/media/acdea6161e616f2d.jpg",
+    "bytes": 40440,
+    "width": 300,
+    "height": 216
+  },
+  "https://dzs.in.ua/uploads/portfolio/razborka-planetarnogo-reduktora-ekskavatora-komatsu-pc-3000-dnepropetrovskij-zavod-specremonta-071.jpg": {
+    "path": "/media/72a6d964d1330aa4.jpg",
+    "bytes": 36547,
+    "width": 245,
+    "height": 300
+  },
+  "https://dzs.in.ua/uploads/portfolio/razborka-planetarnogo-reduktora-ekskavatora-komatsu-pc-3000-dnepropetrovskij-zavod-specremonta-081.jpg": {
+    "path": "/media/6985430292a4d505.jpg",
+    "bytes": 41114,
+    "width": 202,
+    "height": 310
+  },
+  "https://dzs.in.ua/uploads/portfolio/razborka-planetarnogo-reduktora-ekskavatora-komatsu-pc-3000-dnepropetrovskij-zavod-specremonta-091.jpg": {
+    "path": "/media/54eff387dbea05aa.jpg",
+    "bytes": 36572,
+    "width": 201,
+    "height": 303
+  },
+  "https://dzs.in.ua/uploads/portfolio/razborka-planetarnogo-reduktora-ekskavatora-komatsu-pc-3000-dnepropetrovskij-zavod-specremonta-101.jpg": {
+    "path": "/media/093c3f12415cc580.jpg",
+    "bytes": 38380,
+    "width": 247,
+    "height": 300
+  },
+  "https://dzs.in.ua/uploads/portfolio/razborka-planetarnogo-reduktora-ekskavatora-komatsu-pc-3000-dnepropetrovskij-zavod-specremonta-121.jpg": {
+    "path": "/media/7a1f813f6470cc80.jpg",
+    "bytes": 37040,
+    "width": 221,
+    "height": 300
+  },
+  "https://dzs.in.ua/uploads/portfolio/razborka-planetarnogo-reduktora-ekskavatora-komatsu-pc-3000-dnepropetrovskij-zavod-specremonta-131.jpg": {
+    "path": "/media/24c128de1a8946d8.jpg",
+    "bytes": 34917,
+    "width": 232,
+    "height": 300
+  },
+  "https://dzs.in.ua/uploads/portfolio/razborka-planetarnogo-reduktora-ekskavatora-komatsu-pc-3000-dnepropetrovskij-zavod-specremonta-151.jpg": {
+    "path": "/media/4377f7e3a530f8ad.jpg",
+    "bytes": 27247,
+    "width": 273,
+    "height": 234
+  },
+  "https://dzs.in.ua/uploads/portfolio/razborka-planetarnogo-reduktora-ekskavatora-komatsu-pc-3000-dnepropetrovskij-zavod-specremonta-171.jpg": {
+    "path": "/media/6b8c5b30162e6a1e.jpg",
+    "bytes": 44729,
+    "width": 307,
+    "height": 200
+  },
+  "https://dzs.in.ua/uploads/portfolio/razborka-planetarnogo-reduktora-ekskavatora-komatsu-pc-3000-dnepropetrovskij-zavod-specremonta-191.jpg": {
+    "path": "/media/1d094f14d605bb17.jpg",
+    "bytes": 33846,
+    "width": 300,
+    "height": 200
+  },
+  "https://dzs.in.ua/uploads/portfolio/razborka-planetarnogo-reduktora-ekskavatora-komatsu-pc-3000-dnepropetrovskij-zavod-specremonta-201.jpg": {
+    "path": "/media/5ee9ee2b6fe10744.jpg",
+    "bytes": 41888,
+    "width": 300,
+    "height": 215
+  },
+  "https://dzs.in.ua/uploads/portfolio/razborka-planetarnogo-reduktora-ekskavatora-komatsu-pc-3000-dnepropetrovskij-zavod-specremonta-211.jpg": {
+    "path": "/media/46e99ce30a0851de.jpg",
+    "bytes": 28150,
+    "width": 327,
+    "height": 200
+  },
+  "https://dzs.in.ua/uploads/portfolio/razborka-planetarnogo-reduktora-ekskavatora-komatsu-pc-3000-dnepropetrovskij-zavod-specremonta-221.jpg": {
+    "path": "/media/592fe7a22e6e538a.jpg",
+    "bytes": 41828,
+    "width": 200,
+    "height": 342
+  },
+  "https://dzs.in.ua/uploads/portfolio/razborka-planetarnogo-reduktora-povorota-ekg-10i-proizvoditsya-dnepropetrovskim-zavodom-specremonta-011.jpg": {
+    "path": "/media/dded68524947bd30.jpg",
+    "bytes": 25212,
+    "width": 300,
+    "height": 207
+  },
+  "https://dzs.in.ua/uploads/portfolio/razborka-planetarnogo-reduktora-povorota-ekg-10i-proizvoditsya-dnepropetrovskim-zavodom-specremonta-021.jpg": {
+    "path": "/media/8a8682306c8540c2.jpg",
+    "bytes": 30583,
+    "width": 223,
+    "height": 300
+  },
+  "https://dzs.in.ua/uploads/portfolio/razborka-planetarnogo-reduktora-povorota-ekg-10i-proizvoditsya-dnepropetrovskim-zavodom-specremonta-031.jpg": {
+    "path": "/media/935c867c71121481.jpg",
+    "bytes": 36091,
+    "width": 236,
+    "height": 300
+  },
+  "https://dzs.in.ua/uploads/portfolio/razborka-planetarnogo-reduktora-povorota-ekg-10i-proizvoditsya-dnepropetrovskim-zavodom-specremonta-041.jpg": {
+    "path": "/media/1b4b05c9699a7c9d.jpg",
+    "bytes": 31978,
+    "width": 283,
+    "height": 300
+  },
+  "https://dzs.in.ua/uploads/portfolio/razborka-planetarnogo-reduktora-povorota-ekg-10i-proizvoditsya-dnepropetrovskim-zavodom-specremonta-051.jpg": {
+    "path": "/media/6f93086334ea000d.jpg",
+    "bytes": 41117,
+    "width": 225,
+    "height": 300
+  },
+  "https://dzs.in.ua/uploads/portfolio/razborka-planetarnogo-reduktora-povorota-ekg-10i-proizvoditsya-dnepropetrovskim-zavodom-specremonta-061.jpg": {
+    "path": "/media/ca94db68e19e0294.jpg",
+    "bytes": 40030,
+    "width": 300,
+    "height": 224
+  },
+  "https://dzs.in.ua/uploads/portfolio/razborka-planetarnogo-reduktora-povorota-ekg-10i-proizvoditsya-dnepropetrovskim-zavodom-specremonta-071.jpg": {
+    "path": "/media/0ccc1a7a71de30ac.jpg",
+    "bytes": 26670,
+    "width": 300,
+    "height": 224
+  },
+  "https://dzs.in.ua/uploads/portfolio/razborka-planetarnogo-reduktora-povorota-ekg-10i-proizvoditsya-dnepropetrovskim-zavodom-specremonta-081.jpg": {
+    "path": "/media/d5cd8feca3b3d153.jpg",
+    "bytes": 40034,
+    "width": 225,
+    "height": 300
+  },
+  "https://dzs.in.ua/uploads/portfolio/razborka-planetarnogo-reduktora-povorota-ekg-10i-proizvoditsya-dnepropetrovskim-zavodom-specremonta-091.jpg": {
+    "path": "/media/7a498a158fb6170c.jpg",
+    "bytes": 45228,
+    "width": 300,
+    "height": 224
+  },
+  "https://dzs.in.ua/uploads/portfolio/razborka-planetarnogo-reduktora-xoda-ekg-10-i-dnepropetrovskij-zavod-specremonta-021.jpg": {
+    "path": "/media/94cb14fb575255bd.jpg",
+    "bytes": 49123,
+    "width": 300,
+    "height": 247
+  },
+  "https://dzs.in.ua/uploads/portfolio/razborka-planetarnogo-reduktora-xoda-ekg-10-i-dnepropetrovskij-zavod-specremonta-031.jpg": {
+    "path": "/media/9aa7f4f387b4b70b.jpg",
+    "bytes": 37650,
+    "width": 300,
+    "height": 223
+  },
+  "https://dzs.in.ua/uploads/portfolio/razborka-planetarnogo-reduktora-xoda-ekg-10-i-dnepropetrovskij-zavod-specremonta-041.jpg": {
+    "path": "/media/4f51da1214a0c471.jpg",
+    "bytes": 36976,
+    "width": 300,
+    "height": 239
+  },
+  "https://dzs.in.ua/uploads/portfolio/razborka-planetarnogo-reduktora-xoda-ekg-10-i-dnepropetrovskij-zavod-specremonta-052.jpg": {
+    "path": "/media/91e6b6b4403b60c2.jpg",
+    "bytes": 37770,
+    "width": 337,
+    "height": 200
+  },
+  "https://dzs.in.ua/uploads/portfolio/remont-planetarnogo-reduktora-ekskavatora-komatsu-pc-3000-dnepropetrovskij-zavod-specremonta-0111.jpg": {
+    "path": "/media/bf93d7b4dabd44fd.jpg",
+    "bytes": 30114,
+    "width": 246,
+    "height": 300
+  },
+  "https://dzs.in.ua/uploads/portfolio/remont-planetarnogo-reduktora-ekskavatora-komatsu-pc-3000-dnepropetrovskij-zavod-specremonta-012.jpg": {
+    "path": "/media/fb2f27851de417f8.jpg",
+    "bytes": 21410,
+    "width": 204,
+    "height": 300
+  },
+  "https://dzs.in.ua/uploads/portfolio/remont-planetarnogo-reduktora-ekskavatora-komatsu-pc-3000-dnepropetrovskij-zavod-specremonta-0211.jpg": {
+    "path": "/media/3cf9aea6048e3eb1.jpg",
+    "bytes": 20568,
+    "width": 253,
+    "height": 300
+  },
+  "https://dzs.in.ua/uploads/portfolio/remont-planetarnogo-reduktora-ekskavatora-komatsu-pc-3000-dnepropetrovskij-zavod-specremonta-031.jpg": {
+    "path": "/media/dd98ac1678ed75b9.jpg",
+    "bytes": 26897,
+    "width": 241,
+    "height": 300
+  },
+  "https://dzs.in.ua/uploads/portfolio/remont-planetarnogo-reduktora-ekskavatora-komatsu-pc-3000-dnepropetrovskij-zavod-specremonta-051.jpg": {
+    "path": "/media/8e827eeed05a6530.jpg",
+    "bytes": 41177,
+    "width": 300,
+    "height": 267
+  },
+  "https://dzs.in.ua/uploads/portfolio/remont-planetarnogo-reduktora-ekskavatora-komatsu-pc-3000-dnepropetrovskij-zavod-specremonta-0911.jpg": {
+    "path": "/media/c0bdd36280651173.jpg",
+    "bytes": 30185,
+    "width": 300,
+    "height": 202
+  },
+  "https://dzs.in.ua/uploads/portfolio/remont-planetarnogo-reduktora-ekskavatora-komatsu-pc-3000-dnepropetrovskij-zavod-specremonta-101.jpg": {
+    "path": "/media/486799db493d59c9.jpg",
+    "bytes": 24375,
+    "width": 300,
+    "height": 224
+  },
+  "https://dzs.in.ua/uploads/portfolio/remont-planetarnogo-reduktora-ekskavatora-komatsu-pc-3000-dnepropetrovskij-zavod-specremonta-111.jpg": {
+    "path": "/media/ebb1e9907fab3453.jpg",
+    "bytes": 38922,
+    "width": 300,
+    "height": 223
+  },
+  "https://dzs.in.ua/uploads/portfolio/remont-planetarnogo-reduktora-ekskavatora-komatsu-pc-3000-dnepropetrovskij-zavod-specremonta-121.jpg": {
+    "path": "/media/30e225c32547529a.jpg",
+    "bytes": 39161,
+    "width": 276,
+    "height": 300
+  },
+  "https://dzs.in.ua/uploads/portfolio/remont-planetarnogo-reduktora-ekskavatora-komatsu-pc-3000-dnepropetrovskij-zavod-specremonta-151.jpg": {
+    "path": "/media/7068508d0eef410b.jpg",
+    "bytes": 34928,
+    "width": 224,
+    "height": 300
+  },
+  "https://dzs.in.ua/uploads/portfolio/remont-planetarnogo-reduktora-ekskavatora-komatsu-pc-3000-dnepropetrovskij-zavod-specremonta-161.jpg": {
+    "path": "/media/61df31e0671665c3.jpg",
+    "bytes": 24295,
+    "width": 310,
+    "height": 173
+  },
+  "https://dzs.in.ua/uploads/portfolio/remont-planetarnogo-reduktora-ekskavatora-komatsu-pc-3000-dnepropetrovskij-zavod-specremonta-171.jpg": {
+    "path": "/media/fa8415f9b86f2dcf.jpg",
+    "bytes": 34606,
+    "width": 300,
+    "height": 207
+  },
+  "https://dzs.in.ua/uploads/portfolio/remont-planetarnogo-reduktora-ekskavatora-komatsu-pc-3000-dnepropetrovskij-zavod-specremonta-222.jpg": {
+    "path": "/media/65bfec2389ce9d56.jpg",
+    "bytes": 27996,
+    "width": 226,
+    "height": 300
+  },
+  "https://dzs.in.ua/uploads/portfolio/remont-planetarnogo-reduktora-ekskavatora-komatsu-pc-3000-dnepropetrovskij-zavod-specremonta.jpg": {
+    "path": "/media/7f1f3b956789d017.jpg",
+    "bytes": 24404,
+    "width": 247,
+    "height": 330
+  },
+  "https://dzs.in.ua/uploads/portfolio/remont-planetarnogo-reduktora-povorota-ekg-10i-proizvodit-dnepropetrovskij-zavod-specremonta-011.jpg": {
+    "path": "/media/49a29ce70e2b2a16.jpg",
+    "bytes": 30413,
+    "width": 300,
+    "height": 239
+  },
+  "https://dzs.in.ua/uploads/portfolio/remont-planetarnogo-reduktora-povorota-ekg-10i-proizvodit-dnepropetrovskij-zavod-specremonta-021.jpg": {
+    "path": "/media/02765f0897688839.jpg",
+    "bytes": 33131,
+    "width": 300,
+    "height": 238
+  },
+  "https://dzs.in.ua/uploads/portfolio/remont-planetarnogo-reduktora-povorota-ekg-10i-proizvodit-dnepropetrovskij-zavod-specremonta-031.jpg": {
+    "path": "/media/7b3f40559c55c84e.jpg",
+    "bytes": 33268,
+    "width": 300,
+    "height": 214
+  },
+  "https://dzs.in.ua/uploads/portfolio/remont-planetarnogo-reduktora-povorota-ekg-10i-proizvodit-dnepropetrovskij-zavod-specremonta-041.jpg": {
+    "path": "/media/7919d11de1672293.jpg",
+    "bytes": 37628,
+    "width": 232,
+    "height": 300
+  },
+  "https://dzs.in.ua/uploads/portfolio/remont-planetarnogo-reduktora-povorota-ekg-10i-proizvodit-dnepropetrovskij-zavod-specremonta-051.jpg": {
+    "path": "/media/3cc86919b9df8344.jpg",
+    "bytes": 48700,
+    "width": 300,
+    "height": 224
+  },
+  "https://dzs.in.ua/uploads/portfolio/remont-planetarnogo-reduktora-povorota-ekg-10i-proizvodit-dnepropetrovskij-zavod-specremonta-052.jpg": {
+    "path": "/media/4d56ff9626049cd5.jpg",
+    "bytes": 48700,
+    "width": 300,
+    "height": 224
+  },
+  "https://dzs.in.ua/uploads/portfolio/remont-planetarnogo-reduktora-povorota-ekg-10i-proizvodit-dnepropetrovskij-zavod-specremonta-061.jpg": {
+    "path": "/media/0eb7abb8d2bfefc3.jpg",
+    "bytes": 43228,
+    "width": 300,
+    "height": 224
+  },
+  "https://dzs.in.ua/uploads/portfolio/remont-planetarnogo-reduktora-povorota-ekg-10i-proizvodit-dnepropetrovskij-zavod-specremonta-071.jpg": {
+    "path": "/media/9ba6084970324e30.jpg",
+    "bytes": 39897,
+    "width": 300,
+    "height": 224
+  },
+  "https://dzs.in.ua/uploads/portfolio/remont-planetarnogo-reduktora-povorota-ekg-10i-proizvodit-dnepropetrovskij-zavod-specremonta-081.jpg": {
+    "path": "/media/de3a97c385d1347f.jpg",
+    "bytes": 28509,
+    "width": 300,
+    "height": 230
+  },
+  "https://dzs.in.ua/uploads/portfolio/remont-planetarnogo-reduktora-povorota-ekg-10i-proizvodit-dnepropetrovskij-zavod-specremonta-101.jpg": {
+    "path": "/media/48d7867155696351.jpg",
+    "bytes": 30671,
+    "width": 224,
+    "height": 300
+  },
+  "https://dzs.in.ua/uploads/portfolio/remont-planetarnogo-reduktora-povorota-ekg-10i-proizvodit-dnepropetrovskij-zavod-specremonta-131.jpg": {
+    "path": "/media/17c1d4de4b82eb3d.jpg",
+    "bytes": 24378,
+    "width": 300,
+    "height": 202
+  },
+  "https://dzs.in.ua/uploads/portfolio/remont-planetarnogo-reduktora-xoda-ekg-10-i-dnepropetrovskij-zavod-specremonta-01.jpg": {
+    "path": "/media/f6dd20093419f210.jpg",
+    "bytes": 29207,
+    "width": 300,
+    "height": 266
+  },
+  "https://dzs.in.ua/uploads/portfolio/remont-planetarnogo-reduktora-xoda-ekg-10-i-dnepropetrovskij-zavod-specremonta-0111.jpg": {
+    "path": "/media/ccbf72b99728e400.jpg",
+    "bytes": 29207,
+    "width": 300,
+    "height": 266
+  },
+  "https://dzs.in.ua/uploads/portfolio/remont-planetarnogo-reduktora-xoda-ekg-10-i-dnepropetrovskij-zavod-specremonta-031.jpg": {
+    "path": "/media/49d915e97935c75f.jpg",
+    "bytes": 36533,
+    "width": 300,
+    "height": 250
+  },
+  "https://dzs.in.ua/uploads/portfolio/remont-planetarnogo-reduktora-xoda-ekg-10-i-dnepropetrovskij-zavod-specremonta-041.jpg": {
+    "path": "/media/0df927f6f0656607.jpg",
+    "bytes": 23945,
+    "width": 300,
+    "height": 224
+  },
+  "https://dzs.in.ua/uploads/portfolio/remont-planetarnogo-reduktora-xoda-ekg-10-i-dnepropetrovskij-zavod-specremonta-061.jpg": {
+    "path": "/media/44f32a13154ddb5b.jpg",
+    "bytes": 30869,
+    "width": 300,
+    "height": 219
+  },
+  "https://dzs.in.ua/uploads/portfolio/sborka-planetarnogo-reduktora-ekskavatora-komatsu-pc-3000-dnepropetrovskij-zavod-specremonta-041.jpg": {
+    "path": "/media/3ef74cf2c4ecccd1.jpg",
+    "bytes": 29453,
+    "width": 300,
+    "height": 259
+  },
+  "https://dzs.in.ua/uploads/portfolio/sborka-planetarnogo-reduktora-ekskavatora-komatsu-pc-3000-dnepropetrovskij-zavod-specremonta-061.jpg": {
+    "path": "/media/1ce093766cda7846.jpg",
+    "bytes": 41056,
+    "width": 300,
+    "height": 246
+  },
+  "https://dzs.in.ua/uploads/portfolio/sborka-planetarnogo-reduktora-ekskavatora-komatsu-pc-3000-dnepropetrovskij-zavod-specremonta-071.jpg": {
+    "path": "/media/dbf35c73db694f65.jpg",
+    "bytes": 35093,
+    "width": 300,
+    "height": 224
+  },
+  "https://dzs.in.ua/uploads/portfolio/sborka-planetarnogo-reduktora-ekskavatora-komatsu-pc-3000-dnepropetrovskij-zavod-specremonta-081.jpg": {
+    "path": "/media/a6a2447eb9117e4d.jpg",
+    "bytes": 39531,
+    "width": 300,
+    "height": 218
+  },
+  "https://dzs.in.ua/uploads/portfolio/sborka-planetarnogo-reduktora-xoda-ekg-10-i-dnepropetrovskij-zavod-specremonta-011.jpg": {
+    "path": "/media/49a3a950efcf99cb.jpg",
+    "bytes": 32090,
+    "width": 300,
+    "height": 223
+  },
+  "https://dzs.in.ua/uploads/portfolio/sborka-planetarnogo-reduktora-xoda-ekg-10-i-dnepropetrovskij-zavod-specremonta-021.jpg": {
+    "path": "/media/f9c140310a86038d.jpg",
+    "bytes": 34048,
+    "width": 251,
+    "height": 300
+  },
+  "https://dzs.in.ua/uploads/portfolio/sborka-planetarnogo-reduktora-xoda-ekg-10-i-dnepropetrovskij-zavod-specremonta-031.jpg": {
+    "path": "/media/48416b1abf4e8932.jpg",
+    "bytes": 31747,
+    "width": 300,
+    "height": 293
+  },
+  "https://dzs.in.ua/uploads/portfolio/sertifikat-perevirky-tipu-ooo-dzs11.jpg": {
+    "path": "/media/b8d5c09ade0e24a7.jpg",
+    "bytes": 231082,
+    "width": 744,
+    "height": 1024
+  },
+  "https://dzs.in.ua/uploads/portfolio/spravka-platelshhika-nds-ooo-dzs_1681.jpg": {
+    "path": "/media/3d182bc7339c0fe6.jpg",
+    "bytes": 341581,
+    "width": 1654,
+    "height": 2339
+  },
+  "https://dzs.in.ua/uploads/portfolio/tormoznye-diskovye-kolodki-xitachi-en-3500-dnepropetrovskij-zavod-specremonta-01.jpg": {
+    "path": "/media/4c87018c3f1b3310.jpg",
+    "bytes": 20313,
+    "width": 320,
+    "height": 194
+  },
+  "https://dzs.in.ua/uploads/portfolio/tormoznye-diskovye-kolodki-xitachi-en-3500-dnepropetrovskij-zavod-specremonta1.jpg": {
+    "path": "/media/6e3b531461bb9f88.jpg",
+    "bytes": 15698,
+    "width": 330,
+    "height": 190
+  },
+  "https://dzs.in.ua/uploads/portfolio/tormoznye-kolodki-xitachi-4674697-dnepropetrovskij-zavod-specremonta-011.jpg": {
+    "path": "/media/b99a3601cdf652bf.jpg",
+    "bytes": 16050,
+    "width": 320,
+    "height": 200
+  },
+  "https://dzs.in.ua/uploads/portfolio/tormoznye-kolodki-xitachi-4674697-dnepropetrovskij-zavod-specremonta-021.jpg": {
+    "path": "/media/95dca97252394d76.jpg",
+    "bytes": 20212,
+    "width": 330,
+    "height": 190
+  },
+  "https://dzs.in.ua/uploads/portfolio/tormoznye-kolodki-xitachi-4674697-dnepropetrovskij-zavod-specremonta-031.jpg": {
+    "path": "/media/44b31bb6b930cf21.jpg",
+    "bytes": 29874,
+    "width": 300,
+    "height": 225
+  },
+  "https://dzs.in.ua/uploads/portfolio/tormoznye-kolodki-xitachi-4674697-dnepropetrovskij-zavod-specremonta1.jpg": {
+    "path": "/media/6a0c69aa1f741871.jpg",
+    "bytes": 26600,
+    "width": 303,
+    "height": 200
+  },
+  "https://dzs.in.ua/uploads/portfolio/vypiska-iz-reestra-ooo-dzs-011.jpg": {
+    "path": "/media/6c75c6d8596d44ad.jpg",
+    "bytes": 276389,
+    "width": 1653,
+    "height": 2337
+  },
+  "https://dzs.in.ua/uploads/portfolio/vypiska-iz-reestra-ooo-dzs1.jpg": {
+    "path": "/media/b9c8964dc71a3453.jpg",
+    "bytes": 269956,
+    "width": 1653,
+    "height": 2337
+  },
+  "https://dzs.in.ua/uploads/product/04b170f90f5e49b09eb96e2be460cfb1.jpg": {
+    "path": "/media/7b1b6b447903596e.jpg",
+    "bytes": 41840,
+    "width": 704,
+    "height": 532
+  },
+  "https://dzs.in.ua/uploads/product/04e1c9c4d2b099b73df22495489d6d0e.jpg": {
+    "path": "/media/7170a21bb6a3cf93.jpg",
+    "bytes": 13101,
+    "width": 270,
+    "height": 202
+  },
+  "https://dzs.in.ua/uploads/product/2901c15d98c72f67957b727f0b4c91e2.jpg": {
+    "path": "/media/6dbd8775a4ea49e6.jpg",
+    "bytes": 45889,
+    "width": 270,
+    "height": 384
+  },
+  "https://dzs.in.ua/uploads/product/31f41127561661e74bb2ae2d1aba3b61.jpg": {
+    "path": "/media/456400a274cf82e9.jpg",
+    "bytes": 19976,
+    "width": 270,
+    "height": 205
+  },
+  "https://dzs.in.ua/uploads/product/3428166b2f7d9639ba1a8b53f27fa99e.jpg": {
+    "path": "/media/78bb5a1844163393.jpg",
+    "bytes": 93662,
+    "width": 885,
+    "height": 569
+  },
+  "https://dzs.in.ua/uploads/product/3abab2c4a26e211e57b9ea8982ba84ab.jpg": {
+    "path": "/media/3e7c01bf67cc76e4.jpg",
+    "bytes": 149027,
+    "width": 745,
+    "height": 558
+  },
+  "https://dzs.in.ua/uploads/product/3d8b304a19ea2e48d174242e772c29bc.jpg": {
+    "path": "/media/90d33bf8719e864a.jpg",
+    "bytes": 45746,
+    "width": 270,
+    "height": 342
+  },
+  "https://dzs.in.ua/uploads/product/3db815f1201ef9425529790fd04711c2.jpg": {
+    "path": "/media/4399fb9974bcd563.jpg",
+    "bytes": 30671,
+    "width": 224,
+    "height": 300
+  },
+  "https://dzs.in.ua/uploads/product/42090152cbd4729a3715601eea19fed3.jpg": {
+    "path": "/media/32f20e44cbb32e82.jpg",
+    "bytes": 43275,
+    "width": 300,
+    "height": 223
+  },
+  "https://dzs.in.ua/uploads/product/4703800-hitachi-eh3500-ot-proizvoditelya-ooo-dzs-salnik-i01.jpg": {
+    "path": "/media/b6baa26bd3bf8373.jpg",
+    "bytes": 45039,
+    "width": 300,
+    "height": 225
+  },
+  "https://dzs.in.ua/uploads/product/4703800-hitachi-eh3500-salnik-ot-proizvoditelya-ooo-dzs.jpg": {
+    "path": "/media/9b9822ab3ddbd0c9.jpg",
+    "bytes": 41685,
+    "width": 300,
+    "height": 223
+  },
+  "https://dzs.in.ua/uploads/product/79f6de7372281e909c7a54d9b0181ac0.jpg": {
+    "path": "/media/ab1a8eb7a1364948.jpg",
+    "bytes": 17492,
+    "width": 272,
+    "height": 200
+  },
+  "https://dzs.in.ua/uploads/product/7d5b4705e3d59582cdc6f931b45350c2.jpg": {
+    "path": "/media/812bb562819c734d.jpg",
+    "bytes": 30195,
+    "width": 225,
+    "height": 300
+  },
+  "https://dzs.in.ua/uploads/product/7d6f75b16e55d229ac038f41bebb2184.jpg": {
+    "path": "/media/8743bc706417ba7b.jpg",
+    "bytes": 34275,
+    "width": 270,
+    "height": 200
+  },
+  "https://dzs.in.ua/uploads/product/7de490c8444f070561a1924497f7ebc8.jpg": {
+    "path": "/media/cb6465df3b1ff556.jpg",
+    "bytes": 19279,
+    "width": 300,
+    "height": 210
+  },
+  "https://dzs.in.ua/uploads/product/84d60192c4a423d88567e5cba8ebe7f1.jpg": {
+    "path": "/media/ea8c0a6be6692220.jpg",
+    "bytes": 18629,
+    "width": 300,
+    "height": 202
+  },
+  "https://dzs.in.ua/uploads/product/898983baf8a9e572c9aa5690b018e668.jpg": {
+    "path": "/media/bd0724f16f60c0c0.jpg",
+    "bytes": 34089,
+    "width": 225,
+    "height": 300
+  },
+  "https://dzs.in.ua/uploads/product/8b6d02bacf1f6fdc19e8cee2dbc9acf4.jpg": {
+    "path": "/media/5a9b936a519d869b.jpg",
+    "bytes": 23202,
+    "width": 308,
+    "height": 200
+  },
+  "https://dzs.in.ua/uploads/product/8e1fb071583d97c4677b7ba51b44f5bd.jpg": {
+    "path": "/media/28630853462473c6.jpg",
+    "bytes": 24378,
+    "width": 300,
+    "height": 202
+  },
+  "https://dzs.in.ua/uploads/product/975e733097c1fc6e722e5a1ed827d87a.jpg": {
+    "path": "/media/cd0ed9b2ad1f9258.jpg",
+    "bytes": 35412,
+    "width": 276,
+    "height": 300
+  },
+  "https://dzs.in.ua/uploads/product/a4fc85e633354951ab2b4c2a30472e95.jpg": {
+    "path": "/media/3671523e0cbabf54.jpg",
+    "bytes": 22746,
+    "width": 253,
+    "height": 210
+  },
+  "https://dzs.in.ua/uploads/product/b28266dc730a8686b50b1ba7dd1b9d40.jpg": {
+    "path": "/media/922ed013addf7c73.jpg",
+    "bytes": 23658,
+    "width": 300,
+    "height": 200
+  },
+  "https://dzs.in.ua/uploads/product/bc67a967068a19572fb2f3ed98fcc3f8.jpg": {
+    "path": "/media/a334096f8b4a42e3.jpg",
+    "bytes": 19279,
+    "width": 300,
+    "height": 210
+  },
+  "https://dzs.in.ua/uploads/product/be13c6ec7d17e658d898152923a15e5a.jpg": {
+    "path": "/media/bc2be7b6e001e2af.jpg",
+    "bytes": 23964,
+    "width": 300,
+    "height": 220
+  },
+  "https://dzs.in.ua/uploads/product/be4e8235913866f7c5b3a2f8d273eff3.jpg": {
+    "path": "/media/9ba2ea364df86f1c.jpg",
+    "bytes": 24933,
+    "width": 410,
+    "height": 238
+  },
+  "https://dzs.in.ua/uploads/product/c8dd7cdebaf9cc3d055adbc35e67bdbd.jpg": {
+    "path": "/media/210b4d0a61085a89.jpg",
+    "bytes": 75453,
+    "width": 885,
+    "height": 664
+  },
+  "https://dzs.in.ua/uploads/product/d836046c88db5d5423ce0a3eb166c772.jpg": {
+    "path": "/media/286646eb1a65c8b4.jpg",
+    "bytes": 97543,
+    "width": 576,
+    "height": 765
+  },
+  "https://dzs.in.ua/uploads/product/db75f0251fa093b5b9ccab0da67b5f7a.jpg": {
+    "path": "/media/f5f743c1422597e1.jpg",
+    "bytes": 20147,
+    "width": 270,
+    "height": 205
+  },
+  "https://dzs.in.ua/uploads/product/dc837db074b6472b3e4690c842b41817.jpg": {
+    "path": "/media/43613c8e583ef124.jpg",
+    "bytes": 27459,
+    "width": 300,
+    "height": 215
+  },
+  "https://dzs.in.ua/uploads/product/e41748dc17cca43a04d2053c5df9ae23.jpg": {
+    "path": "/media/c46beef21a268e26.jpg",
+    "bytes": 24404,
+    "width": 247,
+    "height": 330
+  },
+  "https://dzs.in.ua/uploads/product/kolodka-tormoznaya-dlya-belaz-dzs.jpg": {
+    "path": "/media/6a44c81caff8769d.jpg",
+    "bytes": 274078,
+    "width": 960,
+    "height": 1280
+  },
+  "https://dzs.in.ua/uploads/product/kolodka-tormoznaya-dlya-belaza-1.jpg": {
+    "path": "/media/808ccef136e60e82.jpg",
+    "bytes": 233870,
+    "width": 1280,
+    "height": 960
+  },
+  "https://dzs.in.ua/uploads/product/kolodka-tormoznaya-dlya-belaza-dzs.jpg": {
+    "path": "/media/06a1d44b0462c601.jpg",
+    "bytes": 273414,
+    "width": 960,
+    "height": 1280
+  },
+  "https://dzs.in.ua/uploads/product/remont-gidroilindrov1.jpg": {
+    "path": "/media/c8d118b73dffcbd3.jpg",
+    "bytes": 25064,
+    "width": 264,
+    "height": 418
+  }
+}
