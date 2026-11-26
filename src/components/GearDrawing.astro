@@ -66,8 +66,9 @@ for (let i = 1; i < gears.length; i++) {
   b.phase = direction + Math.PI - facing * b.step;
 }
 const deg = (angle: number) => n(angle * 180 / Math.PI);
-// On load the train turns by two teeth, so the final position is the drawn one.
-const turn = (index: number) => deg((index % 2 ? -2 : 2) * gears[index].step);
+// On load the train turns by a whole number of teeth, so the final position is the drawn one.
+const TURN_TEETH = 4;
+const turn = (index: number) => deg((index % 2 ? -TURN_TEETH : TURN_TEETH) * gears[index].step);
 
 const holes = ({ web }: typeof g1) => Array.from({ length: web.holes }, (_, i) => {
   const angle = (i + .5) * 2 * Math.PI / web.holes;

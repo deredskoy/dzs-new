@@ -107,7 +107,7 @@ mark { background: var(--orange); color: var(--ink); box-decoration-break: clone
 .gd-text .gd-position { font-size: 16px; font-weight: 500; fill: var(--ink); }
 .gd-title .gd-title-name { font-size: 14px; font-weight: 500; fill: var(--ink); }
 @media (prefers-reduced-motion: no-preference) {
-  .gd-turn { animation: gd-turn 1.8s cubic-bezier(.45, 0, .2, 1) .4s both; }
+  .gd-turn { animation: gd-turn 3.3s cubic-bezier(.45, 0, .2, 1) .4s both; }
 }
 @keyframes gd-turn { to { transform: rotate(var(--turn)); } }
 .hero-baseline { grid-column: 1/-1; display: flex; justify-content: space-between; align-items: center; gap: 20px; border-top: 1px solid var(--line); padding: 18px 0 24px; font-family: var(--mono); font-size: 11px; letter-spacing: .04em; color: var(--muted); }
