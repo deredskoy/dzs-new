@@ -1,0 +1,83 @@
+---
+import { translator, type Locale } from '../lib/i18n';
+type Variant = 'lathe-1553' | 'lathe-dip400' | 'press';
+interface Props { variant: Variant; locale?: Locale }
+const { variant, locale = 'uk' } = Astro.props;
+const t = translator(locale);
+// Drawn to scale, 1 unit = 10 mm, beside a 1.75 m person so the size reads at a glance.
+const copy: Record<Variant, { title: string; text: string }> = {
+  'lathe-1553': { title: 'Найбільша деталь для верстата 1553', text: 'Діаметр до 2600 мм, висота до 1350 мм, вага до 6 т.' },
+  'lathe-dip400': { title: 'Найбільша деталь для верстата ДІП-400', text: 'Довжина між центрами до 3000 мм, діаметр над станиною до 800 мм при висоті центрів 400 мм. Короткі деталі до 1200 мм у діаметрі обробляємо у виїмці станини.' },
+  press: { title: 'Деталі для преса 250 т', text: 'Зусилля преса 250 т, діаметр деталі до 1300 мм.' },
+};
+const id = 'drawing-' + variant;
+---
+<section class="graphic-band" aria-labelledby={id + '-title'}>
+  <div class="wrap graphic-grid">
+    <div class="graphic-copy">
+      <h2 id={id + '-title'}>{t(copy[variant].title)}</h2>
+      <p>{t(copy[variant].text)}</p>
+      <p class="graphic-note">{t('Розміри в міліметрах. Для масштабу поруч людина зростом 1,75 м.')}</p>
+    </div>
+    <figure class="machine-figure">
+      <svg viewBox={variant === 'lathe-dip400' ? '0 0 520 300' : '0 0 480 300'} aria-hidden="true">
+        <defs>
+          <marker id={id + '-a'} viewBox="0 0 8 6" refX="8" refY="3" markerWidth="8" markerHeight="6" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path d="M0 0L8 3L0 6Z" class="md-arrow"/></marker>
+          <marker id={id + '-o'} viewBox="0 0 8 6" refX="8" refY="3" markerWidth="10" markerHeight="8" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path d="M0 0L8 3L0 6Z" class="md-arrow-key"/></marker>
+          <marker id={id + '-w'} viewBox="0 0 8 6" refX="8" refY="3" markerWidth="8" markerHeight="6" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path d="M0 0L8 3L0 6Z" fill="#fff"/></marker>
+          <g id={id + '-person'} class="md-person"><circle cx="0" cy="-164" r="11"/><rect x="-15" y="-148" width="30" height="62" rx="8"/><rect x="-23" y="-146" width="8" height="58" rx="4"/><rect x="15" y="-146" width="8" height="58" rx="4"/><rect x="-14" y="-92" width="12" height="92" rx="4"/><rect x="2" y="-92" width="12" height="92" rx="4"/></g>
+        </defs>
+        {variant === 'lathe-1553' && <>
+          <path class="md-line" d="M20 262H460"/>
+          <rect class="md-line" x="50" y="250" width="280" height="12"/>
+          <rect class="md-part" x="60" y="115" width="260" height="135"/>
+          <path class="md-axis" d="M190 104V274"/>
+          <path class="md-line" d="M60 111V86M320 111V86M56 115H24M56 250H24"/>
+          <path class="md-key" d="M60 96H320" marker-start={`url(#${id}-o)`} marker-end={`url(#${id}-o)`}/>
+          <path class="md-dim" d="M32 115V250" marker-start={`url(#${id}-a)`} marker-end={`url(#${id}-a)`}/>
+          <text class="md-text" x="150" y="86" text-anchor="middle">Ø 2600</text>
+          <text class="md-text" transform="translate(22 182) rotate(-90)" text-anchor="middle">1350</text>
+          <text class="md-text-light" x="255" y="189" text-anchor="middle">{t('≤ 6 т')}</text>
+          <use href={'#' + id + '-person'} x="410" y="262"/>
+          <text class="md-text" x="410" y="78" text-anchor="middle">{t('1,75 м')}</text>
+        </>}
+        {variant === 'lathe-dip400' && <>
+          <path class="md-line" d="M8 272H512"/>
+          <rect class="md-line" x="30" y="226" width="330" height="46"/>
+          <rect class="md-line" x="10" y="136" width="36" height="90"/>
+          <rect class="md-line" x="354" y="164" width="28" height="62"/>
+          <rect class="md-part" x="50" y="146" width="300" height="80"/>
+          <path class="md-center" d="M46 180L58 186L46 192ZM354 180L342 186L354 192Z"/>
+          <path class="md-axis" d="M4 186H396"/>
+          <path class="md-line" d="M50 142V114M350 142V114M362 226H412M396 186H412"/>
+          <path class="md-key" d="M50 124H350" marker-start={`url(#${id}-o)`} marker-end={`url(#${id}-o)`}/>
+          <path class="md-dim-light" d="M322 146V226" marker-start={`url(#${id}-w)`} marker-end={`url(#${id}-w)`}/>
+          <path class="md-dim" d="M404 186V226" marker-start={`url(#${id}-a)`} marker-end={`url(#${id}-a)`}/>
+          <text class="md-text" x="200" y="114" text-anchor="middle">3000</text>
+          <text class="md-text-light" transform="translate(312 186) rotate(-90)" text-anchor="middle">Ø 800</text>
+          <text class="md-text" x="414" y="212">400</text>
+          <use href={'#' + id + '-person'} x="474" y="272"/>
+          <text class="md-text" x="474" y="88" text-anchor="middle">{t('1,75 м')}</text>
+        </>}
+        {variant === 'press' && <>
+          <path class="md-line" d="M20 272H460"/>
+          <rect class="md-line" x="70" y="250" width="230" height="22"/>
+          <rect class="md-line" x="176" y="26" width="18" height="44"/>
+          <rect class="md-line" x="158" y="70" width="54" height="40"/>
+          <rect class="md-part" x="120" y="190" width="47" height="60"/>
+          <rect class="md-part" x="203" y="190" width="47" height="60"/>
+          <rect class="md-shaft" x="167" y="176" width="36" height="74"/>
+          <path class="md-force" d="M185 114V158"/>
+          <path class="md-force-head" d="M185 174L175 156H195Z"/>
+          <text class="md-text-strong" x="206" y="146">{t('250 т')}</text>
+          <path class="md-line" d="M120 186V154M250 186V154"/>
+          <path class="md-dim" d="M120 162H170" marker-start={`url(#${id}-a)`}/>
+          <path class="md-dim" d="M200 162H250" marker-end={`url(#${id}-a)`}/>
+          <text class="md-text" x="112" y="167" text-anchor="end">Ø 1300</text>
+          <use href={'#' + id + '-person'} x="400" y="272"/>
+          <text class="md-text" x="400" y="88" text-anchor="middle">{t('1,75 м')}</text>
+        </>}
+      </svg>
+    </figure>
+  </div>
+</section>

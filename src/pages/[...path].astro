@@ -1,0 +1,18 @@
+---
+import ContentPage from '../components/ContentPage.astro';
+import { sourcePages, aliases, pageFor, localizePage, type SourcePage } from '../lib/site';
+import { locales, type Locale } from '../lib/i18n';
+
+export function getStaticPaths() {
+  const routes = [
+    ...sourcePages.map(page => ({ path: page.path, page })),
+    ...Object.entries(aliases).map(([path, canonical]) => ({ path, page: pageFor(canonical)! })),
+  ];
+  return locales.flatMap(locale => routes.map(({ path, page }) => ({
+    params: { path: (locale === 'en' ? 'en/' : '') + path.slice(1) },
+    props: { page: localizePage(page, locale), locale },
+  })));
+}
+interface Props { page: SourcePage; locale: Locale }
+---
+<ContentPage page={Astro.props.page} locale={Astro.props.locale}/>

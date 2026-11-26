@@ -1,0 +1,20 @@
+---
+import { translator, type Locale } from '../lib/i18n';
+import { excavatorModels } from '../lib/site';
+interface Props { locale?: Locale }
+const { locale = 'uk' } = Astro.props;
+const t = translator(locale);
+---
+<div class="model-groups">
+  <h3>{t('Моделі, для яких виготовляємо редуктори')}</h3>
+  {excavatorModels.map(group => (
+    <section class="model-group">
+      <div class="model-group-head">
+        <h4>{group.brand}</h4>
+        <span class="model-count">{group.models.length} {t('моделей')}</span>
+      </div>
+      <p>{t(group.type)}</p>
+      <ul>{group.models.map(model => <li>{model}</li>)}</ul>
+    </section>
+  ))}
+</div>
