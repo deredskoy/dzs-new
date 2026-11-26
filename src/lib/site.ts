@@ -85,13 +85,19 @@ const retiredImages = ['https://dzs.in.ua/uploads/files/long_logo1.png'];
 export function pageImages(page: SourcePage) {
   return page.images.filter((image, i, all) => !image.src.includes('/partners/') && !retiredImages.includes(image.src) && !assetMap[image.src]?.error && all.findIndex(other => other.src === image.src) === i);
 }
+// Section names say what the section offers, so every link to it carries the search terms of the page.
 export const categories = [
-  { title: 'Виготовлення', href: '/catalog/category/izgotovlenie', detail: 'Від креслення до готового виробу' },
-  { title: 'Ремонт', href: '/catalog/category/remont', detail: 'Відновлюємо ресурс обладнання' },
-  { title: 'Механічна обробка', href: '/catalog/category/uslugi', detail: 'Токарні, розточувальні та пресові роботи' },
+  { title: 'Виготовлення деталей і вузлів', href: '/catalog/category/izgotovlenie', detail: 'Від креслення до готового виробу' },
+  { title: 'Ремонт редукторів і агрегатів', href: '/catalog/category/remont', detail: 'Відновлюємо ресурс обладнання' },
+  { title: 'Механічна обробка металу', href: '/catalog/category/uslugi', detail: 'Токарні, розточувальні та пресові роботи' },
   // The sales tab stays in the catalogue without offers until the plant sells equipment again.
-  { title: 'Продаж обладнання', href: '/catalog/category/prodam-kuplyu', detail: 'Редуктори, механізми та агрегати', paused: true },
+  { title: 'Продаж редукторів і агрегатів', href: '/catalog/category/prodam-kuplyu', detail: 'Редуктори, механізми та агрегати', paused: true },
 ];
+/** The catalogue section of a product or a subsection. */
+export function categoryOf(path: string) {
+  return categories.find(item => path.startsWith(item.href + '/'))
+    || categories.find(item => sourcePages.some(page => (page.path === item.href || page.path.startsWith(item.href + '/')) && page.cards.some(card => card.href === path)));
+}
 /** Catalogue sections that currently have no offers, with their subsections. */
 export function isPaused(path: string) {
   return categories.some(item => item.paused && (path === item.href || path.startsWith(item.href + '/')));
@@ -103,7 +109,28 @@ export const companyLinks = [
   { title: 'Команда та вакансії', href: '/states/kollektiv-i-vakansii' },
 ];
 export function titleFor(page: SourcePage, locale: Locale = 'uk') {
-  const special: Record<string, string> = { '/portfolio': 'Галерея робіт', '/contacts': 'Контакти', '/about-company': 'Підприємство', '/catalog': 'Продукція та послуги', [paths.belaz]: 'Гальмівна накладка для БеЛАЗ', [paths.hitachi]: 'Гальмівна колодка HITACHI EH 3500', [paths.friction]: 'Фрикційні вироби на замовлення' };
+  const special: Record<string, string> = {
+    '/portfolio': 'Галерея робіт', '/contacts': 'Контакти', '/about-company': 'Підприємство', '/catalog': 'Продукція та послуги',
+    [paths.belaz]: 'Гальмівна накладка 75131-3577060-01 для БеЛАЗ 130 т', [paths.hitachi]: 'Гальмівна колодка 4674697 для HITACHI EH 3500', [paths.friction]: 'Фрикційні вироби на замовлення',
+    // Product headings name the work and the part number; cards and links use the same names.
+    '/product/info/izgotovim-uzly-mehanizmov-agregaty-po-zakazu': 'Виготовлення вузлів механізмів і агрегатів на замовлення',
+    '/product/info/izgotovim-valy-val-shesterni-shesterni': 'Виготовлення валів, вал-шестерень і шестерень',
+    '/product/info/izgotovim-special-nye-reduktory-po-zakazu': 'Виготовлення спеціальних редукторів на замовлення',
+    '/product/info/vypolnim-tokarnye-raboty-na-karusel-nom-stanke': 'Токарні роботи на карусельному верстаті 1553',
+    '/product/info/vypolnim-tokarnye-raboty-na-dip-400': 'Токарні роботи на верстаті ДІП-400',
+    '/product/info/vypolnim-gorizontal-no-rastochnye-raboty-na-2622v': 'Горизонтально-розточувальні роботи на верстаті 2622В',
+    '/product/info/4703800-proizvodstvo-sal-nikov-dlya-samosvala-hitachi-en-3500': 'Сальник 4703800 для самоскида HITACHI EH 3500',
+    '/product/info/remont-i-vosstanovlenie-gidrocilindrov': 'Ремонт і відновлення гідроциліндрів кар’єрної та будівельної техніки',
+    '/portfolio/sal-niki-dlya-samosvala-hitachi-en-3500-as-kat-4703800': 'Сальники 4703800 для самоскида HITACHI EH 3500 AC',
+    '/portfolio/tormoznye-diskovye-kolodki-dlya-samosvala-hitachi-3500': 'Гальмівні дискові колодки 4674697 для самоскида HITACHI EH 3500',
+    // Catalogue sections and subsections listing several products had generic source headings ("Ремонт", "Виготовлення").
+    ...Object.fromEntries(categories.map(item => [item.href, item.title])),
+    '/catalog/category/izgotovlenie/izgotovlenie-reduktorov-special-nyh-i-obshepromyshlennogo-naznacheniya': 'Виготовлення редукторів спеціального та загальнопромислового призначення',
+    '/catalog/category/izgotovlenie/izgotovlenie-special-nyh-frikcionnyh-izdelij': 'Виготовлення спеціальних фрикційних виробів',
+    '/catalog/category/remont/remont-planetarnyh-reduktorov-hoda-povorota-ekskavatorov': 'Ремонт планетарних редукторів ходу та повороту екскаваторів',
+    '/catalog/category/prodam-kuplyu/prodaem-agregaty-i-reduktory': 'Продаж редукторів і агрегатів',
+    '/catalog/category/prodam-kuplyu/pokupaem-reduktory-i-agregaty': 'Купівля редукторів і агрегатів',
+  };
   if (special[page.path]) return translate(special[page.path], locale);
   if (page.path.split('/').length > 4 && page.path.startsWith('/catalog/') && page.cards.length === 1) return page.cards[0].title;
   return page.title;
@@ -127,6 +154,41 @@ function dashLists(html: string) {
     return result;
   }).replace(/<\/ul>\s*<ul>/g, '');
 }
+// Contextual links: the first mention of a product or section in a source text links to its page.
+// Phrases are matched in each language's text; a link to the page itself is removed.
+const contextLinks: Record<string, { uk: string; en: string; href: string }[]> = {
+  '/states/o-predpriyatii': [
+    { uk: 'верстатний парк', en: 'machine tools', href: '/states/nash-stanochnyy-park' },
+    { uk: 'планетарних редукторів ходу та повороту Komatsu, Hitachi, Caterpillar', en: 'Komatsu, Hitachi, Caterpillar and other planetary travel and swing gearboxes', href: '/product/info/izgotovlenie-planetarnyh-reduktorov-hoda-i-povorota' },
+    { uk: 'фрикційних виробів для спецтехніки та обладнання', en: 'friction products for specialist machinery and equipment', href: paths.friction },
+    { uk: 'гальмівних колодок для великовантажного самоскида Hitachi 3500', en: 'replacement brake pads for Hitachi 3500 heavy-duty dump trucks', href: paths.hitachi },
+  ],
+  '/news/8': [
+    { uk: 'гальмівну дискову колодку для великовантажного самоскида HITACHI EH 3500 CII, АС', en: 'a disc brake pad for HITACHI EH 3500 CII and AC heavy-duty dump trucks', href: paths.hitachi },
+  ],
+  '/news/9': [
+    { uk: 'виготовлення редукторів та їх комплектуючих', en: 'manufacture of gearboxes and their components', href: '/catalog/category/izgotovlenie/izgotovlenie-reduktorov-special-nyh-i-obshepromyshlennogo-naznacheniya' },
+    { uk: 'ремонту та сервісного обслуговування планетарних редукторів ходу повороту', en: 'repair and servicing of planetary travel and swing gearboxes', href: '/catalog/category/remont/remont-planetarnyh-reduktorov-hoda-povorota-ekskavatorov' },
+  ],
+};
+function linkMentions(html: string, path: string, locale: Locale) {
+  const self = url(path, locale);
+  html = html.replace(/<a\b[^>]*\bhref="([^"]+)"[^>]*>([\s\S]*?)<\/a>/g, (link, href: string, text: string) => href.split('#')[0] === self ? text : link);
+  for (const mention of contextLinks[path] || []) {
+    const phrase = mention[locale];
+    let inLink = false;
+    let done = false;
+    html = html.split(/(<[^>]+>)/g).map(part => {
+      if (part.startsWith('<')) { if (/^<a\b/i.test(part)) inLink = true; if (/^<\/a>/i.test(part)) inLink = false; return part; }
+      if (done || inLink || !part.includes(phrase)) return part;
+      done = true;
+      return part.replace(phrase, `<a href="${url(mention.href, locale)}">${phrase}</a>`);
+    }).join('');
+    if (!done) throw new Error(`Contextual link text not found on ${path} (${locale}): ${phrase}`);
+  }
+  return html;
+}
+
 /** Where the first list of a page is replaced by a structured graphic. */
 export const graphicMarker = '<!--graphic-->';
 export interface RichOptions { worksheet?: boolean; replaceList?: boolean }
@@ -136,7 +198,7 @@ export function richHtml(page: SourcePage, locale: Locale = 'uk', options: RichO
   if (options.worksheet) html = html.replace('<ul>', '<ol class="worksheet">').replace(/<\/ul>/, '</ol>');
   // The page is split around the graphic, so plain wrappers must not stay open across the split.
   if (options.replaceList) html = html.replace(/<\/?(?:div|section)>/g, '').replace(/<ul>[\s\S]*?<\/ul>/, graphicMarker);
-  return html
+  html = html
     .replace(/<p>\s*<img [^>]*src="([^"]+)"[^>]*>\s*<\/p>/g, (match, src) => retiredImages.includes(src) ? '' : match)
     .replace(/<p>(?:\s*<br\s*\/?>)+/g, '<p>').replace(/(?:<br\s*\/?>\s*)+<\/p>/g, '</p>')
     .replace(/<p>\s*<\/p>/g, '')
@@ -151,9 +213,10 @@ export function richHtml(page: SourcePage, locale: Locale = 'uk', options: RichO
     })
     .replace(/<img /g, '<img loading="lazy" decoding="async" ')
     .replace(/<h1\b/g, '<h2').replace(/<\/h1>/g, '</h2>');
+  return linkMentions(html, page.path, locale);
 }
 
-export interface ProductDetail { kind: 'part' | 'make' | 'repair' | 'machining' | 'sale'; lead: string; facts: [string, string][]; graphic?: 'timeline' | 'models' | 'lathe-1553' | 'lathe-dip400' | 'press'; worksheet?: boolean }
+export interface ProductDetail { kind: 'part' | 'make' | 'repair' | 'machining' | 'sale'; lead: string; facts: [label: string, value: string, href?: string][]; graphic?: 'timeline' | 'models' | 'lathe-1553' | 'lathe-dip400' | 'press'; worksheet?: boolean }
 const productData = details as unknown as { products: Record<string, ProductDetail>; timeline: { year: number; title: string; code: string; href: string }[]; models: { brand: string; type: string; models: string[] }[]; briefs: Record<ProductDetail['kind'], string[]> };
 export const partsTimeline = productData.timeline;
 export const excavatorModels = productData.models;

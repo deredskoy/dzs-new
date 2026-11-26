@@ -35,7 +35,7 @@ const fit = (width: number) => `--max:${Math.round(width * 1.5)}px`;
       <div><dt>{t('Повний день')}</dt><dd>{t('8:00–17:00, повний соцпакет, фіксований оклад')}</dd></div>
       <div><dt>{t('Вільний графік')}</dt><dd>{t('Узгоджується з керівництвом, відрядна оплата')}</dd></div>
     </dl>
-    <a class="button" href="tel:+380673775670">+38 (067) 377-56-70 <span aria-hidden="true">↗</span></a>
+    <a class="button" href="tel:+380673775670">+38 (067) 377-56-70</a>
   </aside>
   <div class="rich-content company-text" set:html={richHtml(page, locale)}/>
 </section>}
@@ -45,7 +45,7 @@ const fit = (width: number) => `--max:${Math.round(width * 1.5)}px`;
   <ul class="machine-index">{park.machines.map(machine => <li><a href={'#' + machine.id}>{machine.title}</a></li>)}</ul>
   {park.machines.map(machine => <article class="machine" id={machine.id} aria-labelledby={machine.id + '-title'}>
     <div class="machine-photos" data-count={machine.photos.length}>{machine.photos.map((photo, index) => <a class="machine-photo" href={photo.src} target="_blank" rel="noopener" data-shape={photo.shape} style={`--photo:url("${photo.src}");${fit(photo.width)}`}><img src={photo.src} width={photo.width} height={photo.height} alt={machine.photos.length > 1 ? machine.title + ', ' + t('фото') + ' ' + (index + 1) : machine.title} loading="lazy" decoding="async"/></a>)}</div>
-    <div class="machine-text"><h2 id={machine.id + '-title'}>{machine.title}</h2><div class="rich-content" set:html={machine.html}/></div>
+    <div class="machine-text"><h2 id={machine.id + '-title'}>{machine.title}</h2><div class="rich-content" set:html={machine.html}/>{machine.service && <a class="text-link machine-service" href={machine.service.href}>{machine.service.title}</a>}</div>
   </article>)}
   <div class="rich-content machine-outro" set:html={park.outro}/>
 </section>}

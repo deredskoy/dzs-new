@@ -1,4 +1,4 @@
-import { richHtml, imageUrl, imageSize, url, type ImageShape, type SourcePage } from './site';
+import { richHtml, imageUrl, imageSize, url, pageFor, titleFor, type ImageShape, type SourcePage } from './site';
 import { translate, type Locale } from './i18n';
 
 /** Plain text of an HTML fragment, ready to be inserted as text. */
@@ -21,7 +21,17 @@ const machinePhotos: Record<string, string[]> = {
   'https://dzs.in.ua/uploads/files/tokarno_karyselniy_stanok.jpg': ['/media/lathe-1553-2026.jpg'],
 };
 
-export interface Machine { id: string; title: string; photos: Photo[]; html: string }
+// Machines with a service page link to it, and the service page links back to the machine.
+export const machineServices: Record<string, string> = {
+  'https://dzs.in.ua/uploads/files/tokarno_karyselniy_stanok.jpg': '/product/info/vypolnim-tokarnye-raboty-na-karusel-nom-stanke',
+  'https://dzs.in.ua/uploads/files/tokarno_vintorezniy_stanok_dip_400.jpg': '/product/info/vypolnim-tokarnye-raboty-na-dip-400',
+  'https://dzs.in.ua/uploads/files/tokarno_rastochniy.jpg': '/product/info/vypolnim-gorizontal-no-rastochnye-raboty-na-2622v',
+  'https://dzs.in.ua/uploads/files/press.jpg': '/product/info/vypolnim-raspressovku-promyshlennym-pressom',
+};
+/** A stable anchor for a machine on the machine-shop page, taken from its source photo's file name. */
+export const machineAnchor = (source: string) => source.split('/').pop()!.replace(/\.\w+$/, '').replace(/_/g, '-');
+
+export interface Machine { id: string; title: string; photos: Photo[]; html: string; service?: { href: string; title: string } }
 /** Splits the machine-shop page into its equipment entries: each has a heading, its photos and a description. */
 export function machinePark(page: SourcePage, locale: Locale) {
   const chunks = unwrap(page.html).split(/<hr\s*\/?>/i);
@@ -39,7 +49,11 @@ export function machinePark(page: SourcePage, locale: Locale) {
     if (!heading) throw new Error('Machine without a heading on ' + page.path);
     if (!machines.length) intro = plainText(chunk.slice(0, heading.index));
     const body = withoutEmptyParagraphs(chunk.slice(heading.index! + heading[0].length).replace(image[0], ''));
-    machines.push({ id: 'machine-' + (machines.length + 1), title: plainText(heading[1]), photos: (machinePhotos[image[1]] || [image[1]]).map(photo), html: richHtml({ ...page, html: body }, locale) });
+    const servicePage = machineServices[image[1]] ? pageFor(machineServices[image[1]], locale) : undefined;
+    machines.push({
+      id: machineAnchor(image[1]), title: plainText(heading[1]), photos: (machinePhotos[image[1]] || [image[1]]).map(photo), html: richHtml({ ...page, html: body }, locale),
+      service: servicePage && { href: url(servicePage.path, locale), title: titleFor(servicePage, locale) },
+    });
   });
   return { intro, machines, outro: richHtml({ ...page, html: withoutEmptyParagraphs(outro) }, locale) };
 }

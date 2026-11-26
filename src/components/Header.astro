@@ -26,7 +26,7 @@ function currentSection(href: string) {
   <div class="wrap header-inner">
     <a class="brand" href={url('/', locale)} aria-label={t('Дніпропетровський завод спецремонта — головна')}>
       <img src={url('/media/logo-dzs.png')} width="181" height="201" alt=""/>
-      <span class="brand-name">{t('Дніпропетровський')}<br/>{t('завод спецремонта')}</span>
+      <span class="brand-name">{t('Дніпропетровський')} <br/>{t('завод спецремонта')}</span>
     </a>
     <nav class="desktop-nav" aria-label={t('Головна навігація')}>
       {nav.map(item => <a href={url(item.href, locale)} aria-current={currentSection(item.href)}>{t(item.title)}</a>)}
@@ -43,7 +43,7 @@ function currentSection(href: string) {
       <details class="mobile-nav">
         <summary><span class="menu-label">{t('Меню')}</span><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5"><path class="menu-lines" d="M3 6H21M3 12H21M3 18H21"/><path class="menu-close" d="M5 5L19 19M5 19L19 5"/></svg></summary>
         <nav aria-label={t('Мобільна навігація')}>
-          {nav.map(item => <a href={url(item.href, locale)} aria-current={currentSection(item.href)}>{t(item.title)}<span aria-hidden="true">↗</span></a>)}
+          {nav.map(item => <a href={url(item.href, locale)} aria-current={currentSection(item.href)}>{t(item.title)}</a>)}
         </nav>
       </details>
     </div>

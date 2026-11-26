@@ -226,7 +226,7 @@ test('English navigation, breadcrumbs and content links remain in English', asyn
   await expect(page).toHaveURL(/\/en\/$/);
   await page.getByRole('navigation', { name: 'Main navigation' }).getByRole('link', { name: 'Products & services' }).click();
   await page.locator('.content-card').filter({ hasText: '130-tonne BelAZ' }).getByRole('link').first().click();
-  await expect(page.locator('h1')).toHaveText('Brake lining for BelAZ');
+  await expect(page.locator('h1')).toHaveText('Brake lining 75131-3577060-01 for 130-tonne BelAZ');
   await expect(page.getByRole('navigation', { name: 'Main navigation' }).getByRole('link', { name: 'Products & services' })).toHaveAttribute('aria-current', 'location');
   await expect(page.locator('.rich-content')).toContainText('75131-3577060-01');
   await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', /\/dzs-new\/en\/product\//);
@@ -329,7 +329,7 @@ test('the sales tab stays in the catalogue without offers', async ({ page, reque
   await expect(page.locator('.capabilities a')).toHaveCount(3);
   await expect(page.locator('.capabilities a[href*="prodam-kuplyu"]')).toHaveCount(0);
   await page.goto(base + 'catalog/');
-  await expect(page.locator('.section-nav a[href$="/catalog/category/prodam-kuplyu/"]')).toHaveText('Продаж обладнання');
+  await expect(page.locator('.section-nav a[href$="/catalog/category/prodam-kuplyu/"]')).toHaveText('Продаж редукторів і агрегатів');
   await expect(page.locator('.content-card a[href*="prodam-reduktor"]')).toHaveCount(0);
   await page.goto(base + 'catalog/category/prodam-kuplyu/');
   await expect(page.locator('.empty-catalog')).toHaveText('Зараз пропозицій немає.');
@@ -357,14 +357,14 @@ test('company pages use the full width and keep their content', async ({ page })
   await page.goto(base + 'states/nash-stanochnyy-park/');
   await expect(page.locator('.machine')).toHaveCount(14);
   await expect(page.locator('.machine-index a')).toHaveCount(14);
-  await expect(page.locator('#machine-1 h2')).toHaveText('Карусельний двостійковий верстат 1553 Ø2300');
-  await expect(page.locator('#machine-1 img')).toHaveCount(1);
-  await expect(page.locator('#machine-1 img')).toHaveAttribute('src', /lathe-1553-2026\.jpg$/);
-  const photo = (await page.locator('#machine-2 .machine-photo').boundingBox())!;
-  const description = (await page.locator('#machine-2 .machine-text').boundingBox())!;
+  await expect(page.locator('#tokarno-karyselniy-stanok h2')).toHaveText('Карусельний двостійковий верстат 1553 Ø2300');
+  await expect(page.locator('#tokarno-karyselniy-stanok img')).toHaveCount(1);
+  await expect(page.locator('#tokarno-karyselniy-stanok img')).toHaveAttribute('src', /lathe-1553-2026\.jpg$/);
+  const photo = (await page.locator('#tokarno-vintorezniy-stanok-dip-400 .machine-photo').boundingBox())!;
+  const description = (await page.locator('#tokarno-vintorezniy-stanok-dip-400 .machine-text').boundingBox())!;
   expect(description.x).toBeGreaterThan(photo.x + photo.width);
   await page.locator('.machine-index a').nth(7).click();
-  await expect(page).toHaveURL(/#machine-8$/);
+  await expect(page).toHaveURL(/#press$/);
 
   await page.goto(base + 'states/dokumenty/');
   const documents = page.locator('.document-grid li');
@@ -380,4 +380,52 @@ test('company pages use the full width and keep their content', async ({ page })
   const first = (await documents.nth(0).boundingBox())!;
   const fifth = (await documents.nth(4).boundingBox())!;
   expect(fifth.y).toBeCloseTo(first.y, 0);
+});
+
+test('links are named after the pages they open', async ({ page }) => {
+  const generic = /^(Докладніше|Переглянути роботу|Наші можливості|Увесь каталог|Більше про ДЗС|Уся галерея|Усі контакти|Усі напрями|Learn more|View project)$/;
+  const anchors = async () => page.locator('a[href]').evaluateAll(links => links.map(link => (link.textContent || '').replace(/\s+/g, ' ').trim()));
+  for (const route of ['', 'catalog/', 'catalog/category/remont/', product.hitachi, 'portfolio/', 'states/o-predpriyatii/', 'en/', 'en/catalog/']) {
+    await page.goto(base + route);
+    for (const text of await anchors()) {
+      expect(text, route).not.toMatch(generic);
+      expect(text, route).not.toMatch(/[↗→]/);
+    }
+  }
+
+  // Cards carry the heading of the page they open.
+  await page.goto(base + 'catalog/');
+  const cards = page.locator('.card-link');
+  for (const index of [0, 6, 10]) {
+    const name = (await cards.nth(index).textContent())!.trim();
+    await cards.nth(index).click();
+    await expect(page.locator('h1')).toHaveText(name);
+    await page.goBack();
+  }
+
+  // Products show their catalogue section in the breadcrumbs and in structured data.
+  await page.goto(base + product.lathe);
+  await expect(page.locator('.breadcrumbs a')).toHaveText(['Головна', 'Продукція та послуги', 'Механічна обробка металу']);
+  const crumbs = JSON.parse((await page.locator('script[type="application/ld+json"]').textContent())!);
+  expect(crumbs['@type']).toBe('BreadcrumbList');
+  expect(crumbs.itemListElement).toHaveLength(4);
+  expect(crumbs.itemListElement[2].item).toMatch(/\/catalog\/category\/uslugi\/$/);
+
+  // The lathe service and the lathe on the machine-shop page link to each other.
+  await page.locator('.product-facts a', { hasText: 'Токарно-карусельний 1553' }).click();
+  await expect(page).toHaveURL(/\/states\/nash-stanochnyy-park\/#tokarno-karyselniy-stanok$/);
+  await page.locator('#tokarno-karyselniy-stanok .machine-service').click();
+  await expect(page.locator('h1')).toHaveText('Токарні роботи на карусельному верстаті 1553');
+
+  // Source texts link their first mention of a product or section.
+  await page.goto(base + 'states/o-predpriyatii/');
+  await expect(page.locator('.company-text a')).toHaveText(['верстатний парк', 'планетарних редукторів ходу та повороту Komatsu, Hitachi, Caterpillar', 'фрикційних виробів для спецтехніки та обладнання', 'гальмівних колодок для великовантажного самоскида Hitachi 3500']);
+  await page.goto(base + 'news/8/');
+  await expect(page.locator('main a[href$="/news/8/"]')).toHaveCount(0);
+  await expect(page.locator('.rich-content a[href*="4674697-hitachi"]')).toHaveCount(1);
+
+  // The footer lists the catalogue sections on every page; the timeline keeps words apart.
+  await expect(page.locator('.site-footer nav').first().locator('a')).toHaveText(['Виготовлення деталей і вузлів', 'Ремонт редукторів і агрегатів', 'Механічна обробка металу']);
+  await page.goto(base + product.hitachi);
+  await expect(page.locator('.parts-timeline a').first()).toHaveText('2017 Сальник для HITACHI EH 3500 4703800');
 });
