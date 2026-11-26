@@ -291,6 +291,39 @@ test('hero gears mesh on their pitch circles and the large gear is toned', async
   await expect(page.locator('.gear-drawing .gd-title')).toContainText('Передача зубчаста');
 });
 
+test('documents open as watermarked pages in a viewer, not as files', async ({ page, request }) => {
+  await page.goto(base + 'states/dokumenty/');
+  const card = page.locator('.document-card').first();
+  await card.click();
+  const viewer = page.getByRole('dialog', { name: /Виписка з Єдиного державного реєстру/ });
+  await expect(viewer).toBeVisible();
+  const pages = viewer.locator('.document-viewer-pages img');
+  await expect(pages).toHaveCount(3);
+  await expect(pages.nth(2)).toHaveAttribute('src', /vypyska-yedr-2026-p3\.jpg$/);
+  await expect(pages.nth(0)).toHaveAttribute('alt', /сторінка 1$/);
+  await pages.nth(0).evaluate((image: HTMLImageElement) => image.decode());
+  expect(await pages.nth(0).evaluate((image: HTMLImageElement) => image.naturalWidth)).toBe(1240);
+  expect(await pages.nth(0).evaluate(image => getComputedStyle(image).pointerEvents)).toBe('none');
+  expect(await pages.nth(0).evaluate(image => image.dispatchEvent(new MouseEvent('contextmenu', { bubbles: true, cancelable: true })))).toBe(false);
+  await page.keyboard.press('Escape');
+  await expect(viewer).not.toBeVisible();
+  await expect(card).toBeFocused();
+  await page.locator('.document-card').nth(2).click();
+  await expect(page.locator('.document-viewer-pages img')).toHaveCount(1);
+  await page.getByRole('button', { name: /Закрити/ }).click();
+  await expect(page.locator('dialog')).not.toBeVisible();
+  for (const file of ['vypyska-yedr-2026.pdf', 'vytiah-platnyka-pdv.pdf', 'nakaz-pryznachennia-dyrektora.pdf']) {
+    expect((await request.get(base + 'documents/' + file)).status(), file).toBe(404);
+  }
+});
+
+test('the press service shows the current photo of the press', async ({ page }) => {
+  await page.goto(base + 'product/info/vypolnim-raspressovku-promyshlennym-pressom/');
+  await expect(page.locator('.product-hero-image img')).toHaveAttribute('src', /press-250t-2026\.jpg$/);
+  await page.goto(base + 'catalog/category/uslugi/');
+  await expect(page.locator('.content-card img[src$="press-250t-2026.jpg"]')).toHaveCount(1);
+});
+
 test('the sales tab stays in the catalogue without offers', async ({ page, request }) => {
   await page.goto(base);
   await expect(page.locator('.capabilities a')).toHaveCount(3);
@@ -325,7 +358,8 @@ test('company pages use the full width and keep their content', async ({ page })
   await expect(page.locator('.machine')).toHaveCount(14);
   await expect(page.locator('.machine-index a')).toHaveCount(14);
   await expect(page.locator('#machine-1 h2')).toHaveText('Карусельний двостійковий верстат 1553 Ø2300');
-  await expect(page.locator('#machine-1 img')).toHaveAttribute('src', /32f20e44cbb32e82\.jpg$/);
+  await expect(page.locator('#machine-1 img')).toHaveCount(1);
+  await expect(page.locator('#machine-1 img')).toHaveAttribute('src', /lathe-1553-2026\.jpg$/);
   const photo = (await page.locator('#machine-2 .machine-photo').boundingBox())!;
   const description = (await page.locator('#machine-2 .machine-text').boundingBox())!;
   expect(description.x).toBeGreaterThan(photo.x + photo.width);
@@ -334,11 +368,15 @@ test('company pages use the full width and keep their content', async ({ page })
 
   await page.goto(base + 'states/dokumenty/');
   const documents = page.locator('.document-grid li');
-  await expect(documents).toHaveCount(10);
-  await expect(documents.nth(4)).toContainText('Дозвіл №1118.14.12');
-  await expect(documents.nth(4).locator('a')).toHaveAttribute('href', /8c723c805bbbd7dc\.jpg$/);
-  await expect(documents.nth(5).locator('a')).toHaveAttribute('href', /4433b5c9966bde7c\.jpg$/);
-  await expect(documents.nth(7)).toContainText('Сертифікат відповідності типу');
+  await expect(documents).toHaveCount(9);
+  await expect(page.locator('.documents a')).toHaveCount(0);
+  await expect(documents.nth(0)).toContainText('Виписка з Єдиного державного реєстру');
+  await expect(documents.nth(0).locator('.document-pages-count')).toHaveText('3 стор.');
+  await expect(documents.nth(2)).toContainText('Наказ про призначення директора');
+  await expect(documents.nth(3)).toContainText('Дозвіл №1118.14.12');
+  await expect(documents.nth(3).locator('button')).toHaveAttribute('data-pages', /8c723c805bbbd7dc\.jpg/);
+  await expect(documents.nth(4).locator('button')).toHaveAttribute('data-pages', /4433b5c9966bde7c\.jpg/);
+  await expect(documents.nth(6)).toContainText('Сертифікат відповідності типу');
   const first = (await documents.nth(0).boundingBox())!;
   const fifth = (await documents.nth(4).boundingBox())!;
   expect(fifth.y).toBeCloseTo(first.y, 0);

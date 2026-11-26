@@ -8,7 +8,7 @@ const { page, locale } = Astro.props;
 const t = translator(locale);
 // Company pages use the full width: the text reads on the left, photos and key facts sit on the right.
 const park = page.path === '/states/nash-stanochnyy-park' ? machinePark(page, locale) : undefined;
-const docs = page.path === '/states/dokumenty' ? documents(page) : undefined;
+const docs = page.path === '/states/dokumenty' ? documents(page, locale) : undefined;
 const gears = photo('https://dzs.in.ua/uploads/product/3abab2c4a26e211e57b9ea8982ba84ab.jpg');
 // Small photos are enlarged by at most half, so they stay sharp.
 const fit = (width: number) => `--max:${Math.round(width * 1.5)}px`;
@@ -44,13 +44,52 @@ const fit = (width: number) => `--max:${Math.round(width * 1.5)}px`;
   <p class="machine-intro">{park.intro}</p>
   <ul class="machine-index">{park.machines.map(machine => <li><a href={'#' + machine.id}>{machine.title}</a></li>)}</ul>
   {park.machines.map(machine => <article class="machine" id={machine.id} aria-labelledby={machine.id + '-title'}>
-    <figure class="machine-photo" style={`--photo:url("${machine.photo.src}");${fit(machine.photo.width)}`}><img src={machine.photo.src} width={machine.photo.width} height={machine.photo.height} alt={machine.title} loading="lazy" decoding="async"/></figure>
+    <div class="machine-photos" data-count={machine.photos.length}>{machine.photos.map((photo, index) => <a class="machine-photo" href={photo.src} target="_blank" rel="noopener" data-shape={photo.shape} style={`--photo:url("${photo.src}");${fit(photo.width)}`}><img src={photo.src} width={photo.width} height={photo.height} alt={machine.photos.length > 1 ? machine.title + ', ' + t('фото') + ' ' + (index + 1) : machine.title} loading="lazy" decoding="async"/></a>)}</div>
     <div class="machine-text"><h2 id={machine.id + '-title'}>{machine.title}</h2><div class="rich-content" set:html={machine.html}/></div>
   </article>)}
   <div class="rich-content machine-outro" set:html={park.outro}/>
 </section>}
 
-{docs && <section class="wrap documents">
+{docs && <section class="wrap documents" data-documents data-page-label={t('сторінка')}>
   <p class="documents-intro">{docs.intro}</p>
-  <ol class="document-grid">{docs.items.map(item => <li><a href={item.photo.src} target="_blank" rel="noopener"><span class="document-scan"><img src={item.photo.src} width={item.photo.width} height={item.photo.height} alt="" loading="lazy" decoding="async"/></span><span class="document-title">{item.title}</span></a></li>)}</ol>
+  <ol class="document-grid">{docs.items.map(item => <li><button type="button" class="document-card" aria-haspopup="dialog" data-title={item.title} data-pages={JSON.stringify(item.pages.map(({ src, width, height }) => ({ src, width, height })))}><span class="document-scan"><img src={item.cover.src} width={item.cover.width} height={item.cover.height} alt="" loading="lazy" decoding="async" draggable="false"/></span><span class="document-title">{item.title}{item.pages.length > 1 && <span class="document-pages-count">{item.pages.length} {t('стор.')}</span>}</span></button></li>)}</ol>
+  <dialog class="document-viewer" aria-labelledby="document-viewer-title">
+    <div class="document-viewer-bar"><h2 id="document-viewer-title"></h2><button type="button" class="document-viewer-close" data-close>{t('Закрити')} <span aria-hidden="true">×</span></button></div>
+    <div class="document-viewer-pages"></div>
+  </dialog>
 </section>}
+
+<script>
+  // Documents open in a viewer instead of as files: the pages are watermarked images that
+  // cannot be dragged, long-pressed or saved from the context menu.
+  const section = document.querySelector<HTMLElement>('[data-documents]');
+  const dialog = section?.querySelector('dialog');
+  if (section && dialog) {
+    const heading = dialog.querySelector('h2')!;
+    const pages = dialog.querySelector('.document-viewer-pages')!;
+    let opener: HTMLElement | undefined;
+    section.addEventListener('contextmenu', event => {
+      if ((event.target as Element).closest('.document-scan, .document-viewer-pages')) event.preventDefault();
+    });
+    section.addEventListener('dragstart', event => event.preventDefault());
+    section.querySelectorAll<HTMLButtonElement>('.document-card').forEach(card => card.addEventListener('click', () => {
+      opener = card;
+      const list: { src: string; width: number; height: number }[] = JSON.parse(card.dataset.pages!);
+      heading.textContent = card.dataset.title!;
+      pages.replaceChildren(...list.map((page, index) => {
+        const image = new Image(page.width, page.height);
+        image.src = page.src;
+        image.alt = list.length > 1 ? `${card.dataset.title}, ${section.dataset.pageLabel} ${index + 1}` : card.dataset.title!;
+        image.draggable = false;
+        return image;
+      }));
+      dialog.showModal();
+      dialog.scrollTop = 0;
+    }));
+    dialog.addEventListener('click', event => {
+      const target = event.target as Element;
+      if (target === dialog || target.closest('[data-close]')) dialog.close();
+    });
+    dialog.addEventListener('close', () => { pages.replaceChildren(); opener?.focus(); });
+  }
+</script>

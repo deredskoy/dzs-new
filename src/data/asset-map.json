@@ -185,12 +185,6 @@
     "width": 222,
     "height": 300
   },
-  "https://dzs.in.ua/uploads/portfolio/prikaz-o-naznachenii-direktora-ooo-dzs1.jpg": {
-    "path": "/media/6f07e5cc9ccc3bf5.jpg",
-    "bytes": 196751,
-    "width": 1653,
-    "height": 2337
-  },
   "https://dzs.in.ua/uploads/portfolio/probuksovochnoe-ustrojstvo-izgotovlenie-dzs1.jpg": {
     "path": "/media/ac02d5ed74e17728.jpg",
     "bytes": 38592,
@@ -605,12 +599,6 @@
     "width": 744,
     "height": 1024
   },
-  "https://dzs.in.ua/uploads/portfolio/spravka-platelshhika-nds-ooo-dzs_1681.jpg": {
-    "path": "/media/3d182bc7339c0fe6.jpg",
-    "bytes": 341581,
-    "width": 1654,
-    "height": 2339
-  },
   "https://dzs.in.ua/uploads/portfolio/tormoznye-diskovye-kolodki-xitachi-en-3500-dnepropetrovskij-zavod-specremonta-01.jpg": {
     "path": "/media/4c87018c3f1b3310.jpg",
     "bytes": 20313,
@@ -646,18 +634,6 @@
     "bytes": 26600,
     "width": 303,
     "height": 200
-  },
-  "https://dzs.in.ua/uploads/portfolio/vypiska-iz-reestra-ooo-dzs-011.jpg": {
-    "path": "/media/6c75c6d8596d44ad.jpg",
-    "bytes": 276389,
-    "width": 1653,
-    "height": 2337
-  },
-  "https://dzs.in.ua/uploads/portfolio/vypiska-iz-reestra-ooo-dzs1.jpg": {
-    "path": "/media/b9c8964dc71a3453.jpg",
-    "bytes": 269956,
-    "width": 1653,
-    "height": 2337
   },
   "https://dzs.in.ua/uploads/product/04b170f90f5e49b09eb96e2be460cfb1.jpg": {
     "path": "/media/7b1b6b447903596e.jpg",
@@ -862,5 +838,17 @@
     "bytes": 25064,
     "width": 264,
     "height": 418
+  },
+  "/media/press-250t-2026.jpg": {
+    "path": "/media/press-250t-2026.jpg",
+    "bytes": 16232,
+    "width": 225,
+    "height": 300
+  },
+  "/media/lathe-1553-2026.jpg": {
+    "path": "/media/lathe-1553-2026.jpg",
+    "bytes": 166404,
+    "width": 872,
+    "height": 1123
   }
 }

@@ -43,8 +43,13 @@ export function url(path = '/', locale: Locale = 'uk') {
   const tail = pathname === '/' ? '/' : pathname.replace(/\/$/, '') + (/\.[a-z0-9]+$/i.test(pathname) ? '' : '/');
   return base + prefix + tail + (hash ? '#' + hash : '');
 }
+// Client photos, November 2026: a newer photo stands in for the source image wherever it appears.
+const replacedImages: Record<string, string> = {
+  'https://dzs.in.ua/uploads/product/be13c6ec7d17e658d898152923a15e5a.jpg': '/media/press-250t-2026.jpg',
+};
+const assetFor = (src: string) => assetMap[replacedImages[src] || src];
 export function imageUrl(src: string) {
-  const local = assetMap[src]?.path;
+  const local = assetFor(src)?.path;
   if (local) return url(local);
   if (src.startsWith('/media/')) return url(src);
   return src;
@@ -52,7 +57,7 @@ export function imageUrl(src: string) {
 export type ImageShape = 'portrait' | 'landscape';
 // Photos narrower than 0.9:1 are treated as vertical; square and wider ones share the horizontal layout.
 export function imageSize(src: string, fallback = { width: 1000, height: 750 }) {
-  const asset = assetMap[src];
+  const asset = assetFor(src);
   const width = asset?.width || fallback.width;
   const height = asset?.height || fallback.height;
   const shape: ImageShape = width / height < .9 ? 'portrait' : 'landscape';

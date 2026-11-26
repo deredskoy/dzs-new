@@ -383,7 +383,14 @@ a.timeline-item:hover .timeline-title { text-decoration: underline; text-underli
 .machine-index a { display: flex; align-items: center; min-height: 48px; padding: 8px 0; font-size: 16px; line-height: 1.4; }
 .machine-index a:hover { color: var(--navy); text-decoration: underline; }
 .machine { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 28px 56px; align-items: start; padding-block: 48px; border-top: 1px solid var(--line); scroll-margin-top: 16px; }
-.machine-photo { position: relative; display: grid; place-items: center; margin: 0; aspect-ratio: 4 / 3; overflow: hidden; background: var(--wash); border: 1px solid var(--line); border-radius: var(--radius); }
+.machine-photos { display: grid; gap: 12px; }
+/* Two vertical photos of one machine sit side by side. */
+.machine-photos[data-count="2"] { grid-template-columns: 1fr 1fr; }
+.machine-photos[data-count="2"] .machine-photo { aspect-ratio: 4 / 5; }
+/* A single vertical photo gets a square frame instead of a wide one. */
+.machine-photos[data-count="1"] .machine-photo[data-shape="portrait"] { aspect-ratio: 1; }
+.machine-photo { position: relative; display: grid; place-items: center; margin: 0; aspect-ratio: 4 / 3; overflow: hidden; background: var(--wash); border: 1px solid var(--line); border-radius: var(--radius); transition: border-color .18s; }
+a.machine-photo:hover { border-color: var(--navy); }
 /* Small photos keep their size; a blurred copy of the same photo fills the frame. */
 .machine-photo::before { content: ''; position: absolute; inset: -40px; background: var(--photo) center / cover; filter: blur(28px); opacity: .5; }
 .machine-photo img { position: absolute; inset: 0; width: min(100%, var(--max)); height: 100%; margin: auto; object-fit: contain; }
@@ -396,13 +403,26 @@ a.timeline-item:hover .timeline-title { text-decoration: underline; text-underli
 .documents-intro { max-width: 60ch; margin-bottom: 40px; font-size: 19px; line-height: 1.7; }
 .document-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(196px, 1fr)); gap: 40px 28px; margin: 0; padding: 0; list-style: none; counter-reset: document; }
 .document-grid li { min-width: 0; counter-increment: document; }
-.document-grid a { display: flex; flex-direction: column; gap: 14px; height: 100%; }
-.document-scan { display: block; aspect-ratio: 1 / 1.414; overflow: hidden; background: var(--wash); border: 1px solid var(--line); border-radius: 4px; box-shadow: 0 10px 24px -18px #10244880; transition: border-color .18s; }
+.document-card { display: flex; flex-direction: column; gap: 14px; width: 100%; height: 100%; padding: 0; border: 0; background: none; color: inherit; font: inherit; text-align: left; cursor: zoom-in; }
+.document-scan { display: block; width: 100%; aspect-ratio: 1 / 1.414; overflow: hidden; background: var(--wash); border: 1px solid var(--line); border-radius: 4px; box-shadow: 0 10px 24px -18px #10244880; transition: border-color .18s; }
 .document-scan img { width: 100%; height: 100%; object-fit: cover; object-position: top; }
 .document-title { font-size: 15px; line-height: 1.5; }
 .document-title::before { content: counter(document) '. '; color: var(--muted); }
-.document-grid a:hover .document-scan { border-color: var(--navy); }
-.document-grid a:hover .document-title { text-decoration: underline; }
+.document-pages-count { margin-left: 8px; padding: 1px 6px; border: 1px solid var(--line); border-radius: 3px; font: 11px/1.6 var(--mono); color: var(--muted); white-space: nowrap; }
+.document-card:hover .document-scan { border-color: var(--navy); }
+.document-card:hover .document-title { text-decoration: underline; }
+/* Document images are not draggable or selectable, and the context menu does not offer to save them. */
+.document-scan img, .document-viewer-pages img { pointer-events: none; user-select: none; -webkit-user-select: none; -webkit-user-drag: none; -webkit-touch-callout: none; }
+.document-viewer { width: min(920px, calc(100% - 32px)); max-width: none; max-height: calc(100dvh - 32px); padding: 0; border: 0; border-radius: var(--radius); background: var(--wash); color: var(--ink); box-shadow: 0 32px 64px -24px #091a3480; overflow: auto; overscroll-behavior: contain; }
+.document-viewer::backdrop { background: #091a34d9; }
+html:has(.document-viewer[open]) { overflow: hidden; }
+.document-viewer-bar { position: sticky; top: 0; z-index: 1; display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 10px 12px 10px 24px; background: white; border-bottom: 1px solid var(--line); }
+.document-viewer-bar h2 { font-size: 17px; line-height: 1.4; letter-spacing: 0; }
+.document-viewer-close { display: inline-flex; align-items: center; gap: 8px; flex-shrink: 0; min-height: 44px; padding: 8px 14px; border: 1px solid var(--line); border-radius: var(--radius); background: white; color: var(--ink); font: 500 15px/1.4 'Roboto', Arial, sans-serif; }
+.document-viewer-close span { font-size: 22px; line-height: 1; }
+.document-viewer-close:hover { border-color: var(--navy); background: var(--wash); }
+.document-viewer-pages { display: grid; gap: 16px; padding: 16px; }
+.document-viewer-pages img { width: 100%; height: auto; background: white; box-shadow: 0 8px 24px -16px #10244899; }
 .not-found p:not(.eyebrow) { color: var(--muted); margin-top: 24px; }
 
 @media (hover: hover) and (prefers-reduced-motion: no-preference) {
@@ -600,6 +620,10 @@ a.timeline-item:hover .timeline-title { text-decoration: underline; text-underli
   .capabilities p { margin-top: 8px; font-size: 16px; }
   .page-heading h1 { font-size: 34px; }
   .product-hero h1 { font-size: 34px; }
+  .document-viewer { width: calc(100% - 16px); max-height: calc(100dvh - 16px); }
+  .document-viewer-bar { padding: 8px 8px 8px 16px; }
+  .document-viewer-bar h2 { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; font-size: 15px; }
+  .document-viewer-pages { padding: 8px; gap: 8px; }
   .footer-top { grid-template-columns: 1fr; gap: 28px; }
   .footer-brand { grid-column: auto; }
   .footer-bottom { flex-wrap: wrap; gap: 4px; }
