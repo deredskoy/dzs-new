@@ -91,10 +91,15 @@ mark { background: var(--orange); color: var(--ink); box-decoration-break: clone
 .gd-frame, .gd-title-frame { stroke: #a9b3c0; stroke-width: 1.2; }
 .gd-axis path, .gd-pitch { fill: none; stroke: #8a96a5; stroke-width: .75; stroke-dasharray: 12 3 1.5 3; }
 .gd-gear-1 { fill: #c9d4e3; stroke: var(--navy); stroke-width: 1.3; stroke-linejoin: round; }
-.gd-web { fill: #b4c2d6; }
-.gd-edge { stroke: var(--navy); stroke-width: .9; }
-.gd-gear-2 { fill: var(--orange); }
+.gd-web-1 { fill: #b4c2d6; }
+.gd-edge-1 { stroke: var(--navy); stroke-width: .9; }
+/* The smaller gears share the construction of the large one in their own colours: rim, recessed web, holes, hub. */
+.gd-gear-2 { fill: var(--orange); stroke: #a65a00; stroke-width: 1.1; stroke-linejoin: round; }
+.gd-web-2 { fill: #e58200; }
+.gd-edge-2 { stroke: #a65a00; stroke-width: .9; }
 .gd-gear-3 { fill: var(--navy); }
+.gd-web-3 { fill: #22406f; }
+.gd-edge-3 { stroke: #7d95bd; stroke-width: .9; }
 .gd-thin path, .gd-leaders path { stroke: #4f5c6e; stroke-width: .75; }
 .gd-arrow, .gd-leaders circle { fill: #4f5c6e; }
 .gd-leaders .gd-dot-light { fill: #fff; }
