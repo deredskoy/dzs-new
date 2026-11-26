@@ -49,7 +49,8 @@ const product = {
   komatsu: 'product/info/remont-planetarnogo-reduktora-povorota-ekskavatora-komatsu-pc-3000/',
   planetary: 'product/info/izgotovlenie-planetarnyh-reduktorov-hoda-i-povorota/',
 };
-const routes = ['', 'catalog/', 'product/info/proizvodstvo-tormoznoj-diskovoj-nakladki-dlya-samosvala-belaz-130t/', ...Object.values(product), 'states/nash-stanochnyy-park/', 'states/dokumenty/', 'portfolio/', 'contacts/'];
+const company = ['about-company/', 'states/o-predpriyatii/', 'states/nash-stanochnyy-park/', 'states/dokumenty/', 'states/kollektiv-i-vakansii/'];
+const routes = ['', 'catalog/', 'catalog/category/prodam-kuplyu/', 'product/info/proizvodstvo-tormoznoj-diskovoj-nakladki-dlya-samosvala-belaz-130t/', ...Object.values(product), ...company, 'portfolio/', 'contacts/'];
 
 for (const viewport of screens) {
   test('layout and image loading at '+viewport.width+'px', async ({ page }) => {
@@ -72,7 +73,8 @@ for (const viewport of screens) {
       expect(state.scrollWidth, route).toBeLessThanOrEqual(state.width + 1);
       expect(state.brokenImages, route).toEqual([]);
       await expect(page.locator('h1')).toBeVisible();
-      for (const link of await page.locator('.language-switch a').all()) {
+      await expect(page.locator('.language-switch a:visible')).not.toHaveCount(0);
+      for (const link of await page.locator('.language-switch a:visible').all()) {
         const box = await link.boundingBox();
         expect(box?.width).toBeGreaterThanOrEqual(44);
         expect(box?.height).toBeGreaterThanOrEqual(44);
@@ -103,7 +105,7 @@ test('mobile menu supports dismissal, focus and active sections', async ({ page 
   await page.goto(base);
   const navigation = page.getByRole('navigation', { name: 'Мобільна навігація' });
   await expect(navigation).not.toBeVisible();
-  await page.getByText('Меню', { exact: false }).first().click();
+  await page.locator('.mobile-nav summary').click();
   await expect(navigation).toBeVisible();
   await navigation.getByRole('link', { name: 'Галерея' }).focus();
   await page.keyboard.press('Escape');
@@ -111,7 +113,7 @@ test('mobile menu supports dismissal, focus and active sections', async ({ page 
   await expect(page.locator('.mobile-nav summary')).toBeFocused();
   await page.keyboard.press('Enter');
   await expect(navigation).toBeVisible();
-  await page.locator('.language-switch a').first().focus();
+  await page.locator('.language-switch a:visible').first().focus();
   await expect(navigation).not.toBeVisible();
   await page.locator('.mobile-nav summary').click();
   await page.locator('.hero-baseline > span').click();
@@ -216,10 +218,10 @@ test('English navigation, breadcrumbs and content links remain in English', asyn
   await page.goto(base + 'en/');
   await page.getByRole('navigation', { name: 'Main navigation' }).getByRole('link', { name: 'Company', exact: true }).click();
   await expect(page).toHaveURL(/\/en\/about-company\/$/);
-  await page.locator('.rich-content').getByRole('link', { name: 'Our machine shop' }).click();
+  await page.locator('.letter').getByRole('link', { name: 'explore our machine shop' }).click();
   await expect(page).toHaveURL(/\/en\/states\/nash-stanochnyy-park\/$/);
   await expect(page.locator('h1')).toHaveText('Our machine shop');
-  await expect(page.locator('.rich-content')).toContainText('3000 kg');
+  await expect(page.locator('.machine-park')).toContainText('3000 kg');
   await page.locator('.breadcrumbs').getByRole('link', { name: 'Home', exact: true }).click();
   await expect(page).toHaveURL(/\/en\/$/);
   await page.getByRole('navigation', { name: 'Main navigation' }).getByRole('link', { name: 'Products & services' }).click();
@@ -250,4 +252,94 @@ test('English contact form and prepared email use English labels', async ({ page
   expect(parsed.searchParams.get('body')).toContain('Name: Jane + Alex');
   expect(parsed.searchParams.get('body')).toContain('Parts & assemblies — 75131-3577060-01');
   expect(await form.getAttribute('data-email-status')).toContain('Send the prepared draft');
+});
+
+test('header shows the logo, the company name and the working hours', async ({ page }) => {
+  for (const viewport of [{ width: 1440, height: 900 }, { width: 1024, height: 768 }, { width: 375, height: 812 }]) {
+    await page.setViewportSize(viewport);
+    await page.goto(base);
+    await expect(page.locator('.brand img')).toHaveAttribute('src', /logo-dzs\.png$/);
+    await expect(page.locator('.brand-name')).toBeVisible();
+    await expect(page.locator('.brand-name')).toHaveText(/Дніпропетровський\s*завод спецремонта/);
+    const name = await page.locator('.brand-name').boundingBox();
+    const controls = await page.locator('.header-controls').boundingBox();
+    expect(name!.x + name!.width, 'company name overlaps the controls at ' + viewport.width).toBeLessThan(controls!.x);
+  }
+  await expect(page.locator('.header-phone-hours')).toHaveText('Пн–Пт, 08:00–17:00');
+  await expect(page.locator('.hours')).toContainText('Понеділок — п’ятниця');
+  await expect(page.locator('.hours')).toContainText('08:00–17:00');
+  await page.goto(base + 'en/');
+  await expect(page.locator('.header-phone-hours')).toHaveText('Mon–Fri, 08:00–17:00');
+  await expect(page.locator('.hours')).toContainText('Monday — Friday');
+});
+
+test('hero gears mesh on their pitch circles and the large gear is toned', async ({ page }) => {
+  await page.goto(base);
+  const gears = await page.locator('.gear-drawing .gd-pitch').evaluateAll(circles => circles.map(circle => {
+    const match = circle.parentElement!.getAttribute('transform')!.match(/translate\(([\d.]+) ([\d.]+)\)/)!;
+    return { x: Number(match[1]), y: Number(match[2]), r: Number(circle.getAttribute('r')) };
+  }));
+  expect(gears).toHaveLength(3);
+  expect(gears[0].r).toBeGreaterThan(gears[1].r);
+  expect(gears[0].r).toBeGreaterThan(gears[2].r);
+  for (const [a, b] of [[gears[0], gears[1]], [gears[1], gears[2]]]) {
+    expect(Math.hypot(b.x - a.x, b.y - a.y)).toBeCloseTo(a.r + b.r, 1);
+  }
+  const fill = await page.locator('.gd-gear-1').evaluate(element => getComputedStyle(element).fill);
+  expect(fill).not.toBe('none');
+  await expect(page.locator('.gear-drawing text', { hasText: 'Ø280' })).toHaveCount(1);
+  await expect(page.locator('.gear-drawing .gd-title')).toContainText('Передача зубчаста');
+});
+
+test('the sales tab stays in the catalogue without offers', async ({ page, request }) => {
+  await page.goto(base);
+  await expect(page.locator('.capabilities a')).toHaveCount(3);
+  await expect(page.locator('.capabilities a[href*="prodam-kuplyu"]')).toHaveCount(0);
+  await page.goto(base + 'catalog/');
+  await expect(page.locator('.section-nav a[href$="/catalog/category/prodam-kuplyu/"]')).toHaveText('Продаж обладнання');
+  await expect(page.locator('.content-card a[href*="prodam-reduktor"]')).toHaveCount(0);
+  await page.goto(base + 'catalog/category/prodam-kuplyu/');
+  await expect(page.locator('.empty-catalog')).toHaveText('Зараз пропозицій немає.');
+  await expect(page.locator('.content-card')).toHaveCount(0);
+  await expect(page.locator('main')).not.toContainText('Продаємо та купуємо спеціальні редуктори');
+  expect((await request.get(base + 'product/info/prodam-reduktor-c2sh-800-20-11/')).status()).toBe(404);
+});
+
+test('company pages use the full width and keep their content', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.goto(base + 'about-company/');
+  await expect(page.locator('.letter-greeting')).toHaveText('Шановні партнери!');
+  await expect(page.locator('.letter-body a')).toHaveCount(4);
+  const letter = (await page.locator('.letter').boundingBox())!;
+  expect(Math.abs(letter.x + letter.width / 2 - 720)).toBeLessThan(2);
+
+  for (const path of ['states/o-predpriyatii/', 'states/kollektiv-i-vakansii/']) {
+    await page.goto(base + path);
+    const text = (await page.locator('.company-text').boundingBox())!;
+    const aside = (await page.locator('.company-aside').boundingBox())!;
+    expect(aside.x, path).toBeGreaterThan(text.x + text.width);
+  }
+  await expect(page.locator('.company-vacancy')).toContainText('Від 5 років');
+
+  await page.goto(base + 'states/nash-stanochnyy-park/');
+  await expect(page.locator('.machine')).toHaveCount(14);
+  await expect(page.locator('.machine-index a')).toHaveCount(14);
+  await expect(page.locator('#machine-1 h2')).toHaveText('Карусельний двостійковий верстат 1553 Ø2300');
+  await expect(page.locator('#machine-1 img')).toHaveAttribute('src', /32f20e44cbb32e82\.jpg$/);
+  const photo = (await page.locator('#machine-2 .machine-photo').boundingBox())!;
+  const description = (await page.locator('#machine-2 .machine-text').boundingBox())!;
+  expect(description.x).toBeGreaterThan(photo.x + photo.width);
+  await page.locator('.machine-index a').nth(7).click();
+  await expect(page).toHaveURL(/#machine-8$/);
+
+  await page.goto(base + 'states/dokumenty/');
+  const documents = page.locator('.document-grid li');
+  await expect(documents).toHaveCount(10);
+  await expect(documents.nth(4)).toContainText('Дозвіл №1118.14.12');
+  await expect(documents.nth(4).locator('a')).toHaveAttribute('href', /8c723c805bbbd7dc\.jpg$/);
+  await expect(documents.nth(5).locator('a')).toHaveAttribute('href', /4433b5c9966bde7c\.jpg$/);
+  await expect(documents.nth(7)).toContainText('Сертифікат відповідності типу');
+  const first = (await documents.nth(0).boundingBox())!;
+  const fifth = (await documents.nth(4).boundingBox())!;
+  expect(fifth.y).toBeCloseTo(first.y, 0);
 });

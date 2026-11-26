@@ -1,0 +1,27 @@
+---
+import '@fontsource/pt-serif/400.css';
+import '@fontsource/pt-serif/700.css';
+import { url as siteUrl } from '../lib/site';
+import { translator, type Locale } from '../lib/i18n';
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+const t = translator(locale);
+const url = (path: string) => siteUrl(path, locale);
+// The address to customers, set as a letter on the new letterhead (client feedback, November 2026).
+---
+<section class="wrap letter-section" aria-labelledby="letter-greeting">
+  <article class="letter">
+    <header class="letter-head">
+      <img src={url('/media/logo-dzs.png')} width="181" height="201" alt=""/>
+      <p class="letter-org">{t('ТОВ «Дніпропетровський завод спецремонта»')}<span>{t('м. Дніпро')}</span></p>
+    </header>
+    <h2 class="letter-greeting" id="letter-greeting">{t('Шановні партнери!')}</h2>
+    <div class="letter-body">
+      <p>{t('Запрошуємо Вас познайомитись з нашим підприємством — ТОВ\u00a0«Дніпропетровський завод спецремонта».')}</p>
+      <p>{t('На сторінках сайту Ви знайдете інформацію про компанію, види діяльності, приклади робіт «до і після ремонту» та контакти.')}</p>
+      <p>{t('У цьому розділі Ви можете')} <a href={url('/states/o-predpriyatii')}>{t('дізнатися про підприємство')}</a>, <a href={url('/states/nash-stanochnyy-park')}>{t('побачити верстатний парк')}</a>, <a href={url('/states/dokumenty')}>{t('ознайомитись з документами')}</a> {t('та')} <a href={url('/states/kollektiv-i-vakansii')}>{t('вимогами підприємства до своїх спеціалістів')}</a>.</p>
+      <p>{t('Будемо раді новим партнерам та взаємовигідній співпраці!')}</p>
+    </div>
+    <p class="letter-sign">{t('З повагою,')}<br/>{t('колектив ТОВ «ДЗС»')}</p>
+  </article>
+</section>

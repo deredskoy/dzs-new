@@ -6,7 +6,8 @@ import ProductFacts from '../components/ProductFacts.astro';
 import PartsTimeline from '../components/PartsTimeline.astro';
 import ExcavatorModels from '../components/ExcavatorModels.astro';
 import MachineDrawing from '../components/MachineDrawing.astro';
-import { pageImages,titleFor,richHtml,graphicMarker,productDetail,relatedCards,imageUrl,imageSize,url as siteUrl,categories,companyLinks,type SourcePage } from '../lib/site';
+import CompanyContent from '../components/CompanyContent.astro';
+import { pageImages,titleFor,richHtml,graphicMarker,productDetail,relatedCards,imageUrl,imageSize,isPaused,url as siteUrl,categories,companyLinks,type SourcePage } from '../lib/site';
 import { translator, type Locale } from '../lib/i18n';
 interface Props {page:SourcePage; locale?:Locale}
 const {page,locale='uk'}=Astro.props;
@@ -19,8 +20,10 @@ const gallery=page.path.startsWith('/portfolio');
 const galleryAlbum=gallery&&page.path!='/portfolio';
 const company=page.path.startsWith('/states/')||page.path==='/about-company';
 const contacts=page.path==='/contacts';
+// The sales tab has no offers at the moment; its old text and listings are not shown.
+const paused=isPaused(page.path);
 const images=pageImages(page).map(image=>({...image,...imageSize(image.src)}));
-const description=page.text?page.text.slice(0,155).trim()+(page.text.length>155?'…':''):title;
+const description=paused?t('Зараз пропозицій немає.'):page.text?page.text.slice(0,155).trim()+(page.text.length>155?'…':''):title;
 const parentHref=product||catalog?'/catalog':gallery?'/portfolio':'/about-company';
 const parentTitle=product||catalog?'Продукція та послуги':gallery?'Галерея':'Підприємство';
 // Product pages add a short summary, a fact panel and, where the source has the data, one graphic.
@@ -37,7 +40,7 @@ const brief=detail?{items:detail.brief,note:detail.kind==='repair'?'Точний
 {company&&<nav class="wrap section-nav" aria-label={t("Розділи підприємства")}>{companyLinks.map(item=><a href={url(item.href)} aria-current={page.path===item.href?'page':undefined}>{t(item.title)}</a>)}</nav>}
 {catalog&&<nav class="wrap section-nav" aria-label={t("Напрями діяльності")}><a href={url('/catalog')} aria-current={page.path==='/catalog'?'page':undefined}>{t("Усі напрями")}</a>{categories.map(item=><a href={url(item.href)} aria-current={page.path===item.href||page.path.startsWith(item.href+'/')?'page':undefined}>{t(item.title)}</a>)}</nav>}
 
-{contacts?<section class="wrap contact-cards"><article><span class="eyebrow">{t("ТЕЛЕФОН")}</span><h2>{t("Поговорімо")}</h2><a href="tel:+380673775670">+38 (067) 377-56-70</a><a href="tel:+380679723706">+38 (067) 972-37-06</a><a href="tel:+380967700405">+38 (096) 770-04-05</a></article><article><span class="eyebrow">{t("ЕЛЕКТРОННА ПОШТА")}</span><h2>{t("Напишіть нам")}</h2><a href="mailto:tovdzs@gmail.com">tovdzs@gmail.com ↗</a><p>{t("Додайте до листа креслення, фотографії та опис задачі.")}</p></article><article><span class="eyebrow">{t("ПІДПРИЄМСТВО")}</span><h2>{t("Дніпро, Україна")}</h2><p>{t("ТОВ «Дніпропетровський завод спецремонта»")}</p><p>{t("49038, м. Дніпро")}</p><p>{t("Перед візитом узгодьте час і місце зустрічі телефоном.")}</p></article></section>:galleryAlbum?<section class="wrap album-grid" aria-label={t("Фотографії виконаної роботи")}>{images.map((image,index)=><a href={imageUrl(image.src)} target="_blank" rel="noopener" data-shape={image.shape} aria-label={t('Відкрити фото')+' '+(index+1)+': '+title}><img src={imageUrl(image.src)} alt={image.alt||title+': '+t('фото')+' '+(index+1)} width={image.width} height={image.height} loading={index>1?'lazy':'eager'}/><span>{t('ФОТО')} {String(index+1).padStart(2,'0')} <span aria-hidden="true">↗</span></span></a>)}</section>:<>
+{contacts?<section class="wrap contact-cards"><article><span class="eyebrow">{t("ТЕЛЕФОН")}</span><h2>{t("Поговорімо")}</h2><a href="tel:+380673775670">+38 (067) 377-56-70</a><a href="tel:+380679723706">+38 (067) 972-37-06</a><a href="tel:+380967700405">+38 (096) 770-04-05</a></article><article><span class="eyebrow">{t("ЕЛЕКТРОННА ПОШТА")}</span><h2>{t("Напишіть нам")}</h2><a href="mailto:tovdzs@gmail.com">tovdzs@gmail.com ↗</a><p>{t("Додайте до листа креслення, фотографії та опис задачі.")}</p></article><article><span class="eyebrow">{t("ПІДПРИЄМСТВО")}</span><h2>{t("Дніпро, Україна")}</h2><p>{t("ТОВ «Дніпропетровський завод спецремонта»")}</p><p>{t("49038, м. Дніпро")}</p><p>{t("Перед візитом узгодьте час і місце зустрічі телефоном.")}</p></article></section>:company?<CompanyContent page={page} locale={locale}/>:paused?<div class="wrap empty-catalog"><p>{t("Зараз пропозицій немає.")}</p></div>:galleryAlbum?<section class="wrap album-grid" aria-label={t("Фотографії виконаної роботи")}>{images.map((image,index)=><a href={imageUrl(image.src)} target="_blank" rel="noopener" data-shape={image.shape} aria-label={t('Відкрити фото')+' '+(index+1)+': '+title}><img src={imageUrl(image.src)} alt={image.alt||title+': '+t('фото')+' '+(index+1)} width={image.width} height={image.height} loading={index>1?'lazy':'eager'}/><span>{t('ФОТО')} {String(index+1).padStart(2,'0')} <span aria-hidden="true">↗</span></span></a>)}</section>:<>
 {page.text&&(product?<section class="wrap body-section product-body"><div class:list={['product-body-grid',{'has-facts':detail}]}>{detail&&<ProductFacts facts={detail.facts} locale={locale}/>}<div class="product-text"><h2>{t("Докладніше")} <mark>{t("про виріб і роботи")}</mark></h2><div class="rich-content" set:html={richBefore}/>{richAfter!==undefined&&<><ExcavatorModels locale={locale}/><div class="rich-content" set:html={richAfter}/></>}</div></div></section>:<section class="wrap body-section"><div class="rich-content" set:html={richBefore}/></section>)}
 {detail?.graphic==='timeline'&&<PartsTimeline current={page.path} locale={locale}/>}
 {drawing&&<MachineDrawing variant={drawing} locale={locale}/>}

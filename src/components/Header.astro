@@ -24,9 +24,9 @@ function currentSection(href: string) {
 <a class="skip-link" href="#main">{t('Перейти до вмісту')}</a>
 <header class="site-header">
   <div class="wrap header-inner">
-    <a class="brand" href={url('/', locale)} aria-label={t('ДЗС — головна')}>
-      <img src={url('/media/logo-header.png')} width="158" height="82" alt={t('ДЗС')}/>
-      <span>{t('Дніпропетровський')}<br/>{t('завод спецремонта')}</span>
+    <a class="brand" href={url('/', locale)} aria-label={t('Дніпропетровський завод спецремонта — головна')}>
+      <img src={url('/media/logo-dzs.png')} width="181" height="201" alt=""/>
+      <span class="brand-name">{t('Дніпропетровський')}<br/>{t('завод спецремонта')}</span>
     </a>
     <nav class="desktop-nav" aria-label={t('Головна навігація')}>
       {nav.map(item => <a href={url(item.href, locale)} aria-current={currentSection(item.href)}>{t(item.title)}</a>)}
@@ -34,7 +34,7 @@ function currentSection(href: string) {
     <div class="header-controls">
       <a class="header-phone" href="tel:+380673775670">
         <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><path d="M8.6 3.5H5.2C4.3 3.5 3.5 4.3 3.6 5.2C4.3 13.1 10.9 19.7 18.8 20.4C19.7 20.5 20.5 19.7 20.5 18.8V15.4L16.3 13.8L14.2 15.9C11.6 14.7 9.3 12.4 8.1 9.8L10.2 7.7Z"/></svg>
-        <span class="header-phone-text"><span class="header-phone-number">+38 (067) 377-56-70</span><span class="header-phone-hours">{t('Пн–Пт, 09:00–18:00')}</span></span>
+        <span class="header-phone-text"><span class="header-phone-number">+38 (067) 377-56-70</span><span class="header-phone-hours">{t('Пн–Пт, 08:00–17:00')}</span></span>
       </a>
       <nav class="language-switch" aria-label={t('Мова сайту')}>
         <a href={url(currentPath, 'uk')} hreflang="uk" aria-label={t('Українська')} aria-current={locale === 'uk' ? 'true' : undefined} data-language-link>UA</a>

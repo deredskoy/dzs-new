@@ -10,7 +10,12 @@ export interface SourcePage {
 }
 interface Asset { path?: string; width?: number; height?: number; bytes?: number; error?: string }
 const assetMap = assets as Record<string, Asset>;
-export const sourcePages = source.pages as SourcePage[];
+// Client feedback, November 2026: the plant neither buys nor sells equipment now, so the gearbox
+// that was for sale is no longer published or listed.
+const retiredPages = ['/product/info/prodam-reduktor-c2sh-800-20-11'];
+export const sourcePages = (source.pages as SourcePage[])
+  .filter(page => !retiredPages.includes(page.path))
+  .map(page => ({ ...page, cards: page.cards.filter(card => !retiredPages.includes(card.href)) }));
 export const paths = {
   belaz: '/product/info/proizvodstvo-tormoznoj-diskovoj-nakladki-dlya-samosvala-belaz-130t',
   hitachi: '/product/info/proizvodstvo-tormoznoj-diskovoj-kolodki-4674697-hitachi-eh-3500',
@@ -79,8 +84,13 @@ export const categories = [
   { title: 'Виготовлення', href: '/catalog/category/izgotovlenie', detail: 'Від креслення до готового виробу' },
   { title: 'Ремонт', href: '/catalog/category/remont', detail: 'Відновлюємо ресурс обладнання' },
   { title: 'Механічна обробка', href: '/catalog/category/uslugi', detail: 'Токарні, розточувальні та пресові роботи' },
-  { title: 'Продаж обладнання', href: '/catalog/category/prodam-kuplyu', detail: 'Редуктори, механізми та агрегати' },
+  // The sales tab stays in the catalogue without offers until the plant sells equipment again.
+  { title: 'Продаж обладнання', href: '/catalog/category/prodam-kuplyu', detail: 'Редуктори, механізми та агрегати', paused: true },
 ];
+/** Catalogue sections that currently have no offers, with their subsections. */
+export function isPaused(path: string) {
+  return categories.some(item => item.paused && (path === item.href || path.startsWith(item.href + '/')));
+}
 export const companyLinks = [
   { title: 'Про підприємство', href: '/states/o-predpriyatii' },
   { title: 'Верстатний парк', href: '/states/nash-stanochnyy-park' },

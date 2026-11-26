@@ -1,0 +1,56 @@
+---
+import CompanyLetter from './CompanyLetter.astro';
+import { richHtml, type SourcePage } from '../lib/site';
+import { machinePark, documents, photo } from '../lib/company';
+import { translator, type Locale } from '../lib/i18n';
+interface Props { page: SourcePage; locale: Locale }
+const { page, locale } = Astro.props;
+const t = translator(locale);
+// Company pages use the full width: the text reads on the left, photos and key facts sit on the right.
+const park = page.path === '/states/nash-stanochnyy-park' ? machinePark(page, locale) : undefined;
+const docs = page.path === '/states/dokumenty' ? documents(page) : undefined;
+const gears = photo('https://dzs.in.ua/uploads/product/3abab2c4a26e211e57b9ea8982ba84ab.jpg');
+// Small photos are enlarged by at most half, so they stay sharp.
+const fit = (width: number) => `--max:${Math.round(width * 1.5)}px`;
+---
+{page.path === '/about-company' && <CompanyLetter locale={locale}/>}
+
+{page.path === '/states/o-predpriyatii' && <section class="wrap company-layout">
+  <aside class="company-aside" aria-label={t('Коротко про ДЗС')}>
+    <figure class="company-photo"><img src={gears.src} width={gears.width} height={gears.height} alt={t('Планетарна передача: сонячна шестерня, сателіти й коронне колесо')} loading="lazy" decoding="async"/></figure>
+    <dl class="facts-list">
+      <div><dt>{t('Працюємо')}</dt><dd>{t('З 2003 року, Дніпро')}</dd></div>
+      <div><dt>{t('Виробнича база')}</dt><dd>{t('Верстатний парк, кранове господарство, кваліфіковані робітники')}</dd></div>
+      <div><dt>{t('Дозвіл на роботи підвищеної небезпеки')}</dt><dd>№ 080.11.12.29.52.3</dd></div>
+    </dl>
+  </aside>
+  <div class="rich-content company-text" set:html={richHtml(page, locale)}/>
+</section>}
+
+{page.path === '/states/kollektiv-i-vakansii' && <section class="wrap company-layout">
+  <aside class="company-aside company-vacancy" aria-labelledby="vacancy-title">
+    <h2 id="vacancy-title">{t('Шукаємо токаря')}</h2>
+    <dl class="facts-list">
+      <div><dt>{t('Досвід')}</dt><dd>{t('Від 5 років')}</dd></div>
+      <div><dt>{t('Повний день')}</dt><dd>{t('8:00–17:00, повний соцпакет, фіксований оклад')}</dd></div>
+      <div><dt>{t('Вільний графік')}</dt><dd>{t('Узгоджується з керівництвом, відрядна оплата')}</dd></div>
+    </dl>
+    <a class="button" href="tel:+380673775670">+38 (067) 377-56-70 <span aria-hidden="true">↗</span></a>
+  </aside>
+  <div class="rich-content company-text" set:html={richHtml(page, locale)}/>
+</section>}
+
+{park && <section class="wrap machine-park">
+  <p class="machine-intro">{park.intro}</p>
+  <ul class="machine-index">{park.machines.map(machine => <li><a href={'#' + machine.id}>{machine.title}</a></li>)}</ul>
+  {park.machines.map(machine => <article class="machine" id={machine.id} aria-labelledby={machine.id + '-title'}>
+    <figure class="machine-photo" style={`--photo:url("${machine.photo.src}");${fit(machine.photo.width)}`}><img src={machine.photo.src} width={machine.photo.width} height={machine.photo.height} alt={machine.title} loading="lazy" decoding="async"/></figure>
+    <div class="machine-text"><h2 id={machine.id + '-title'}>{machine.title}</h2><div class="rich-content" set:html={machine.html}/></div>
+  </article>)}
+  <div class="rich-content machine-outro" set:html={park.outro}/>
+</section>}
+
+{docs && <section class="wrap documents">
+  <p class="documents-intro">{docs.intro}</p>
+  <ol class="document-grid">{docs.items.map(item => <li><a href={item.photo.src} target="_blank" rel="noopener"><span class="document-scan"><img src={item.photo.src} width={item.photo.width} height={item.photo.height} alt="" loading="lazy" decoding="async"/></span><span class="document-title">{item.title}</span></a></li>)}</ol>
+</section>}

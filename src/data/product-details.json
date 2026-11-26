@@ -160,16 +160,6 @@
         ["Поставки", "Полтавський ГЗК"]
       ]
     },
-    "/product/info/prodam-reduktor-c2sh-800-20-11": {
-      "kind": "sale",
-      "lead": "Новий редуктор підйому Ц2Ш 800-20-11 є в наявності.",
-      "facts": [
-        ["Модель", "Ц2Ш 800-20-11"],
-        ["Тип", "Редуктор підйому"],
-        ["Стан", "Новий"],
-        ["Наявність", "Є на складі"]
-      ]
-    },
     "/product/info/4703800-proizvodstvo-sal-nikov-dlya-samosvala-hitachi-en-3500": {
       "kind": "part",
       "graphic": "timeline",

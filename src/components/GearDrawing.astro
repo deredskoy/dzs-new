@@ -1,25 +1,141 @@
 ---
-interface Props { locale?:Locale }
-const {locale='uk'}=Astro.props;
-const t=translator(locale);
 import { translator, type Locale } from '../lib/i18n';
-function gear(teeth: number, outer: number, root: number, hole: number) {
-  const points = Array.from({ length: teeth * 4 }, (_, i) => {
-    const r = i % 4 === 1 || i % 4 === 2 ? outer : root;
-    const a = (i / (teeth * 4)) * Math.PI * 2;
-    return (Math.cos(a) * r).toFixed(2) + ',' + (Math.sin(a) * r).toFixed(2);
-  });
-  return 'M' + points.join(' L') + 'Z M' + hole + ',0 A' + hole + ',' + hole + ' 0 1 0 ' + -hole + ',0 A' + hole + ',' + hole + ' 0 1 0 ' + hole + ',0 Z';
+interface Props { locale?: Locale }
+const { locale = 'uk' } = Astro.props;
+const t = translator(locale);
+
+// A spur gear train drawn to ЄСКД conventions: involute teeth that mesh on tangent pitch circles,
+// dash-dot centre and pitch lines, dimensions taken from the axes, position leaders and a title block.
+// Sizes are real millimetres (module 10), drawn at 0.95 units per millimetre.
+const SCALE = .95;
+const MODULE = 10 * SCALE;
+const ALPHA = 20 * Math.PI / 180;
+const inv = (angle: number) => Math.tan(angle) - angle;
+const n = (value: number) => Number(value.toFixed(2));
+const at = (radius: number, angle: number) => n(radius * Math.cos(angle)) + ',' + n(radius * Math.sin(angle));
+const polar = (x: number, y: number, radius: number, degrees: number) => ({ x: n(x + radius * Math.cos(degrees * Math.PI / 180)), y: n(y + radius * Math.sin(degrees * Math.PI / 180)) });
+
+/** Involute spur gear outline around (0,0); tooth 0 points along +x. */
+function outline(z: number) {
+  const r = MODULE * z / 2, rb = r * Math.cos(ALPHA), ra = r + MODULE, rf = r - 1.25 * MODULE;
+  const pitch = 2 * Math.PI / z;
+  // Half the tooth thickness on the pitch circle, less a small backlash so meshing flanks stay apart.
+  const half = (Math.PI / 2 - .08) / z;
+  // Half the tooth thickness at a radius; below the base circle the flank is radial.
+  const psi = (radius: number) => half + inv(ALPHA) - inv(Math.acos(rb / Math.max(radius, rb)));
+  const start = Math.max(rb, rf);
+  const radii = [rf, ...Array.from({ length: 7 }, (_, i) => start + (ra - start) * i / 6)];
+  let d = '';
+  for (let k = 0; k < z; k++) {
+    const c = k * pitch;
+    const left = radii.map(radius => at(radius, c - psi(radius)));
+    const right = [...radii].reverse().map(radius => at(radius, c + psi(radius)));
+    d += (k ? 'L' : 'M') + left.join('L') + `A${n(ra)},${n(ra)} 0 0 1 ` + right[0] + 'L' + right.slice(1).join('L')
+      + `A${n(rf)},${n(rf)} 0 0 1 ` + at(rf, c + pitch - psi(rf));
+  }
+  return d + 'Z';
 }
+/** A bore with a keyway (ГОСТ 23360) cut towards +x; sizes in millimetres. */
+function bore(diameter: number, keyWidth: number, keyDepth: number) {
+  const r = diameter / 2 * SCALE, w = keyWidth / 2 * SCALE, depth = r + keyDepth * SCALE;
+  const edge = Math.sqrt(r * r - w * w);
+  return `M${n(edge)},${n(-w)}L${n(depth)},${n(-w)}L${n(depth)},${n(w)}L${n(edge)},${n(w)}A${n(r)},${n(r)} 0 1 1 ${n(edge)},${n(-w)}Z`;
+}
+const circle = (radius: number, cx = 0, cy = 0) => `M${n(cx + radius)},${n(cy)}a${n(radius)},${n(radius)} 0 1 0 ${n(-2 * radius)},0a${n(radius)},${n(radius)} 0 1 0 ${n(2 * radius)},0Z`;
+
+// Gear 1 (toned, 26 teeth) drives gear 2 (14), which drives gear 3 (16).
+// Centre distances: 200 mm = 160 × 120 and 150 mm = 90 × 120, so gears 1 and 3 share one axis.
+const origin = { x: 200, y: 162 };
+const gears = [
+  { z: 26, x: 0, y: 0, bore: [60, 18, 4.4] },
+  { z: 14, x: 160, y: 120, bore: [40, 12, 3.3] },
+  { z: 16, x: 250, y: 0, bore: [50, 14, 3.8] },
+].map(spec => {
+  const pitchRadius = MODULE * spec.z / 2;
+  return { ...spec, cx: origin.x + spec.x * SCALE, cy: origin.y + spec.y * SCALE, pitchRadius, tipRadius: pitchRadius + MODULE, step: 2 * Math.PI / spec.z, phase: 0 };
+});
+const [g1, g2, g3] = gears;
+// Phase each gear so a tooth faces the gap of its neighbour on the line of centres.
+g1.phase = -Math.PI / 2; // tooth tips at the top and bottom, where the diameter is measured
+for (let i = 1; i < gears.length; i++) {
+  const a = gears[i - 1], b = gears[i];
+  const direction = Math.atan2(b.cy - a.cy, b.cx - a.cx);
+  const offset = (((direction - a.phase) / a.step) % 1 + 1) % 1;
+  const facing = ((.5 - offset) % 1 + 1) % 1;
+  b.phase = direction + Math.PI - facing * b.step;
+}
+const deg = (angle: number) => n(angle * 180 / Math.PI);
+// On load the train turns by two teeth, so the final position is the drawn one.
+const turn = (index: number) => deg((index % 2 ? -2 : 2) * gears[index].step);
+
+// The large gear has a recessed web with six lightening holes.
+const holes = Array.from({ length: 6 }, (_, i) => circle(16 * SCALE, Math.cos((i + .5) * Math.PI / 3) * 70 * SCALE, Math.sin((i + .5) * Math.PI / 3) * 70 * SCALE)).join('');
+const rim = 100 * SCALE, hub = 40 * SCALE;
+
+// Centre lines start on a dash at the centre and end past the tip circle; they stop short of a neighbouring gear.
+const axis = (gear: typeof g1, dx: number, dy: number, past = 8) =>
+  `M${n(gear.cx)},${n(gear.cy)}l${n(dx * (gear.tipRadius + past))},${n(dy * (gear.tipRadius + past))}`;
+const axes = [axis(g1, -1, 0), axis(g1, 1, 0, 4), axis(g1, 0, -1), axis(g1, 0, 1), axis(g2, 1, 0), axis(g2, -1, 0, -20), axis(g2, 0, -1, 2), axis(g2, 0, 1), axis(g3, 1, 0), axis(g3, -1, 0, 4), axis(g3, 0, -1), axis(g3, 0, 1)];
+// Dash-dot pattern 12-3-1.5-3, fitted to a whole number of repeats around each pitch circle.
+const pitchLength = (radius: number) => 19.5 * Math.round(2 * Math.PI * radius / 19.5);
+
+const dim = { left: n(g1.cx - g1.tipRadius - 22), bottom: n(g2.cy + g2.tipRadius + 26), right: n(g3.cx + g3.tipRadius + 24) };
+// Position leaders start with a dot on the part and end on a shelf with the position number.
+const shelfY = g1.cy - 112;
+const leaders = [
+  { number: 1, dot: polar(g1.cx, g1.cy, 108.75 * SCALE, -40), bend: { x: g1.cx + 145, y: shelfY }, shelf: 24 },
+  { number: 2, dot: polar(g2.cx, g2.cy, g2.tipRadius * .62, 140), bend: { x: g2.cx - 84, y: g2.cy + 62 }, shelf: -24 },
+  { number: 3, dot: polar(g3.cx, g3.cy, g3.tipRadius * .66, -50), bend: { x: g3.cx + 84, y: shelfY }, shelf: 24, light: true },
+];
 ---
-<svg class="gear-drawing" viewBox="0 0 600 540" fill="none" aria-hidden="true">
-  <g class="drawing-lines" stroke="currentColor" stroke-width=".8">
-    <path d="M55 140H335M195 20V290M178 34H211M179 266H211M82 45V251M74 45H162M74 251H162M78 49L86 41M78 255L86 247"/>
-    <g transform="translate(195 140)"><path d={gear(16,107,94,33)}/><circle r="77" stroke-dasharray="3 4"/><circle r="22"/><path d="M-125 0H125M0-125V125" stroke-dasharray="8 5"/></g>
-    <path d="M151 384L525 407V441L151 419ZM160 388L515 410M150 461H526M151 428V473M526 448V473M148 465L156 457M522 465L530 457M554 221V441M541 221H564M541 441H564M550 225L558 217M550 445L558 437M190 372V431M187 378L190 372L193 378M187 425L190 431L193 425"/>
-    <path d="M220 464H470M355 403L362 437" stroke-dasharray="5 4"/>
+<svg class="gear-drawing" viewBox="0 0 600 480" fill="none" aria-hidden="true">
+  <defs>
+    <marker id="gd-arrow" viewBox="0 0 10 4" refX="10" refY="2" markerWidth="10" markerHeight="4" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path d="M0 0L10 2L0 4Z" class="gd-arrow"/></marker>
+  </defs>
+  <rect class="gd-frame" x="10" y="10" width="580" height="460"/>
+  <g class="gd-axis">{axes.map(d => <path d={d}/>)}</g>
+
+  {gears.map((gear, index) => (
+    <g transform={`translate(${n(gear.cx)} ${n(gear.cy)})`}>
+      <g class="gd-turn" style={`--turn:${turn(index)}deg`}>
+        <g transform={`rotate(${deg(gear.phase)})`}>
+          <path class={`gd-gear gd-gear-${index + 1}`} fill-rule="evenodd" d={outline(gear.z) + bore(gear.bore[0], gear.bore[1], gear.bore[2]) + (index === 0 ? holes : '')}/>
+          {index === 0 && <><path class="gd-web" fill-rule="evenodd" d={circle(rim) + circle(hub) + holes}/><path class="gd-edge" d={circle(rim) + circle(hub)}/></>}
+        </g>
+      </g>
+      <circle class="gd-pitch" r={n(gear.pitchRadius)} pathLength={pitchLength(gear.pitchRadius)}/>
+    </g>
+  ))}
+
+  <g class="gd-thin">
+    <path d={`M${g1.cx},${n(g1.cy - g1.tipRadius)}H${dim.left - 4}M${g1.cx},${n(g1.cy + g1.tipRadius)}H${dim.left - 4}`}/>
+    <path d={`M${dim.left},${n(g1.cy - g1.tipRadius)}V${n(g1.cy + g1.tipRadius)}`} marker-start="url(#gd-arrow)" marker-end="url(#gd-arrow)"/>
+    {gears.map(gear => <path d={`M${n(gear.cx)},${n(gear.cy + gear.tipRadius + 8)}V${dim.bottom + 4}`}/>)}
+    <path d={`M${g1.cx},${dim.bottom}H${n(g2.cx)}`} marker-start="url(#gd-arrow)" marker-end="url(#gd-arrow)"/>
+    <path d={`M${n(g2.cx)},${dim.bottom}H${n(g3.cx)}`} marker-start="url(#gd-arrow)" marker-end="url(#gd-arrow)"/>
+    <path d={`M${n(g3.cx + g3.tipRadius + 8)},${n(g3.cy)}H${dim.right + 4}M${n(g2.cx + g2.tipRadius + 8)},${n(g2.cy)}H${dim.right + 4}`}/>
+    <path d={`M${dim.right},${n(g3.cy)}V${n(g2.cy)}`} marker-start="url(#gd-arrow)" marker-end="url(#gd-arrow)"/>
   </g>
-  <g transform="translate(331 245) rotate(12)"><path d={gear(12,113,94,55)} fill="var(--navy)" fill-rule="evenodd"/></g>
-  <g transform="translate(448 349) rotate(7)"><path d={gear(10,72,57,33)} fill="var(--orange)" fill-rule="evenodd"/></g>
-  <g class="drawing-labels" fill="currentColor" font-size="10" font-family="monospace"><text x="58" y="38">Ø 210</text><text x="311" y="483">275 ±0.1</text><text x="562" y="334" transform="rotate(-90 562 334)">200 ±0.05</text><text x="183" y="365">A</text><text x="183" y="444">A</text><text x="39" y="518">{t("ДЗС · ВИРОБНИЦТВО / РЕМОНТ")}</text><text x="561" y="518" text-anchor="end">{t("М 1:2")}</text></g>
+
+  <g class="gd-leaders">
+    {leaders.map(leader => <>
+      <path d={`M${leader.dot.x},${leader.dot.y}L${n(leader.bend.x)},${n(leader.bend.y)}h${leader.shelf}`}/>
+      <circle class:list={{ 'gd-dot-light': leader.light }} cx={leader.dot.x} cy={leader.dot.y} r="2.2"/>
+    </>)}
+  </g>
+
+  <g class="gd-text">
+    <text transform={`translate(${dim.left - 6} ${g1.cy}) rotate(-90)`} text-anchor="middle">Ø280</text>
+    <text x={n((g1.cx + g2.cx) / 2)} y={dim.bottom - 5} text-anchor="middle">160</text>
+    <text x={n((g2.cx + g3.cx) / 2)} y={dim.bottom - 5} text-anchor="middle">90</text>
+    <text transform={`translate(${dim.right - 6} ${n((g3.cy + g2.cy) / 2)}) rotate(-90)`} text-anchor="middle">120</text>
+    {leaders.map(leader => <text class="gd-position" x={n(leader.bend.x + leader.shelf / 2)} y={n(leader.bend.y - 6)} text-anchor="middle">{leader.number}</text>)}
+  </g>
+
+  <g class="gd-title">
+    <path class="gd-title-frame" d="M300 414H590M300 414V470M470 414V470M470 442H590"/>
+    <text class="gd-title-name" x="314" y="447">{t('Передача зубчаста')}</text>
+    <text x="482" y="433">{t('Масштаб')} 1:2</text>
+    <text x="482" y="461">{t('ДЗС')}</text>
+  </g>
 </svg>
